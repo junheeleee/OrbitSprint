@@ -14,9 +14,12 @@ final class GameScene: SKScene {
     private let state: GameState
     private let playerRadius: CGFloat = 14
     private let orbitRadii: [CGFloat] = [76, 112, 148]
-    private let collisionRadiusTolerance: CGFloat = 20
+    private let collisionRadiusTolerance: CGFloat = 9
+    private let orbitTransitionDuration: TimeInterval = 0.16
     private var currentRadius: CGFloat = 76
     private var targetRadius: CGFloat = 76
+    private var orbitStartRadius: CGFloat = 76
+    private var orbitTransitionElapsed: TimeInterval = 0
     private var currentOrbitIndex = 0
     private var orbitStepDirection = 1
     private var angle: CGFloat = -.pi / 2
@@ -84,6 +87,8 @@ final class GameScene: SKScene {
             currentOrbitIndex = 0
         }
         updateOrbitStepDirectionForEdge()
+        orbitStartRadius = currentRadius
+        orbitTransitionElapsed = 0
         targetRadius = orbitRadii[currentOrbitIndex]
     }
 
@@ -120,7 +125,7 @@ final class GameScene: SKScene {
         let timeScale: CGFloat = state.slowTimeRemaining > 0 ? 0.62 : 1
         let feverScale: CGFloat = state.isFeverActive ? 2.25 : 1
         angle += angularSpeed * difficulty * timeScale * feverScale * CGFloat(delta)
-        currentRadius += (targetRadius - currentRadius) * min(1, CGFloat(delta) * 14)
+        updateOrbitRadius(delta: delta)
         spawnTimer += delta
         sparkTimer += delta
         powerUpTimer += delta
@@ -323,7 +328,7 @@ final class GameScene: SKScene {
     private func checkCollisions() {
         for node in objectLayer.children {
             guard isOnCollidingRadius(with: node) else { continue }
-            guard player.frame.insetBy(dx: -3, dy: -3).intersects(node.frame) else { continue }
+            guard isTouchingPlayer(node) else { continue }
 
             if node.name == NodeName.spark {
                 let hitPoint = node.position
@@ -408,6 +413,8 @@ final class GameScene: SKScene {
         currentRadius = saferRecoveryRadius(at: angle)
         currentOrbitIndex = nearestOrbitIndex(to: currentRadius)
         updateOrbitStepDirectionForEdge()
+        orbitStartRadius = currentRadius
+        orbitTransitionElapsed = orbitTransitionDuration
         targetRadius = currentRadius
         updatePlayerPosition()
         removeNearbyShards(clearance: 1.15)
@@ -555,6 +562,19 @@ final class GameScene: SKScene {
         shieldAura.zRotation = -angle
     }
 
+    private func updateOrbitRadius(delta: TimeInterval) {
+        guard currentRadius != targetRadius else { return }
+
+        orbitTransitionElapsed = min(orbitTransitionDuration, orbitTransitionElapsed + delta)
+        let progress = CGFloat(orbitTransitionElapsed / orbitTransitionDuration)
+        let eased = progress * progress * (3 - 2 * progress)
+        currentRadius = orbitStartRadius + (targetRadius - orbitStartRadius) * eased
+
+        if orbitTransitionElapsed >= orbitTransitionDuration {
+            currentRadius = targetRadius
+        }
+    }
+
     private func point(on radius: CGFloat, angle: CGFloat) -> CGPoint {
         CGPoint(x: center.x + cos(angle) * radius, y: center.y + sin(angle) * radius)
     }
@@ -591,6 +611,26 @@ final class GameScene: SKScene {
     private func isOnCollidingRadius(with node: SKNode) -> Bool {
         guard let objectRadius = storedRadius(for: node) else { return true }
         return abs(objectRadius - currentRadius) <= collisionRadiusTolerance
+    }
+
+    private func isTouchingPlayer(_ node: SKNode) -> Bool {
+        let distance = hypot(player.position.x - node.position.x, player.position.y - node.position.y)
+        return distance <= playerRadius + collisionRadius(for: node)
+    }
+
+    private func collisionRadius(for node: SKNode) -> CGFloat {
+        switch node.name {
+        case NodeName.shard:
+            13
+        case NodeName.spark:
+            10
+        case NodeName.shield:
+            14
+        case NodeName.slow:
+            13
+        default:
+            12
+        }
     }
 
     private func nextThreatSpawnAngle(on radius: CGFloat, minLead: CGFloat, maxLead: CGFloat) -> CGFloat {
