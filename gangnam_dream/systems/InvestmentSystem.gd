@@ -12,7 +12,7 @@ func initialize() -> void:
 			GameState.market_prices[asset.get("id", "")] = float(asset.get("initial_price", asset.get("base_price", 10_000.0)))
 	_roll_cycle()
 
-func process_month(news_items: Array = []) -> void:
+func process_month(news_items: Array) -> void:
 	cycle_timer -= 1
 	if cycle_timer <= 0:
 		_roll_cycle()
@@ -51,7 +51,7 @@ func buy_asset(asset_id: String, amount_krw: float) -> Dictionary:
 	portfolio_updated.emit()
 	return {"success": true, "message": "매수 완료", "quantity": quantity}
 
-func sell_asset(asset_id: String, sell_ratio: float = 1.0) -> Dictionary:
+func sell_asset(asset_id: String, sell_ratio: float) -> Dictionary:
 	if not GameState.portfolio.has(asset_id):
 		return {"success": false, "message": "보유하지 않은 자산입니다."}
 	var asset := DataRegistry.get_asset(asset_id)

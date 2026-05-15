@@ -7,7 +7,7 @@ const SAVE_VERSION := 2
 const SLOT_COUNT := 3
 const AUTOSAVE_SLOT := 0
 
-func save_game(slot: int = AUTOSAVE_SLOT) -> bool:
+func save_game(slot: int) -> bool:
 	var payload := {
 		"version": SAVE_VERSION,
 		"slot": slot,
@@ -25,7 +25,7 @@ func save_game(slot: int = AUTOSAVE_SLOT) -> bool:
 func autosave() -> bool:
 	return save_game(AUTOSAVE_SLOT)
 
-func load_game(slot: int = AUTOSAVE_SLOT) -> bool:
+func load_game(slot: int) -> bool:
 	if not has_save(slot):
 		load_completed.emit(false, slot)
 		return false
@@ -37,10 +37,10 @@ func load_game(slot: int = AUTOSAVE_SLOT) -> bool:
 	load_completed.emit(true, slot)
 	return true
 
-func has_save(slot: int = AUTOSAVE_SLOT) -> bool:
+func has_save(slot: int) -> bool:
 	return FileAccess.file_exists(_slot_path(slot))
 
-func delete_save(slot: int = AUTOSAVE_SLOT) -> void:
+func delete_save(slot: int) -> void:
 	if has_save(slot):
 		DirAccess.remove_absolute(ProjectSettings.globalize_path(_slot_path(slot)))
 
@@ -50,7 +50,7 @@ func get_slots() -> Array:
 		slots.append(get_save_info(slot))
 	return slots
 
-func get_save_info(slot: int = AUTOSAVE_SLOT) -> Dictionary:
+func get_save_info(slot: int) -> Dictionary:
 	if not has_save(slot):
 		return {"slot": slot, "empty": true}
 	var parsed = JSON.parse_string(FileAccess.get_file_as_string(_slot_path(slot)))

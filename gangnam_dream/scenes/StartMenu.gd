@@ -71,7 +71,7 @@ func _start_new_run() -> void:
 	var trait := "흙수저 생존본능"
 	if trait_option.get_item_count() > 0:
 		trait = trait_option.get_item_text(trait_option.selected)
-	GameState.new_game(trait)
+	GameState.start_new_game(trait)
 	get_tree().change_scene_to_file("res://scenes/MainGame.tscn")
 
 func _load_slot(slot: int) -> void:

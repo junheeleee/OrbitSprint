@@ -51,7 +51,10 @@ func reload() -> void:
 func find_event(event_id: String) -> Dictionary:
 	return events_by_id.get(event_id, {})
 
-func get_events(category: String = "") -> Array:
+func get_all_events() -> Array:
+	return events
+
+func get_events(category: String) -> Array:
 	if category.is_empty():
 		return events
 	var filtered: Array = []

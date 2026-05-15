@@ -19,7 +19,7 @@ func _ready() -> void:
 	add_child(label)
 	label.add_theme_color_override("font_color", Color("#dbe7ff"))
 
-func show_message(message: String, color: Color = Color("#dbe7ff")) -> void:
+func show_message(message: String, color: Color) -> void:
 	label.text = message
 	label.add_theme_color_override("font_color", color)
 	var tween := create_tween()

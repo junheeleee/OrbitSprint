@@ -54,7 +54,10 @@ var market_context := {
 func _ready() -> void:
 	randomize()
 
-func new_game(trait: String = "흙수저 생존본능") -> void:
+func new_game() -> void:
+	start_new_game("흙수저 생존본능")
+
+func start_new_game(trait: String) -> void:
 	player_name = "김민준"
 	age = 20
 	year = 2026
@@ -238,7 +241,7 @@ func modify_hidden_stat(stat_name: String, amount: int) -> void:
 		"addiction_tendency":
 			addiction_tendency = clamp(addiction_tendency + amount, 0, 100)
 
-func add_item(item_id: String, quantity: int = 1) -> void:
+func add_item(item_id: String, quantity: int) -> void:
 	var item := DataRegistry.get_item(item_id)
 	if item.is_empty():
 		return
@@ -252,7 +255,7 @@ func add_item(item_id: String, quantity: int = 1) -> void:
 	inventory.append(owned_item)
 	stats_changed.emit()
 
-func remove_item(item_id: String, quantity: int = 1) -> bool:
+func remove_item(item_id: String, quantity: int) -> bool:
 	for i in range(inventory.size()):
 		if inventory[i].get("id", "") == item_id:
 			inventory[i]["quantity"] = int(inventory[i].get("quantity", 1)) - quantity
@@ -262,7 +265,7 @@ func remove_item(item_id: String, quantity: int = 1) -> bool:
 			return true
 	return false
 
-func add_log(message: String, log_type: String = "normal") -> void:
+func add_log(message: String, log_type: String) -> void:
 	var entry := {
 		"turn": turn,
 		"date": get_date_string(),

@@ -20,7 +20,7 @@ func apply_for_job(job_id: String) -> Dictionary:
 	job_changed.emit(job)
 	return {"success": true, "message": "취업 완료"}
 
-func quit_job(voluntary: bool = true) -> void:
+func quit_job(voluntary: bool) -> void:
 	if GameState.current_job.is_empty():
 		return
 	GameState.monthly_income -= float(GameState.current_job.get("base_salary", 0.0))

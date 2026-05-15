@@ -170,7 +170,11 @@ static func get_asset(asset_id: String) -> Dictionary:
 
 # 카테고리별 자산 목록
 static func get_assets_by_category(category: int) -> Array:
-	return ASSETS.filter(func(a): return a["category"] == category)
+	var result: Array = []
+	for asset in ASSETS:
+		if asset["category"] == category:
+			result.append(asset)
+	return result
 
 # 카테고리 이름
 static func category_name(category: int) -> String:
