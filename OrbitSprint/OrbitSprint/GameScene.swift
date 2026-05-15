@@ -20,6 +20,7 @@ final class GameScene: SKScene {
     private var lastUpdate: TimeInterval = 0
     private var elapsedTime: TimeInterval = 0
     private var safeUntil: TimeInterval = 1.6
+    private var invulnerableUntil: TimeInterval = 0
     private var spawnTimer: TimeInterval = 0
     private var sparkTimer: TimeInterval = 0
     private var powerUpTimer: TimeInterval = 0
@@ -278,12 +279,15 @@ final class GameScene: SKScene {
                 flash(color: SKColor(red: 0.64, green: 0.38, blue: 1.0, alpha: 0.18))
             } else if node.name == NodeName.shard {
                 guard elapsedTime > safeUntil else {
-                    node.removeFromParent()
-                    flash(color: SKColor.white.withAlphaComponent(0.12))
+                    absorbShard(node, invulnerabilityDuration: 0.8)
+                    continue
+                }
+                guard elapsedTime > invulnerableUntil else {
+                    absorbShard(node, invulnerabilityDuration: 0.55)
                     continue
                 }
                 if state.consumeShield() {
-                    node.removeFromParent()
+                    absorbShard(node, invulnerabilityDuration: 1.15)
                     Haptics.fail(enabled: state.isHapticsEnabled)
                     flash(color: SKColor(red: 0.2, green: 0.72, blue: 1.0, alpha: 0.2))
                     continue
@@ -292,8 +296,35 @@ final class GameScene: SKScene {
                 state.endGame()
                 player.run(.sequence([.scale(to: 1.45, duration: 0.08), .scale(to: 0.1, duration: 0.16)]))
                 flash(color: state.selectedTheme.shardColor.withAlphaComponent(0.24))
+                return
             }
         }
+    }
+
+    private func absorbShard(_ node: SKNode, invulnerabilityDuration: TimeInterval) {
+        node.removeFromParent()
+        invulnerableUntil = max(invulnerableUntil, elapsedTime + invulnerabilityDuration)
+        removeNearbyShards()
+        pulseInvulnerability()
+    }
+
+    private func removeNearbyShards() {
+        objectLayer.children.forEach { node in
+            guard node.name == NodeName.shard else { return }
+            guard let objectAngle = storedAngle(for: node) else { return }
+            if angularDistance(objectAngle, angle) < 0.72 {
+                node.removeFromParent()
+            }
+        }
+    }
+
+    private func pulseInvulnerability() {
+        player.removeAction(forKey: "invulnerablePulse")
+        let pulse = SKAction.sequence([
+            .fadeAlpha(to: 0.42, duration: 0.08),
+            .fadeAlpha(to: 0.9, duration: 0.08)
+        ])
+        player.run(.repeat(pulse, count: 6), withKey: "invulnerablePulse")
     }
 
     private func flash(color: SKColor) {

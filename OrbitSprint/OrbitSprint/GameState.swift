@@ -17,7 +17,10 @@ final class GameState: ObservableObject {
     }
     @Published var hasSeenTutorial: Bool
     @Published var isSoundEnabled: Bool {
-        didSet { UserDefaults.standard.set(isSoundEnabled, forKey: soundEnabledKey) }
+        didSet {
+            UserDefaults.standard.set(isSoundEnabled, forKey: soundEnabledKey)
+            SoundPlayer.setMusicEnabled(isSoundEnabled)
+        }
     }
     @Published var isHapticsEnabled: Bool {
         didSet { UserDefaults.standard.set(isHapticsEnabled, forKey: hapticsEnabledKey) }

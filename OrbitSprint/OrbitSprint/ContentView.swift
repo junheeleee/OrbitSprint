@@ -69,6 +69,7 @@ struct ContentView: View {
             if scene == nil {
                 scene = makeScene()
             }
+            SoundPlayer.setMusicEnabled(gameState.isSoundEnabled)
         }
         .onChange(of: scenePhase) { _, newPhase in
             gameState.setSceneActive(newPhase == .active)
