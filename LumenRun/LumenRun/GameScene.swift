@@ -32,8 +32,10 @@ final class GameScene: SKScene {
     private var difficulty: CGFloat = 1
     private var renderedTheme: GameTheme?
     private var renderedFeverActive = false
+    private var renderedShieldCharges = -1
 
     private lazy var player = SKShapeNode(circleOfRadius: playerRadius)
+    private lazy var shieldAura = SKShapeNode(path: polygonPath(radius: 30, sides: 6))
     private let orbitLayer = SKNode()
     private let objectLayer = SKNode()
     private let effectLayer = SKNode()
@@ -104,6 +106,10 @@ final class GameScene: SKScene {
                 triggerFeverBurst()
             }
         }
+        if renderedShieldCharges != state.shieldCharges {
+            renderedShieldCharges = state.shieldCharges
+            refreshShieldAura()
+        }
 
         guard !state.isPaused else { return }
         let delta = lastUpdate > 0 ? min(currentTime - lastUpdate, 1 / 20) : 0
@@ -112,7 +118,7 @@ final class GameScene: SKScene {
 
         difficulty = 1 + min(CGFloat(state.score) * 0.012, 1.45)
         let timeScale: CGFloat = state.slowTimeRemaining > 0 ? 0.62 : 1
-        let feverScale: CGFloat = state.isFeverActive ? 1.08 : 1
+        let feverScale: CGFloat = state.isFeverActive ? 2.25 : 1
         angle += angularSpeed * difficulty * timeScale * feverScale * CGFloat(delta)
         currentRadius += (targetRadius - currentRadius) * min(1, CGFloat(delta) * 14)
         spawnTimer += delta
@@ -156,6 +162,7 @@ final class GameScene: SKScene {
         player.glowWidth = 7
         player.zPosition = 5
         addChild(player)
+        setupShieldAura()
         player.alpha = 0.64
         targetRadius = currentRadius
         player.run(.sequence([.wait(forDuration: safeUntil), .fadeAlpha(to: 1, duration: 0.25)]))
@@ -169,6 +176,7 @@ final class GameScene: SKScene {
     private func applyTheme() {
         renderedTheme = state.selectedTheme
         player.fillColor = state.selectedTheme.playerColor
+        refreshShieldAura()
         drawOrbits()
         for node in objectLayer.children {
             guard let shape = node as? SKShapeNode else { continue }
@@ -322,6 +330,9 @@ final class GameScene: SKScene {
                 node.removeFromParent()
                 comboTimer = 0
                 state.collectSpark()
+                if state.isFeverActive {
+                    state.collectFeverHit()
+                }
                 Haptics.collect(enabled: state.isHapticsEnabled)
                 emitBurst(at: hitPoint, color: state.isFeverActive ? state.selectedTheme.feverColor : state.selectedTheme.sparkColor, count: state.isFeverActive ? 18 : 9)
                 flash(color: (state.isFeverActive ? state.selectedTheme.feverColor : state.selectedTheme.sparkColor).withAlphaComponent(state.isFeverActive ? 0.28 : 0.16))
@@ -330,6 +341,9 @@ final class GameScene: SKScene {
                 node.removeFromParent()
                 comboTimer = 0
                 state.grantShield()
+                if state.isFeverActive {
+                    state.collectFeverHit()
+                }
                 Haptics.collect(enabled: state.isHapticsEnabled)
                 emitBurst(at: hitPoint, color: state.selectedTheme.shieldColor, count: 14)
                 flash(color: state.selectedTheme.shieldColor.withAlphaComponent(0.18))
@@ -338,10 +352,23 @@ final class GameScene: SKScene {
                 node.removeFromParent()
                 comboTimer = 0
                 state.triggerSlowTime(duration: 4.0)
+                if state.isFeverActive {
+                    state.collectFeverHit()
+                }
                 Haptics.collect(enabled: state.isHapticsEnabled)
                 emitBurst(at: hitPoint, color: state.selectedTheme.timeCoreColor, count: 14)
                 flash(color: state.selectedTheme.timeCoreColor.withAlphaComponent(0.18))
             } else if node.name == NodeName.shard {
+                if state.isFeverActive {
+                    let hitPoint = node.position
+                    node.removeFromParent()
+                    comboTimer = 0
+                    state.collectFeverHit()
+                    Haptics.collect(enabled: state.isHapticsEnabled)
+                    emitBurst(at: hitPoint, color: state.selectedTheme.feverColor, count: 24)
+                    flash(color: state.selectedTheme.feverColor.withAlphaComponent(0.24))
+                    continue
+                }
                 guard elapsedTime > safeUntil else {
                     absorbShard(node, invulnerabilityDuration: 0.8)
                     continue
@@ -439,6 +466,37 @@ final class GameScene: SKScene {
         player.run(.repeat(pulse, count: 6), withKey: "invulnerablePulse")
     }
 
+    private func setupShieldAura() {
+        shieldAura.strokeColor = state.selectedTheme.shieldColor.withAlphaComponent(0.78)
+        shieldAura.fillColor = state.selectedTheme.shieldColor.withAlphaComponent(0.10)
+        shieldAura.lineWidth = 2.5
+        shieldAura.glowWidth = 12
+        shieldAura.zPosition = 4
+        shieldAura.alpha = 0
+        addChild(shieldAura)
+        refreshShieldAura()
+    }
+
+    private func refreshShieldAura() {
+        shieldAura.strokeColor = state.selectedTheme.shieldColor.withAlphaComponent(0.78)
+        shieldAura.fillColor = state.selectedTheme.shieldColor.withAlphaComponent(0.10)
+        shieldAura.removeAction(forKey: "shieldPulse")
+
+        guard state.shieldCharges > 0 else {
+            shieldAura.run(.fadeOut(withDuration: 0.16))
+            return
+        }
+
+        shieldAura.alpha = 1
+        let scale = 1.0 + CGFloat(min(state.shieldCharges, 3) - 1) * 0.08
+        shieldAura.setScale(scale)
+        let pulse = SKAction.sequence([
+            .group([.scale(to: scale * 1.08, duration: 0.34), .fadeAlpha(to: 0.62, duration: 0.34)]),
+            .group([.scale(to: scale, duration: 0.34), .fadeAlpha(to: 1.0, duration: 0.34)])
+        ])
+        shieldAura.run(.repeatForever(pulse), withKey: "shieldPulse")
+    }
+
     private func flash(color: SKColor) {
         let node = SKShapeNode(rectOf: size)
         node.position = center
@@ -493,6 +551,8 @@ final class GameScene: SKScene {
 
     private func updatePlayerPosition() {
         player.position = point(on: currentRadius, angle: angle)
+        shieldAura.position = player.position
+        shieldAura.zRotation = -angle
     }
 
     private func point(on radius: CGFloat, angle: CGFloat) -> CGPoint {

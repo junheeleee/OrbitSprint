@@ -102,10 +102,15 @@ final class GameState: ObservableObject {
         score += multiplier + (isFeverActive ? 1 : 0)
         level = max(1, score / 15 + 1)
         SoundPlayer.lumen(enabled: isSoundEnabled)
-        if score > bestScore {
-            bestScore = score
-            UserDefaults.standard.set(bestScore, forKey: bestScoreKey)
-        }
+        updateBestScore()
+    }
+
+    func collectFeverHit() {
+        guard isFeverActive else { return }
+        score += max(3, multiplier + 2)
+        level = max(1, score / 15 + 1)
+        SoundPlayer.lumen(enabled: isSoundEnabled)
+        updateBestScore()
     }
 
     func breakCombo() {
@@ -198,6 +203,13 @@ final class GameState: ObservableObject {
     func resetBestScore() {
         bestScore = 0
         UserDefaults.standard.set(0, forKey: bestScoreKey)
+    }
+
+    private func updateBestScore() {
+        if score > bestScore {
+            bestScore = score
+            UserDefaults.standard.set(bestScore, forKey: bestScoreKey)
+        }
     }
 
     private func updatePauseState() {

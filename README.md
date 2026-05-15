@@ -1,12 +1,12 @@
-# Orbit Sprint
+# Lumen Run
 
 <p align="center">
-  <img src="OrbitSprint/OrbitSprint/Assets.xcassets/AppIcon.appiconset/AppIcon.png" width="128" alt="Orbit Sprint app icon">
+  <img src="LumenRun/LumenRun/Assets.xcassets/AppIcon.appiconset/AppIcon.png" width="128" alt="Lumen Run app icon">
 </p>
 
 <p align="center">
-  <strong>One-touch orbit arcade game for iOS</strong><br>
-  Switch lanes, collect sparks, survive pressure, and chase a cleaner run.
+  <strong>One-touch neon core runner for iOS</strong><br>
+  Shift lanes, chain lumen sparks, trigger Fever Sync, and break through the glitch.
 </p>
 
 <p align="center">
@@ -18,16 +18,16 @@
 
 ## Overview
 
-Orbit Sprint is a fast, minimal arcade game built with SwiftUI and SpriteKit. The player controls a runner moving around circular lanes, switching between the inner and outer orbit with a single tap.
+Lumen Run is a fast neon arcade game built with SwiftUI and SpriteKit. The player controls a Lumen Core moving around circular lanes, shifting through three orbit depths with a single tap.
 
-The core loop is simple to learn but designed to grow in pressure: collect sparks, avoid shards, build combos, protect runs with shields, and use slow-time moments to survive longer.
+The core loop is simple to learn but designed to build momentum: collect lumen sparks, avoid glitch shards, build combos, protect runs with visible shields, and trigger Fever Sync to turn every collision into points.
 
 ## Key Features
 
-- One-touch lane switching built for quick mobile sessions
+- One-touch 1-2-3-2-1 lane switching built for quick mobile sessions
 - Increasing difficulty with level progression
-- Combo and multiplier system for score-chasing
-- Shield and slow-time power-ups for strategic recovery
+- Combo, multiplier, and Fever Sync scoring
+- Visible shield aura and slow-time power-ups for strategic recovery
 - Persistent best score
 - Sound effects and haptic feedback with settings toggles
 - Korean and English localization
@@ -36,9 +36,9 @@ The core loop is simple to learn but designed to grow in pressure: collect spark
 
 ## Gameplay
 
-Tap anywhere to switch orbit lanes.
+Tap anywhere to reverse direction and shift through the three orbit depths.
 
-Collect yellow sparks to score points and build combo momentum. Avoid red shards, unless you have a shield ready. As your level rises, the game becomes faster and denser, forcing cleaner timing and better risk decisions.
+Collect lumen sparks to score points and build combo momentum. Avoid glitch shards unless you have a shield ready. Chain 12 sparks to trigger Fever Sync: the core becomes invincible, moves dramatically faster, and scores from anything it hits.
 
 ## Tech Stack
 
@@ -52,9 +52,9 @@ Collect yellow sparks to score points and build combo momentum. Avoid red shards
 ## Project Structure
 
 ```text
-OrbitSprint/
-  OrbitSprint.xcodeproj/
-  OrbitSprint/
+LumenRun/
+  LumenRun.xcodeproj/
+  LumenRun/
     ContentView.swift
     GameScene.swift
     GameState.swift
@@ -70,8 +70,8 @@ OrbitSprint/
 
 ## Run Locally
 
-1. Open `OrbitSprint/OrbitSprint.xcodeproj` in Xcode.
-2. Select the `OrbitSprint` scheme.
+1. Open `LumenRun/LumenRun.xcodeproj` in Xcode.
+2. Select the `LumenRun` scheme.
 3. Choose an iPhone simulator or a connected iPhone.
 4. Press Run.
 
@@ -79,7 +79,7 @@ For physical device testing, make sure Developer Mode is enabled on the iPhone a
 
 ## Localization
 
-Orbit Sprint currently supports:
+Lumen Run currently supports:
 
 - Korean
 - English
@@ -90,7 +90,7 @@ iOS will automatically use the best matching language based on the user's device
 
 Current preparation items:
 
-- Bundle identifier configured as `com.junpacstudio.orbitsprint`
+- Bundle identifier configured as `com.junpacstudio.lumenrun`
 - Korean and English app display names included
 - Privacy manifest included
 - Basic sound, haptics, tutorial, and settings flows implemented
@@ -116,9 +116,9 @@ Before release:
 
 ## Korean Summary
 
-Orbit Sprint는 SwiftUI와 SpriteKit으로 만든 원터치 iOS 아케이드 게임입니다. 플레이어는 안쪽/바깥쪽 궤도를 전환하며 스파크를 모으고 장애물을 피합니다.
+Lumen Run는 SwiftUI와 SpriteKit으로 만든 원터치 iOS 네온 아케이드 게임입니다. 플레이어는 세 단계 궤도를 오르내리며 루멘을 모으고 글리치 파편을 피합니다.
 
-단순한 조작 위에 콤보, 배수 점수, 보호막, 슬로우 타임, 점진적 난이도를 얹어 짧지만 반복해서 도전하고 싶은 모바일 게임을 목표로 개발 중입니다.
+단순한 조작 위에 콤보, 배수 점수, 시각적 보호막, 슬로우 타임, 피버 싱크, 점진적 난이도를 얹어 짧지만 반복해서 도전하고 싶은 모바일 게임을 목표로 개발 중입니다.
 
 ## License
 

@@ -1,27 +1,27 @@
-"app.title" = "LUMEN RELAY";
+"app.title" = "LUMEN RUN";
 "hud.best" = "BEST";
 "hud.level" = "LV %d";
 "hud.combo" = "%d COMBO";
 "hud.fever" = "FEVER SYNC";
 
-"loading.title" = "Waking the Relay";
+"loading.title" = "Igniting the Run";
 "start.eyebrow" = "NEON CORE RUNNER";
-"start.subtitle" = "Guide a Lumen Core through the broken relay. Chain light, dodge glitch shards, and ignite Fever Sync.";
-"start.play" = "Enter Relay";
+"start.subtitle" = "Run a Lumen Core through neon lanes. Chain light, smash through Fever Sync, and outrun the glitch.";
+"start.play" = "Start Run";
 
-"tutorial.title" = "Relay Protocol";
-"tutorial.body" = "Read the lanes, gather lumen sparks, and keep the core synced as the relay accelerates.";
+"tutorial.title" = "Run Protocol";
+"tutorial.body" = "Read the lanes, gather lumen sparks, and keep the core synced as the run accelerates.";
 "tutorial.step.tap" = "Tap anywhere to move 1-2-3-2-1 through the orbit depths.";
 "tutorial.step.collect" = "Collect golden lumen sparks to raise your sync multiplier.";
-"tutorial.step.avoid" = "Avoid magenta glitch shards. One direct crash ends the run.";
-"tutorial.step.powerups" = "Blue shields absorb a crash. Violet time cores slow the relay.";
-"tutorial.step.fever" = "Chain 12 sparks to trigger Fever Sync with boosted scoring and a faster soundtrack.";
-"tutorial.start" = "Start Relay";
+"tutorial.step.avoid" = "Avoid magenta glitch shards. One direct crash ends the run unless Fever is active.";
+"tutorial.step.powerups" = "Blue shields form a visible guard around the core. Violet time cores slow the run.";
+"tutorial.step.fever" = "Chain 12 sparks to trigger Fever Sync: go invincible, go fast, and score from every hit.";
+"tutorial.start" = "Start Run";
 
 "gameover.title" = "SYNC LOST";
 "gameover.score" = "Score %d  |  Best %d";
 "gameover.level" = "Reached Level %d";
-"gameover.restart" = "Reboot Relay";
+"gameover.restart" = "Run Again";
 
 "pause.title" = "Paused";
 "pause.resume" = "Resume";

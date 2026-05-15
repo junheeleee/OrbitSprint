@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct OrbitSprintApp: App {
+struct LumenRunApp: App {
     @StateObject private var gameState = GameState()
 
     init() {
