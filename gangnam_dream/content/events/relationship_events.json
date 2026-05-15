@@ -1,0 +1,1501 @@
+[
+  {
+    "id": "social_life_001",
+    "title": "동창회 초대장",
+    "description": "동창회 초대장. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "social_life",
+    "rarity": "common",
+    "weight": 8,
+    "hidden": false,
+    "conditions": {
+      "has_relationship": true
+    },
+    "tags": [
+      "social_life",
+      "opportunity"
+    ],
+    "cooldown": 4,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 260000,
+          "investment_skill": -5
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": -5,
+          "mental": 5
+        },
+        "result_text": "",
+        "relationship_effects": {
+          "affinity": -1,
+          "type": "romantic"
+        }
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 3,
+          "investment_skill": 6
+        },
+        "result_text": ""
+      }
+    ]
+  },
+  {
+    "id": "social_life_002",
+    "title": "동창회 초대장",
+    "description": "동창회 초대장. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "social_life",
+    "rarity": "rare",
+    "weight": 1.7,
+    "hidden": false,
+    "conditions": {
+      "has_relationship": true
+    },
+    "tags": [
+      "social_life",
+      "viral"
+    ],
+    "cooldown": 7,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 70000,
+          "health": -3
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": -8,
+          "mental": -3
+        },
+        "result_text": "",
+        "relationship_effects": {
+          "affinity": 8,
+          "type": "romantic"
+        }
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 3,
+          "investment_skill": 1
+        },
+        "result_text": ""
+      }
+    ]
+  },
+  {
+    "id": "jobs_003",
+    "title": "이직 공고 발견",
+    "description": "이직 공고 발견. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "jobs",
+    "rarity": "legendary",
+    "weight": 0.55,
+    "hidden": false,
+    "conditions": {
+      "has_relationship": true
+    },
+    "tags": [
+      "jobs",
+      "satire"
+    ],
+    "cooldown": 3,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": -100000,
+          "luck": 2
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": -6,
+          "mental": -5
+        },
+        "result_text": "",
+        "relationship_effects": {
+          "affinity": 9,
+          "type": "business_partners"
+        }
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 1,
+          "investment_skill": 2
+        },
+        "result_text": ""
+      }
+    ]
+  },
+  {
+    "id": "jobs_004",
+    "title": "야근 메신저",
+    "description": "야근 메신저. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "jobs",
+    "rarity": "legendary",
+    "weight": 0.55,
+    "hidden": false,
+    "conditions": {
+      "has_relationship": true
+    },
+    "tags": [
+      "jobs",
+      "pressure"
+    ],
+    "cooldown": 6,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 70000,
+          "social_skill": -3
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 0,
+          "mental": -4
+        },
+        "result_text": "",
+        "relationship_effects": {
+          "affinity": -3,
+          "type": "friends"
+        }
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 6,
+          "investment_skill": 1
+        },
+        "result_text": ""
+      },
+      {
+        "text": "아무것도 하지 않고 버틴다",
+        "effects": {
+          "health": -2,
+          "stress": -3,
+          "money": 0
+        },
+        "result_text": ""
+      }
+    ]
+  },
+  {
+    "id": "family_005",
+    "title": "친척 모임 압박",
+    "description": "친척 모임 압박. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "family",
+    "rarity": "uncommon",
+    "weight": 4,
+    "hidden": false,
+    "conditions": {
+      "has_relationship": true
+    },
+    "tags": [
+      "family",
+      "opportunity"
+    ],
+    "cooldown": 3,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": -80000,
+          "mental": 3
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": -4,
+          "mental": -3
+        },
+        "result_text": "",
+        "relationship_effects": {
+          "affinity": -9,
+          "type": "mentors"
+        }
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 2,
+          "investment_skill": -2
+        },
+        "result_text": "",
+        "flags": [
+          "seen_family_005"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "social_life_006",
+    "title": "인스타 비교 지옥",
+    "description": "인스타 비교 지옥. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "social_life",
+    "rarity": "uncommon",
+    "weight": 4,
+    "hidden": false,
+    "conditions": {
+      "has_relationship": true
+    },
+    "tags": [
+      "social_life",
+      "pressure"
+    ],
+    "cooldown": 3,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 130000,
+          "mental": 2
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": -5,
+          "mental": 3
+        },
+        "result_text": "",
+        "relationship_effects": {
+          "affinity": 8,
+          "type": "business_partners"
+        }
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 2,
+          "investment_skill": 5
+        },
+        "result_text": ""
+      }
+    ]
+  },
+  {
+    "id": "family_007",
+    "title": "집안 병원비",
+    "description": "집안 병원비. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "family",
+    "rarity": "common",
+    "weight": 8,
+    "hidden": false,
+    "conditions": {
+      "min_turn": 11,
+      "has_relationship": true
+    },
+    "tags": [
+      "family",
+      "viral"
+    ],
+    "cooldown": 9,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 430000,
+          "appearance": -1
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 3,
+          "mental": 3
+        },
+        "result_text": "",
+        "relationship_effects": {
+          "affinity": -1,
+          "type": "business_partners"
+        }
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 2,
+          "investment_skill": -1
+        },
+        "result_text": ""
+      }
+    ]
+  },
+  {
+    "id": "social_life_008",
+    "title": "친구의 투자 자랑",
+    "description": "친구의 투자 자랑. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "social_life",
+    "rarity": "uncommon",
+    "weight": 4,
+    "hidden": false,
+    "conditions": {
+      "has_relationship": true
+    },
+    "tags": [
+      "social_life",
+      "opportunity"
+    ],
+    "cooldown": 10,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 80000,
+          "intelligence": 5
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 1,
+          "mental": -5
+        },
+        "result_text": "",
+        "relationship_effects": {
+          "affinity": 8,
+          "type": "friends"
+        }
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": -3,
+          "investment_skill": 6
+        },
+        "result_text": ""
+      },
+      {
+        "text": "아무것도 하지 않고 버틴다",
+        "effects": {
+          "health": -2,
+          "stress": -3,
+          "money": 0
+        },
+        "result_text": ""
+      }
+    ]
+  },
+  {
+    "id": "social_life_009",
+    "title": "친구의 투자 자랑",
+    "description": "친구의 투자 자랑. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "social_life",
+    "rarity": "common",
+    "weight": 8,
+    "hidden": false,
+    "conditions": {
+      "has_relationship": true
+    },
+    "tags": [
+      "social_life",
+      "opportunity"
+    ],
+    "cooldown": 7,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": -200000,
+          "reputation": 6
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": -2,
+          "mental": 2
+        },
+        "result_text": "",
+        "relationship_effects": {
+          "affinity": -9,
+          "type": "mentors"
+        }
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 5,
+          "investment_skill": 4
+        },
+        "result_text": ""
+      }
+    ]
+  },
+  {
+    "id": "jobs_010",
+    "title": "팀장님의 한마디",
+    "description": "팀장님의 한마디. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "jobs",
+    "rarity": "common",
+    "weight": 8,
+    "hidden": false,
+    "conditions": {
+      "has_relationship": true
+    },
+    "tags": [
+      "jobs",
+      "anxiety"
+    ],
+    "cooldown": 6,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 260000,
+          "health": 6
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 7,
+          "mental": 0
+        },
+        "result_text": "",
+        "relationship_effects": {
+          "affinity": -5,
+          "type": "romantic"
+        }
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 1,
+          "investment_skill": 4
+        },
+        "result_text": "",
+        "flags": [
+          "seen_jobs_010"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "social_life_011",
+    "title": "인스타 비교 지옥",
+    "description": "인스타 비교 지옥. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "social_life",
+    "rarity": "uncommon",
+    "weight": 4,
+    "hidden": false,
+    "conditions": {
+      "max_mental": 65,
+      "has_relationship": true
+    },
+    "tags": [
+      "social_life",
+      "class"
+    ],
+    "cooldown": 7,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 300000,
+          "health": -6
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": -5,
+          "mental": -3
+        },
+        "result_text": "",
+        "relationship_effects": {
+          "affinity": 4,
+          "type": "family"
+        }
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 3,
+          "investment_skill": 1
+        },
+        "result_text": ""
+      }
+    ]
+  },
+  {
+    "id": "social_life_012",
+    "title": "술자리 계산서",
+    "description": "술자리 계산서. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "social_life",
+    "rarity": "rare",
+    "weight": 1.7,
+    "hidden": false,
+    "conditions": {
+      "has_relationship": true
+    },
+    "tags": [
+      "social_life",
+      "pressure"
+    ],
+    "cooldown": 5,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": -70000,
+          "luck": -3
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 10,
+          "mental": -1
+        },
+        "result_text": "",
+        "relationship_effects": {
+          "affinity": 13,
+          "type": "friends"
+        }
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 1,
+          "investment_skill": 4
+        },
+        "result_text": ""
+      },
+      {
+        "text": "아무것도 하지 않고 버틴다",
+        "effects": {
+          "health": -2,
+          "stress": -3,
+          "money": 0
+        },
+        "result_text": ""
+      }
+    ]
+  },
+  {
+    "id": "social_life_013",
+    "title": "친구의 투자 자랑",
+    "description": "친구의 투자 자랑. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "social_life",
+    "rarity": "common",
+    "weight": 8,
+    "hidden": false,
+    "conditions": {
+      "min_reputation": 20,
+      "has_relationship": true
+    },
+    "tags": [
+      "social_life",
+      "class"
+    ],
+    "cooldown": 4,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 280000,
+          "investment_skill": 5
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": -3,
+          "mental": 0
+        },
+        "result_text": "",
+        "relationship_effects": {
+          "affinity": 5,
+          "type": "business_partners"
+        }
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 6,
+          "investment_skill": -2
+        },
+        "result_text": ""
+      }
+    ]
+  },
+  {
+    "id": "family_014",
+    "title": "부모님의 전화",
+    "description": "부모님의 전화. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "family",
+    "rarity": "uncommon",
+    "weight": 4,
+    "hidden": false,
+    "conditions": {
+      "min_turn": 18,
+      "has_relationship": true
+    },
+    "tags": [
+      "family",
+      "pressure"
+    ],
+    "cooldown": 10,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": -190000,
+          "social_skill": 5
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": -8,
+          "mental": -7
+        },
+        "result_text": "",
+        "relationship_effects": {
+          "affinity": -12,
+          "type": "romantic"
+        }
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": -1,
+          "investment_skill": -1
+        },
+        "result_text": ""
+      }
+    ]
+  },
+  {
+    "id": "family_015",
+    "title": "친척 모임 압박",
+    "description": "친척 모임 압박. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "family",
+    "rarity": "uncommon",
+    "weight": 4,
+    "hidden": false,
+    "conditions": {
+      "has_relationship": true
+    },
+    "tags": [
+      "family",
+      "opportunity"
+    ],
+    "cooldown": 4,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 140000,
+          "appearance": 7
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": -1,
+          "mental": 4
+        },
+        "result_text": "",
+        "relationship_effects": {
+          "affinity": -12,
+          "type": "romantic"
+        }
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 5,
+          "investment_skill": 5
+        },
+        "result_text": "",
+        "flags": [
+          "seen_family_015"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "family_016",
+    "title": "동생의 부탁",
+    "description": "동생의 부탁. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "family",
+    "rarity": "common",
+    "weight": 8,
+    "hidden": false,
+    "conditions": {
+      "has_relationship": true
+    },
+    "tags": [
+      "family",
+      "anxiety"
+    ],
+    "cooldown": 8,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 130000,
+          "reputation": 5
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 4,
+          "mental": 6
+        },
+        "result_text": "",
+        "relationship_effects": {
+          "affinity": 13,
+          "type": "coworkers"
+        }
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 6,
+          "investment_skill": 3
+        },
+        "result_text": ""
+      },
+      {
+        "text": "아무것도 하지 않고 버틴다",
+        "effects": {
+          "health": -2,
+          "stress": -3,
+          "money": 0
+        },
+        "result_text": ""
+      }
+    ]
+  },
+  {
+    "id": "romance_017",
+    "title": "소개팅 후 정적",
+    "description": "소개팅 후 정적. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "romance",
+    "rarity": "common",
+    "weight": 8,
+    "hidden": false,
+    "conditions": {
+      "has_relationship": true
+    },
+    "tags": [
+      "romance",
+      "pressure"
+    ],
+    "cooldown": 5,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": -250000,
+          "health": 2
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 4,
+          "mental": 5
+        },
+        "result_text": "",
+        "relationship_effects": {
+          "affinity": 3,
+          "type": "business_partners"
+        }
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": -4,
+          "investment_skill": 2
+        },
+        "result_text": ""
+      }
+    ]
+  },
+  {
+    "id": "jobs_018",
+    "title": "팀장님의 한마디",
+    "description": "팀장님의 한마디. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "jobs",
+    "rarity": "uncommon",
+    "weight": 4,
+    "hidden": false,
+    "conditions": {
+      "has_relationship": true
+    },
+    "tags": [
+      "jobs",
+      "anxiety"
+    ],
+    "cooldown": 3,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 210000,
+          "social_skill": -5
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 4,
+          "mental": -2
+        },
+        "result_text": "",
+        "relationship_effects": {
+          "affinity": -5,
+          "type": "romantic"
+        }
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": -4,
+          "investment_skill": 4
+        },
+        "result_text": ""
+      }
+    ]
+  },
+  {
+    "id": "family_019",
+    "title": "친척 모임 압박",
+    "description": "친척 모임 압박. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "family",
+    "rarity": "common",
+    "weight": 8,
+    "hidden": false,
+    "conditions": {
+      "has_relationship": true
+    },
+    "tags": [
+      "family",
+      "anxiety"
+    ],
+    "cooldown": 5,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": -60000,
+          "reputation": -3
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": -8,
+          "mental": -1
+        },
+        "result_text": "",
+        "relationship_effects": {
+          "affinity": -5,
+          "type": "coworkers"
+        }
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 5,
+          "investment_skill": 1
+        },
+        "result_text": ""
+      }
+    ]
+  },
+  {
+    "id": "romance_020",
+    "title": "강남역 비 오는 밤",
+    "description": "강남역 비 오는 밤. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "romance",
+    "rarity": "common",
+    "weight": 8,
+    "hidden": false,
+    "conditions": {
+      "has_relationship": true
+    },
+    "tags": [
+      "romance",
+      "class"
+    ],
+    "cooldown": 10,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 120000,
+          "intelligence": -6
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 1,
+          "mental": -5
+        },
+        "result_text": "",
+        "relationship_effects": {
+          "affinity": -2,
+          "type": "coworkers"
+        }
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": -1,
+          "investment_skill": 2
+        },
+        "result_text": "",
+        "flags": [
+          "seen_romance_020"
+        ]
+      },
+      {
+        "text": "아무것도 하지 않고 버틴다",
+        "effects": {
+          "health": -2,
+          "stress": -3,
+          "money": 0
+        },
+        "result_text": ""
+      }
+    ]
+  },
+  {
+    "id": "social_life_021",
+    "title": "동창회 초대장",
+    "description": "동창회 초대장. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "social_life",
+    "rarity": "common",
+    "weight": 8,
+    "hidden": false,
+    "conditions": {
+      "min_turn": 7,
+      "has_relationship": true
+    },
+    "tags": [
+      "social_life",
+      "class"
+    ],
+    "cooldown": 9,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 200000,
+          "mental": -5
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 6,
+          "mental": 6
+        },
+        "result_text": "",
+        "relationship_effects": {
+          "affinity": 15,
+          "type": "family"
+        }
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 5,
+          "investment_skill": 2
+        },
+        "result_text": ""
+      }
+    ]
+  },
+  {
+    "id": "jobs_022",
+    "title": "이직 공고 발견",
+    "description": "이직 공고 발견. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "jobs",
+    "rarity": "uncommon",
+    "weight": 4,
+    "hidden": false,
+    "conditions": {
+      "max_mental": 65,
+      "has_relationship": true
+    },
+    "tags": [
+      "jobs",
+      "pressure"
+    ],
+    "cooldown": 6,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 210000,
+          "appearance": 7
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 7,
+          "mental": -5
+        },
+        "result_text": "",
+        "relationship_effects": {
+          "affinity": 6,
+          "type": "romantic"
+        }
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 8,
+          "investment_skill": 5
+        },
+        "result_text": ""
+      }
+    ]
+  },
+  {
+    "id": "family_023",
+    "title": "부모님의 전화",
+    "description": "부모님의 전화. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "family",
+    "rarity": "uncommon",
+    "weight": 4,
+    "hidden": false,
+    "conditions": {
+      "has_relationship": true
+    },
+    "tags": [
+      "family",
+      "opportunity"
+    ],
+    "cooldown": 4,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 400000,
+          "mental": 6
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 10,
+          "mental": -4
+        },
+        "result_text": "",
+        "relationship_effects": {
+          "affinity": 5,
+          "type": "coworkers"
+        }
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": -3,
+          "investment_skill": 0
+        },
+        "result_text": ""
+      }
+    ]
+  },
+  {
+    "id": "romance_024",
+    "title": "소개팅 후 정적",
+    "description": "소개팅 후 정적. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "romance",
+    "rarity": "uncommon",
+    "weight": 4,
+    "hidden": false,
+    "conditions": {
+      "has_relationship": true
+    },
+    "tags": [
+      "romance",
+      "opportunity"
+    ],
+    "cooldown": 4,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 450000,
+          "social_skill": 1
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 2,
+          "mental": 2
+        },
+        "result_text": "",
+        "relationship_effects": {
+          "affinity": 3,
+          "type": "family"
+        }
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": -2,
+          "investment_skill": 6
+        },
+        "result_text": ""
+      },
+      {
+        "text": "아무것도 하지 않고 버틴다",
+        "effects": {
+          "health": -2,
+          "stress": -3,
+          "money": 0
+        },
+        "result_text": ""
+      }
+    ]
+  },
+  {
+    "id": "family_025",
+    "title": "집안 병원비",
+    "description": "집안 병원비. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "family",
+    "rarity": "rare",
+    "weight": 1.7,
+    "hidden": false,
+    "conditions": {
+      "has_relationship": true
+    },
+    "tags": [
+      "family",
+      "opportunity"
+    ],
+    "cooldown": 4,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": -20000,
+          "investment_skill": 2
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 3,
+          "mental": 3
+        },
+        "result_text": "",
+        "relationship_effects": {
+          "affinity": 13,
+          "type": "business_partners"
+        }
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 5,
+          "investment_skill": 4
+        },
+        "result_text": "",
+        "flags": [
+          "seen_family_025"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "jobs_026",
+    "title": "퇴사 브이로그 유혹",
+    "description": "퇴사 브이로그 유혹. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "jobs",
+    "rarity": "common",
+    "weight": 8,
+    "hidden": false,
+    "conditions": {
+      "min_reputation": 20,
+      "has_relationship": true
+    },
+    "tags": [
+      "jobs",
+      "anxiety"
+    ],
+    "cooldown": 10,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 210000,
+          "luck": -1
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 2,
+          "mental": -4
+        },
+        "result_text": "",
+        "relationship_effects": {
+          "affinity": 2,
+          "type": "family"
+        }
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 2,
+          "investment_skill": -1
+        },
+        "result_text": ""
+      }
+    ]
+  },
+  {
+    "id": "jobs_027",
+    "title": "야근 메신저",
+    "description": "야근 메신저. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "jobs",
+    "rarity": "common",
+    "weight": 8,
+    "hidden": false,
+    "conditions": {
+      "has_relationship": true
+    },
+    "tags": [
+      "jobs",
+      "class"
+    ],
+    "cooldown": 10,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 270000,
+          "luck": 5
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 3,
+          "mental": 3
+        },
+        "result_text": "",
+        "relationship_effects": {
+          "affinity": 0,
+          "type": "family"
+        }
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 5,
+          "investment_skill": 1
+        },
+        "result_text": ""
+      }
+    ]
+  },
+  {
+    "id": "jobs_028",
+    "title": "퇴사 브이로그 유혹",
+    "description": "퇴사 브이로그 유혹. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "jobs",
+    "rarity": "uncommon",
+    "weight": 4,
+    "hidden": false,
+    "conditions": {
+      "min_turn": 14,
+      "has_relationship": true
+    },
+    "tags": [
+      "jobs",
+      "risk"
+    ],
+    "cooldown": 3,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": -210000,
+          "investment_skill": 0
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 5,
+          "mental": 2
+        },
+        "result_text": "",
+        "relationship_effects": {
+          "affinity": 11,
+          "type": "romantic"
+        }
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": -4,
+          "investment_skill": -1
+        },
+        "result_text": ""
+      },
+      {
+        "text": "아무것도 하지 않고 버틴다",
+        "effects": {
+          "health": -2,
+          "stress": -3,
+          "money": 0
+        },
+        "result_text": ""
+      }
+    ]
+  },
+  {
+    "id": "romance_029",
+    "title": "카톡 읽씹 3시간",
+    "description": "카톡 읽씹 3시간. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "romance",
+    "rarity": "common",
+    "weight": 8,
+    "hidden": false,
+    "conditions": {
+      "has_relationship": true
+    },
+    "tags": [
+      "romance",
+      "opportunity"
+    ],
+    "cooldown": 3,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": -120000,
+          "appearance": 4
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 11,
+          "mental": 3
+        },
+        "result_text": "",
+        "relationship_effects": {
+          "affinity": 13,
+          "type": "friends"
+        }
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 1,
+          "investment_skill": 3
+        },
+        "result_text": ""
+      }
+    ]
+  },
+  {
+    "id": "romance_030",
+    "title": "카톡 읽씹 3시간",
+    "description": "카톡 읽씹 3시간. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "romance",
+    "rarity": "uncommon",
+    "weight": 4,
+    "hidden": false,
+    "conditions": {
+      "has_relationship": true
+    },
+    "tags": [
+      "romance",
+      "pressure"
+    ],
+    "cooldown": 10,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": -230000,
+          "health": -6
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": -7,
+          "mental": -5
+        },
+        "result_text": "",
+        "relationship_effects": {
+          "affinity": 14,
+          "type": "friends"
+        }
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 4,
+          "investment_skill": 5
+        },
+        "result_text": "",
+        "flags": [
+          "seen_romance_030"
+        ]
+      }
+    ]
+  }
+]

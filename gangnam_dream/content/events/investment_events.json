@@ -1,0 +1,1531 @@
+[
+  {
+    "id": "disasters_001",
+    "title": "월세 인상 통보",
+    "description": "월세 인상 통보. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "disasters",
+    "rarity": "common",
+    "weight": 8,
+    "hidden": false,
+    "conditions": {
+      "has_portfolio": true
+    },
+    "tags": [
+      "disasters",
+      "class"
+    ],
+    "cooldown": 7,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 280000,
+          "intelligence": -5
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 12,
+          "mental": -7
+        },
+        "result_text": ""
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": -1,
+          "investment_skill": 0
+        },
+        "result_text": "",
+        "investment_effects": {
+          "market_bias": "crash",
+          "asset_tag": "leveraged",
+          "power": 0.136
+        }
+      }
+    ]
+  },
+  {
+    "id": "gambling_002",
+    "title": "코인 선물 유혹",
+    "description": "코인 선물 유혹. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "gambling",
+    "rarity": "rare",
+    "weight": 1.7,
+    "hidden": false,
+    "conditions": {
+      "has_portfolio": true
+    },
+    "tags": [
+      "gambling",
+      "viral"
+    ],
+    "cooldown": 9,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 380000,
+          "investment_skill": -2
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": -4,
+          "mental": -1
+        },
+        "result_text": ""
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 3,
+          "investment_skill": -1
+        },
+        "result_text": "",
+        "investment_effects": {
+          "market_bias": "bubble",
+          "asset_tag": "real_estate",
+          "power": 0.077
+        }
+      }
+    ]
+  },
+  {
+    "id": "politics_003",
+    "title": "정책 발표 속보",
+    "description": "정책 발표 속보. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "politics",
+    "rarity": "common",
+    "weight": 8,
+    "hidden": false,
+    "conditions": {
+      "has_portfolio": true
+    },
+    "tags": [
+      "politics",
+      "opportunity"
+    ],
+    "cooldown": 8,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": -130000,
+          "health": -3
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 10,
+          "mental": 6
+        },
+        "result_text": ""
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": -2,
+          "investment_skill": 5
+        },
+        "result_text": "",
+        "investment_effects": {
+          "market_bias": "bubble",
+          "asset_tag": "us_stock",
+          "power": -0.068
+        }
+      }
+    ]
+  },
+  {
+    "id": "politics_004",
+    "title": "선거철 테마주",
+    "description": "선거철 테마주. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "politics",
+    "rarity": "uncommon",
+    "weight": 4,
+    "hidden": false,
+    "conditions": {
+      "has_portfolio": true
+    },
+    "tags": [
+      "politics",
+      "opportunity"
+    ],
+    "cooldown": 5,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 320000,
+          "appearance": 3
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": -5,
+          "mental": -4
+        },
+        "result_text": ""
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 3,
+          "investment_skill": 3
+        },
+        "result_text": "",
+        "investment_effects": {
+          "market_bias": "momentum",
+          "asset_tag": "us_stock",
+          "power": -0.079
+        }
+      },
+      {
+        "text": "아무것도 하지 않고 버틴다",
+        "effects": {
+          "health": -2,
+          "stress": -3,
+          "money": 0
+        },
+        "result_text": ""
+      }
+    ]
+  },
+  {
+    "id": "disasters_005",
+    "title": "갑작스런 해고설",
+    "description": "갑작스런 해고설. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "disasters",
+    "rarity": "uncommon",
+    "weight": 4,
+    "hidden": false,
+    "conditions": {
+      "has_portfolio": true
+    },
+    "tags": [
+      "disasters",
+      "pressure"
+    ],
+    "cooldown": 3,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 380000,
+          "stress": 2
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 9,
+          "mental": 6
+        },
+        "result_text": ""
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 8,
+          "investment_skill": 3
+        },
+        "result_text": "",
+        "flags": [
+          "seen_disasters_005"
+        ],
+        "investment_effects": {
+          "market_bias": "momentum",
+          "asset_tag": "crypto",
+          "power": 0.02
+        }
+      }
+    ]
+  },
+  {
+    "id": "disasters_006",
+    "title": "휴대폰 파손",
+    "description": "휴대폰 파손. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "disasters",
+    "rarity": "rare",
+    "weight": 1.7,
+    "hidden": false,
+    "conditions": {
+      "has_portfolio": true
+    },
+    "tags": [
+      "disasters",
+      "pressure"
+    ],
+    "cooldown": 6,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 130000,
+          "luck": 4
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 8,
+          "mental": 3
+        },
+        "result_text": ""
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 8,
+          "investment_skill": 3
+        },
+        "result_text": "",
+        "investment_effects": {
+          "market_bias": "momentum",
+          "asset_tag": "us_stock",
+          "power": -0.07
+        }
+      }
+    ]
+  },
+  {
+    "id": "gambling_007",
+    "title": "토토방 링크",
+    "description": "토토방 링크. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "gambling",
+    "rarity": "common",
+    "weight": 8,
+    "hidden": false,
+    "conditions": {
+      "min_turn": 11,
+      "has_portfolio": true
+    },
+    "tags": [
+      "gambling",
+      "satire"
+    ],
+    "cooldown": 8,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 230000,
+          "investment_skill": -6
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 9,
+          "mental": -3
+        },
+        "result_text": ""
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": -2,
+          "investment_skill": -1
+        },
+        "result_text": "",
+        "investment_effects": {
+          "market_bias": "bubble",
+          "asset_tag": "real_estate",
+          "power": 0.145
+        }
+      }
+    ]
+  },
+  {
+    "id": "disasters_008",
+    "title": "휴대폰 파손",
+    "description": "휴대폰 파손. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "disasters",
+    "rarity": "common",
+    "weight": 8,
+    "hidden": false,
+    "conditions": {
+      "has_portfolio": true
+    },
+    "tags": [
+      "disasters",
+      "opportunity"
+    ],
+    "cooldown": 5,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": -230000,
+          "social_skill": 3
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": -7,
+          "mental": 3
+        },
+        "result_text": ""
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 7,
+          "investment_skill": 4
+        },
+        "result_text": "",
+        "investment_effects": {
+          "market_bias": "crash",
+          "asset_tag": "real_estate",
+          "power": -0.084
+        }
+      },
+      {
+        "text": "아무것도 하지 않고 버틴다",
+        "effects": {
+          "health": -2,
+          "stress": -3,
+          "money": 0
+        },
+        "result_text": ""
+      }
+    ]
+  },
+  {
+    "id": "disasters_009",
+    "title": "갑작스런 해고설",
+    "description": "갑작스런 해고설. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "disasters",
+    "rarity": "common",
+    "weight": 8,
+    "hidden": false,
+    "conditions": {
+      "has_portfolio": true
+    },
+    "tags": [
+      "disasters",
+      "opportunity"
+    ],
+    "cooldown": 3,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 430000,
+          "reputation": 8
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 9,
+          "mental": -7
+        },
+        "result_text": ""
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": -4,
+          "investment_skill": 6
+        },
+        "result_text": "",
+        "investment_effects": {
+          "market_bias": "crash",
+          "asset_tag": "korean_stock",
+          "power": -0.047
+        }
+      }
+    ]
+  },
+  {
+    "id": "disasters_010",
+    "title": "휴대폰 파손",
+    "description": "휴대폰 파손. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "disasters",
+    "rarity": "common",
+    "weight": 8,
+    "hidden": false,
+    "conditions": {
+      "has_portfolio": true
+    },
+    "tags": [
+      "disasters",
+      "pressure"
+    ],
+    "cooldown": 8,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 220000,
+          "mental": -3
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 12,
+          "mental": -3
+        },
+        "result_text": ""
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": -2,
+          "investment_skill": 4
+        },
+        "result_text": "",
+        "flags": [
+          "seen_disasters_010"
+        ],
+        "investment_effects": {
+          "market_bias": "crash",
+          "asset_tag": "us_stock",
+          "power": 0.139
+        }
+      }
+    ]
+  },
+  {
+    "id": "finance_011",
+    "title": "월급날의 카드값",
+    "description": "월급날의 카드값. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "finance",
+    "rarity": "common",
+    "weight": 8,
+    "hidden": false,
+    "conditions": {
+      "max_mental": 65,
+      "has_portfolio": true
+    },
+    "tags": [
+      "finance",
+      "anxiety"
+    ],
+    "cooldown": 5,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 430000,
+          "intelligence": -1
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 0,
+          "mental": -2
+        },
+        "result_text": ""
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 2,
+          "investment_skill": 4
+        },
+        "result_text": "",
+        "investment_effects": {
+          "market_bias": "bubble",
+          "asset_tag": "korean_stock",
+          "power": 0.13
+        }
+      }
+    ]
+  },
+  {
+    "id": "finance_012",
+    "title": "마이너스 통장 알림",
+    "description": "마이너스 통장 알림. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "finance",
+    "rarity": "common",
+    "weight": 8,
+    "hidden": false,
+    "conditions": {
+      "has_portfolio": true
+    },
+    "tags": [
+      "finance",
+      "viral"
+    ],
+    "cooldown": 3,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 140000,
+          "luck": -1
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": -8,
+          "mental": 0
+        },
+        "result_text": ""
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": -2,
+          "investment_skill": 1
+        },
+        "result_text": "",
+        "investment_effects": {
+          "market_bias": "bubble",
+          "asset_tag": "korean_stock",
+          "power": 0.14
+        }
+      },
+      {
+        "text": "아무것도 하지 않고 버틴다",
+        "effects": {
+          "health": -2,
+          "stress": -3,
+          "money": 0
+        },
+        "result_text": ""
+      }
+    ]
+  },
+  {
+    "id": "politics_013",
+    "title": "정책 발표 속보",
+    "description": "정책 발표 속보. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "politics",
+    "rarity": "uncommon",
+    "weight": 4,
+    "hidden": false,
+    "conditions": {
+      "min_reputation": 20,
+      "has_portfolio": true
+    },
+    "tags": [
+      "politics",
+      "class"
+    ],
+    "cooldown": 4,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 220000,
+          "appearance": -4
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": -4,
+          "mental": 5
+        },
+        "result_text": ""
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": -1,
+          "investment_skill": 5
+        },
+        "result_text": "",
+        "investment_effects": {
+          "market_bias": "momentum",
+          "asset_tag": "us_stock",
+          "power": 0.152
+        }
+      }
+    ]
+  },
+  {
+    "id": "disasters_014",
+    "title": "전세 사기 뉴스",
+    "description": "전세 사기 뉴스. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "disasters",
+    "rarity": "common",
+    "weight": 8,
+    "hidden": false,
+    "conditions": {
+      "min_turn": 18,
+      "has_portfolio": true
+    },
+    "tags": [
+      "disasters",
+      "risk"
+    ],
+    "cooldown": 10,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": -200000,
+          "mental": -2
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 8,
+          "mental": 2
+        },
+        "result_text": ""
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": -1,
+          "investment_skill": -1
+        },
+        "result_text": "",
+        "investment_effects": {
+          "market_bias": "momentum",
+          "asset_tag": "leveraged",
+          "power": 0.091
+        }
+      }
+    ]
+  },
+  {
+    "id": "finance_015",
+    "title": "월급날의 카드값",
+    "description": "월급날의 카드값. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "finance",
+    "rarity": "uncommon",
+    "weight": 4,
+    "hidden": false,
+    "conditions": {
+      "has_portfolio": true
+    },
+    "tags": [
+      "finance",
+      "viral"
+    ],
+    "cooldown": 7,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 360000,
+          "health": 6
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 2,
+          "mental": -6
+        },
+        "result_text": ""
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 8,
+          "investment_skill": -2
+        },
+        "result_text": "",
+        "flags": [
+          "seen_finance_015"
+        ],
+        "investment_effects": {
+          "market_bias": "bubble",
+          "asset_tag": "korean_stock",
+          "power": 0.03
+        }
+      }
+    ]
+  },
+  {
+    "id": "politics_016",
+    "title": "청년 지원금 논란",
+    "description": "청년 지원금 논란. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "politics",
+    "rarity": "uncommon",
+    "weight": 4,
+    "hidden": false,
+    "conditions": {
+      "has_portfolio": true
+    },
+    "tags": [
+      "politics",
+      "satire"
+    ],
+    "cooldown": 6,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": -90000,
+          "intelligence": -3
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 11,
+          "mental": -6
+        },
+        "result_text": ""
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 3,
+          "investment_skill": 1
+        },
+        "result_text": "",
+        "investment_effects": {
+          "market_bias": "crash",
+          "asset_tag": "us_stock",
+          "power": -0.047
+        }
+      },
+      {
+        "text": "아무것도 하지 않고 버틴다",
+        "effects": {
+          "health": -2,
+          "stress": -3,
+          "money": 0
+        },
+        "result_text": ""
+      }
+    ]
+  },
+  {
+    "id": "disasters_017",
+    "title": "휴대폰 파손",
+    "description": "휴대폰 파손. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "disasters",
+    "rarity": "common",
+    "weight": 8,
+    "hidden": false,
+    "conditions": {
+      "has_portfolio": true
+    },
+    "tags": [
+      "disasters",
+      "anxiety"
+    ],
+    "cooldown": 6,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": -180000,
+          "stress": 7
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 4,
+          "mental": 0
+        },
+        "result_text": ""
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 7,
+          "investment_skill": 1
+        },
+        "result_text": "",
+        "investment_effects": {
+          "market_bias": "crash",
+          "asset_tag": "leveraged",
+          "power": 0.116
+        }
+      }
+    ]
+  },
+  {
+    "id": "finance_018",
+    "title": "월급날의 카드값",
+    "description": "월급날의 카드값. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "finance",
+    "rarity": "common",
+    "weight": 8,
+    "hidden": false,
+    "conditions": {
+      "has_portfolio": true
+    },
+    "tags": [
+      "finance",
+      "opportunity"
+    ],
+    "cooldown": 10,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": -80000,
+          "health": -5
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 8,
+          "mental": 2
+        },
+        "result_text": ""
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": -1,
+          "investment_skill": 2
+        },
+        "result_text": "",
+        "investment_effects": {
+          "market_bias": "bubble",
+          "asset_tag": "us_stock",
+          "power": -0.026
+        }
+      }
+    ]
+  },
+  {
+    "id": "finance_019",
+    "title": "월급날의 카드값",
+    "description": "월급날의 카드값. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "finance",
+    "rarity": "rare",
+    "weight": 1.7,
+    "hidden": false,
+    "conditions": {
+      "has_portfolio": true
+    },
+    "tags": [
+      "finance",
+      "pressure"
+    ],
+    "cooldown": 6,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": -170000,
+          "health": 6
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": -5,
+          "mental": 3
+        },
+        "result_text": ""
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": -2,
+          "investment_skill": 4
+        },
+        "result_text": "",
+        "investment_effects": {
+          "market_bias": "bubble",
+          "asset_tag": "crypto",
+          "power": 0.108
+        }
+      }
+    ]
+  },
+  {
+    "id": "gambling_020",
+    "title": "한 방이면 끝이라는 말",
+    "description": "한 방이면 끝이라는 말. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "gambling",
+    "rarity": "uncommon",
+    "weight": 4,
+    "hidden": false,
+    "conditions": {
+      "has_portfolio": true
+    },
+    "tags": [
+      "gambling",
+      "anxiety"
+    ],
+    "cooldown": 10,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": -10000,
+          "intelligence": 5
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 11,
+          "mental": 2
+        },
+        "result_text": ""
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": -4,
+          "investment_skill": 2
+        },
+        "result_text": "",
+        "flags": [
+          "seen_gambling_020"
+        ],
+        "investment_effects": {
+          "market_bias": "bubble",
+          "asset_tag": "leveraged",
+          "power": 0.017
+        }
+      },
+      {
+        "text": "아무것도 하지 않고 버틴다",
+        "effects": {
+          "health": -2,
+          "stress": -3,
+          "money": 0
+        },
+        "result_text": ""
+      }
+    ]
+  },
+  {
+    "id": "politics_021",
+    "title": "정책 발표 속보",
+    "description": "정책 발표 속보. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "politics",
+    "rarity": "common",
+    "weight": 8,
+    "hidden": false,
+    "conditions": {
+      "min_turn": 7,
+      "has_portfolio": true
+    },
+    "tags": [
+      "politics",
+      "risk"
+    ],
+    "cooldown": 4,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 420000,
+          "intelligence": 7
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 1,
+          "mental": 5
+        },
+        "result_text": ""
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 0,
+          "investment_skill": 0
+        },
+        "result_text": "",
+        "investment_effects": {
+          "market_bias": "bubble",
+          "asset_tag": "us_stock",
+          "power": 0.102
+        }
+      }
+    ]
+  },
+  {
+    "id": "finance_022",
+    "title": "ETF 인증샷",
+    "description": "ETF 인증샷. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "finance",
+    "rarity": "rare",
+    "weight": 1.7,
+    "hidden": false,
+    "conditions": {
+      "max_mental": 65,
+      "has_portfolio": true
+    },
+    "tags": [
+      "finance",
+      "anxiety"
+    ],
+    "cooldown": 9,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 190000,
+          "appearance": 0
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": -1,
+          "mental": 2
+        },
+        "result_text": ""
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 7,
+          "investment_skill": 4
+        },
+        "result_text": "",
+        "investment_effects": {
+          "market_bias": "crash",
+          "asset_tag": "leveraged",
+          "power": -0.102
+        }
+      }
+    ]
+  },
+  {
+    "id": "politics_023",
+    "title": "정책 발표 속보",
+    "description": "정책 발표 속보. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "politics",
+    "rarity": "common",
+    "weight": 8,
+    "hidden": false,
+    "conditions": {
+      "has_portfolio": true
+    },
+    "tags": [
+      "politics",
+      "pressure"
+    ],
+    "cooldown": 10,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 190000,
+          "stress": 6
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 12,
+          "mental": -1
+        },
+        "result_text": ""
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 3,
+          "investment_skill": 0
+        },
+        "result_text": "",
+        "investment_effects": {
+          "market_bias": "crash",
+          "asset_tag": "us_stock",
+          "power": -0.016
+        }
+      }
+    ]
+  },
+  {
+    "id": "gambling_024",
+    "title": "토토방 링크",
+    "description": "토토방 링크. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "gambling",
+    "rarity": "common",
+    "weight": 8,
+    "hidden": false,
+    "conditions": {
+      "has_portfolio": true
+    },
+    "tags": [
+      "gambling",
+      "opportunity"
+    ],
+    "cooldown": 4,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": -30000,
+          "luck": -2
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": -2,
+          "mental": -2
+        },
+        "result_text": ""
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 8,
+          "investment_skill": 1
+        },
+        "result_text": "",
+        "investment_effects": {
+          "market_bias": "bubble",
+          "asset_tag": "korean_stock",
+          "power": -0.103
+        }
+      },
+      {
+        "text": "아무것도 하지 않고 버틴다",
+        "effects": {
+          "health": -2,
+          "stress": -3,
+          "money": 0
+        },
+        "result_text": ""
+      }
+    ]
+  },
+  {
+    "id": "politics_025",
+    "title": "부동산 규제 루머",
+    "description": "부동산 규제 루머. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "politics",
+    "rarity": "rare",
+    "weight": 1.7,
+    "hidden": false,
+    "conditions": {
+      "has_portfolio": true
+    },
+    "tags": [
+      "politics",
+      "anxiety"
+    ],
+    "cooldown": 7,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": -200000,
+          "intelligence": -4
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 10,
+          "mental": 2
+        },
+        "result_text": ""
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 6,
+          "investment_skill": -1
+        },
+        "result_text": "",
+        "flags": [
+          "seen_politics_025"
+        ],
+        "investment_effects": {
+          "market_bias": "bubble",
+          "asset_tag": "leveraged",
+          "power": 0.037
+        }
+      }
+    ]
+  },
+  {
+    "id": "politics_026",
+    "title": "선거철 테마주",
+    "description": "선거철 테마주. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "politics",
+    "rarity": "common",
+    "weight": 8,
+    "hidden": false,
+    "conditions": {
+      "min_reputation": 20,
+      "has_portfolio": true
+    },
+    "tags": [
+      "politics",
+      "satire"
+    ],
+    "cooldown": 7,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 330000,
+          "health": -1
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 1,
+          "mental": 6
+        },
+        "result_text": ""
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": -3,
+          "investment_skill": -1
+        },
+        "result_text": "",
+        "investment_effects": {
+          "market_bias": "bubble",
+          "asset_tag": "crypto",
+          "power": 0.044
+        }
+      }
+    ]
+  },
+  {
+    "id": "disasters_027",
+    "title": "전세 사기 뉴스",
+    "description": "전세 사기 뉴스. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "disasters",
+    "rarity": "legendary",
+    "weight": 0.55,
+    "hidden": false,
+    "conditions": {
+      "has_portfolio": true
+    },
+    "tags": [
+      "disasters",
+      "anxiety"
+    ],
+    "cooldown": 9,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": -220000,
+          "intelligence": -5
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 11,
+          "mental": 0
+        },
+        "result_text": ""
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 6,
+          "investment_skill": -2
+        },
+        "result_text": "",
+        "investment_effects": {
+          "market_bias": "momentum",
+          "asset_tag": "us_stock",
+          "power": -0.002
+        }
+      }
+    ]
+  },
+  {
+    "id": "politics_028",
+    "title": "청년 지원금 논란",
+    "description": "청년 지원금 논란. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "politics",
+    "rarity": "rare",
+    "weight": 1.7,
+    "hidden": false,
+    "conditions": {
+      "min_turn": 14,
+      "has_portfolio": true
+    },
+    "tags": [
+      "politics",
+      "viral"
+    ],
+    "cooldown": 6,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": -130000,
+          "investment_skill": -6
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": -1,
+          "mental": 4
+        },
+        "result_text": ""
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": -3,
+          "investment_skill": -1
+        },
+        "result_text": "",
+        "investment_effects": {
+          "market_bias": "crash",
+          "asset_tag": "korean_stock",
+          "power": -0.11
+        }
+      },
+      {
+        "text": "아무것도 하지 않고 버틴다",
+        "effects": {
+          "health": -2,
+          "stress": -3,
+          "money": 0
+        },
+        "result_text": ""
+      }
+    ]
+  },
+  {
+    "id": "politics_029",
+    "title": "청년 지원금 논란",
+    "description": "청년 지원금 논란. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "politics",
+    "rarity": "uncommon",
+    "weight": 4,
+    "hidden": false,
+    "conditions": {
+      "has_portfolio": true
+    },
+    "tags": [
+      "politics",
+      "anxiety"
+    ],
+    "cooldown": 9,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": -40000,
+          "luck": 5
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 12,
+          "mental": 1
+        },
+        "result_text": ""
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 8,
+          "investment_skill": -2
+        },
+        "result_text": "",
+        "investment_effects": {
+          "market_bias": "bubble",
+          "asset_tag": "crypto",
+          "power": 0.059
+        }
+      }
+    ]
+  },
+  {
+    "id": "disasters_030",
+    "title": "전세 사기 뉴스",
+    "description": "전세 사기 뉴스. 서울의 속도는 멈추지 않고, 당신의 통장과 멘탈은 매달 시험대에 오른다. 이번 선택은 돈, 관계, 평판 중 무엇을 지킬지 묻는다.",
+    "category": "disasters",
+    "rarity": "common",
+    "weight": 8,
+    "hidden": false,
+    "conditions": {
+      "has_portfolio": true
+    },
+    "tags": [
+      "disasters",
+      "anxiety"
+    ],
+    "cooldown": 3,
+    "choices": [
+      {
+        "text": "현실적으로 계산하고 움직인다",
+        "effects": {
+          "money": 230000,
+          "stress": 0
+        },
+        "result_text": ""
+      },
+      {
+        "text": "감정이 시키는 쪽을 따른다",
+        "effects": {
+          "stress": 0,
+          "mental": 1
+        },
+        "result_text": ""
+      },
+      {
+        "text": "위험하지만 기회를 잡는다",
+        "effects": {
+          "reputation": 7,
+          "investment_skill": 1
+        },
+        "result_text": "",
+        "flags": [
+          "seen_disasters_030"
+        ],
+        "investment_effects": {
+          "market_bias": "crash",
+          "asset_tag": "leveraged",
+          "power": 0.153
+        }
+      }
+    ]
+  }
+]

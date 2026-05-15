@@ -1,0 +1,43 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
+
+[application]
+
+config/name="강남드림"
+config/description="대한민국 현대를 배경으로 한 로그라이크 인생 시뮬레이션 RPG"
+run/main_scene="res://scenes/StartMenu.tscn"
+config/features=PackedStringArray("4.2", "GL Compatibility")
+config/icon="res://icon.svg"
+
+[autoload]
+
+DataRegistry="*res://autoloads/DataRegistry.gd"
+GameState="*res://autoloads/GameState.gd"
+EventManager="*res://autoloads/EventManager.gd"
+NewsManager="*res://autoloads/NewsManager.gd"
+MetaProgression="*res://autoloads/MetaProgression.gd"
+SaveManager="*res://autoloads/SaveManager.gd"
+EndingSystem="*res://systems/EndingSystem.gd"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=800
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"

@@ -1,0 +1,412 @@
+[
+  {
+    "id": "item_01",
+    "name": "knowledge 아이템 1",
+    "category": "knowledge",
+    "price": 37000,
+    "description": "현대 생존에 필요한 knowledge 계열 소비. 살 때는 합리화가 쉽고, 카드값은 정직하다.",
+    "effects": {
+      "investment_skill": 8
+    },
+    "passive_effects": {},
+    "one_time": true,
+    "icon": "💳"
+  },
+  {
+    "id": "item_02",
+    "name": "appearance 아이템 2",
+    "category": "appearance",
+    "price": 59000,
+    "description": "현대 생존에 필요한 appearance 계열 소비. 살 때는 합리화가 쉽고, 카드값은 정직하다.",
+    "effects": {
+      "intelligence": 8
+    },
+    "passive_effects": {},
+    "one_time": true,
+    "icon": "💊"
+  },
+  {
+    "id": "item_03",
+    "name": "social 아이템 3",
+    "category": "social",
+    "price": 81000,
+    "description": "현대 생존에 필요한 social 계열 소비. 살 때는 합리화가 쉽고, 카드값은 정직하다.",
+    "effects": {
+      "mental": 6
+    },
+    "passive_effects": {
+      "stress": 2
+    },
+    "one_time": false,
+    "icon": "💊"
+  },
+  {
+    "id": "item_04",
+    "name": "investment 아이템 4",
+    "category": "investment",
+    "price": 103000,
+    "description": "현대 생존에 필요한 investment 계열 소비. 살 때는 합리화가 쉽고, 카드값은 정직하다.",
+    "effects": {
+      "investment_skill": 2
+    },
+    "passive_effects": {},
+    "one_time": true,
+    "icon": "📚"
+  },
+  {
+    "id": "item_05",
+    "name": "life 아이템 5",
+    "category": "life",
+    "price": 125000,
+    "description": "현대 생존에 필요한 life 계열 소비. 살 때는 합리화가 쉽고, 카드값은 정직하다.",
+    "effects": {
+      "social_skill": 6
+    },
+    "passive_effects": {},
+    "one_time": true,
+    "icon": "💊"
+  },
+  {
+    "id": "item_06",
+    "name": "gambling 아이템 6",
+    "category": "gambling",
+    "price": 147000,
+    "description": "현대 생존에 필요한 gambling 계열 소비. 살 때는 합리화가 쉽고, 카드값은 정직하다.",
+    "effects": {
+      "health": 8
+    },
+    "passive_effects": {
+      "reputation": 2
+    },
+    "one_time": false,
+    "icon": "💊"
+  },
+  {
+    "id": "item_07",
+    "name": "mental 아이템 7",
+    "category": "mental",
+    "price": 169000,
+    "description": "현대 생존에 필요한 mental 계열 소비. 살 때는 합리화가 쉽고, 카드값은 정직하다.",
+    "effects": {
+      "reputation": 7
+    },
+    "passive_effects": {},
+    "one_time": true,
+    "icon": "🎲"
+  },
+  {
+    "id": "item_08",
+    "name": "health 아이템 8",
+    "category": "health",
+    "price": 191000,
+    "description": "현대 생존에 필요한 health 계열 소비. 살 때는 합리화가 쉽고, 카드값은 정직하다.",
+    "effects": {
+      "intelligence": 2
+    },
+    "passive_effects": {},
+    "one_time": true,
+    "icon": "📚"
+  },
+  {
+    "id": "item_09",
+    "name": "knowledge 아이템 9",
+    "category": "knowledge",
+    "price": 213000,
+    "description": "현대 생존에 필요한 knowledge 계열 소비. 살 때는 합리화가 쉽고, 카드값은 정직하다.",
+    "effects": {
+      "investment_skill": 4
+    },
+    "passive_effects": {
+      "luck": 1
+    },
+    "one_time": false,
+    "icon": "☕"
+  },
+  {
+    "id": "item_10",
+    "name": "appearance 아이템 10",
+    "category": "appearance",
+    "price": 235000,
+    "description": "현대 생존에 필요한 appearance 계열 소비. 살 때는 합리화가 쉽고, 카드값은 정직하다.",
+    "effects": {
+      "investment_skill": 5
+    },
+    "passive_effects": {},
+    "one_time": true,
+    "icon": "📚"
+  },
+  {
+    "id": "item_11",
+    "name": "social 아이템 11",
+    "category": "social",
+    "price": 257000,
+    "description": "현대 생존에 필요한 social 계열 소비. 살 때는 합리화가 쉽고, 카드값은 정직하다.",
+    "effects": {
+      "mental": 8
+    },
+    "passive_effects": {},
+    "one_time": true,
+    "icon": "☕"
+  },
+  {
+    "id": "item_12",
+    "name": "investment 아이템 12",
+    "category": "investment",
+    "price": 279000,
+    "description": "현대 생존에 필요한 investment 계열 소비. 살 때는 합리화가 쉽고, 카드값은 정직하다.",
+    "effects": {
+      "stress": 4
+    },
+    "passive_effects": {
+      "mental": 2
+    },
+    "one_time": false,
+    "icon": "📚"
+  },
+  {
+    "id": "item_13",
+    "name": "life 아이템 13",
+    "category": "life",
+    "price": 301000,
+    "description": "현대 생존에 필요한 life 계열 소비. 살 때는 합리화가 쉽고, 카드값은 정직하다.",
+    "effects": {
+      "mental": 3
+    },
+    "passive_effects": {},
+    "one_time": true,
+    "icon": "🎲"
+  },
+  {
+    "id": "item_14",
+    "name": "gambling 아이템 14",
+    "category": "gambling",
+    "price": 323000,
+    "description": "현대 생존에 필요한 gambling 계열 소비. 살 때는 합리화가 쉽고, 카드값은 정직하다.",
+    "effects": {
+      "investment_skill": 5
+    },
+    "passive_effects": {},
+    "one_time": true,
+    "icon": "☕"
+  },
+  {
+    "id": "item_15",
+    "name": "mental 아이템 15",
+    "category": "mental",
+    "price": 345000,
+    "description": "현대 생존에 필요한 mental 계열 소비. 살 때는 합리화가 쉽고, 카드값은 정직하다.",
+    "effects": {
+      "luck": 7
+    },
+    "passive_effects": {
+      "reputation": 3
+    },
+    "one_time": false,
+    "icon": "🎲"
+  },
+  {
+    "id": "item_16",
+    "name": "health 아이템 16",
+    "category": "health",
+    "price": 367000,
+    "description": "현대 생존에 필요한 health 계열 소비. 살 때는 합리화가 쉽고, 카드값은 정직하다.",
+    "effects": {
+      "investment_skill": 7
+    },
+    "passive_effects": {},
+    "one_time": true,
+    "icon": "📈"
+  },
+  {
+    "id": "item_17",
+    "name": "knowledge 아이템 17",
+    "category": "knowledge",
+    "price": 389000,
+    "description": "현대 생존에 필요한 knowledge 계열 소비. 살 때는 합리화가 쉽고, 카드값은 정직하다.",
+    "effects": {
+      "stress": 2
+    },
+    "passive_effects": {},
+    "one_time": true,
+    "icon": "👔"
+  },
+  {
+    "id": "item_18",
+    "name": "appearance 아이템 18",
+    "category": "appearance",
+    "price": 411000,
+    "description": "현대 생존에 필요한 appearance 계열 소비. 살 때는 합리화가 쉽고, 카드값은 정직하다.",
+    "effects": {
+      "appearance": 7
+    },
+    "passive_effects": {
+      "investment_skill": 3
+    },
+    "one_time": false,
+    "icon": "💳"
+  },
+  {
+    "id": "item_19",
+    "name": "social 아이템 19",
+    "category": "social",
+    "price": 433000,
+    "description": "현대 생존에 필요한 social 계열 소비. 살 때는 합리화가 쉽고, 카드값은 정직하다.",
+    "effects": {
+      "social_skill": 7
+    },
+    "passive_effects": {},
+    "one_time": true,
+    "icon": "📚"
+  },
+  {
+    "id": "item_20",
+    "name": "investment 아이템 20",
+    "category": "investment",
+    "price": 455000,
+    "description": "현대 생존에 필요한 investment 계열 소비. 살 때는 합리화가 쉽고, 카드값은 정직하다.",
+    "effects": {
+      "health": 6
+    },
+    "passive_effects": {},
+    "one_time": true,
+    "icon": "📈"
+  },
+  {
+    "id": "item_21",
+    "name": "life 아이템 21",
+    "category": "life",
+    "price": 477000,
+    "description": "현대 생존에 필요한 life 계열 소비. 살 때는 합리화가 쉽고, 카드값은 정직하다.",
+    "effects": {
+      "intelligence": 2
+    },
+    "passive_effects": {
+      "social_skill": 1
+    },
+    "one_time": false,
+    "icon": "🧠"
+  },
+  {
+    "id": "item_22",
+    "name": "gambling 아이템 22",
+    "category": "gambling",
+    "price": 499000,
+    "description": "현대 생존에 필요한 gambling 계열 소비. 살 때는 합리화가 쉽고, 카드값은 정직하다.",
+    "effects": {
+      "social_skill": 4
+    },
+    "passive_effects": {},
+    "one_time": true,
+    "icon": "🎲"
+  },
+  {
+    "id": "item_23",
+    "name": "mental 아이템 23",
+    "category": "mental",
+    "price": 521000,
+    "description": "현대 생존에 필요한 mental 계열 소비. 살 때는 합리화가 쉽고, 카드값은 정직하다.",
+    "effects": {
+      "luck": 2
+    },
+    "passive_effects": {},
+    "one_time": true,
+    "icon": "🧠"
+  },
+  {
+    "id": "item_24",
+    "name": "health 아이템 24",
+    "category": "health",
+    "price": 543000,
+    "description": "현대 생존에 필요한 health 계열 소비. 살 때는 합리화가 쉽고, 카드값은 정직하다.",
+    "effects": {
+      "intelligence": 2
+    },
+    "passive_effects": {
+      "stress": 2
+    },
+    "one_time": false,
+    "icon": "👔"
+  },
+  {
+    "id": "item_25",
+    "name": "knowledge 아이템 25",
+    "category": "knowledge",
+    "price": 565000,
+    "description": "현대 생존에 필요한 knowledge 계열 소비. 살 때는 합리화가 쉽고, 카드값은 정직하다.",
+    "effects": {
+      "appearance": 6
+    },
+    "passive_effects": {},
+    "one_time": true,
+    "icon": "📈"
+  },
+  {
+    "id": "item_26",
+    "name": "appearance 아이템 26",
+    "category": "appearance",
+    "price": 587000,
+    "description": "현대 생존에 필요한 appearance 계열 소비. 살 때는 합리화가 쉽고, 카드값은 정직하다.",
+    "effects": {
+      "intelligence": 1
+    },
+    "passive_effects": {},
+    "one_time": true,
+    "icon": "📚"
+  },
+  {
+    "id": "item_27",
+    "name": "social 아이템 27",
+    "category": "social",
+    "price": 609000,
+    "description": "현대 생존에 필요한 social 계열 소비. 살 때는 합리화가 쉽고, 카드값은 정직하다.",
+    "effects": {
+      "stress": 3
+    },
+    "passive_effects": {
+      "mental": 3
+    },
+    "one_time": false,
+    "icon": "☕"
+  },
+  {
+    "id": "item_28",
+    "name": "investment 아이템 28",
+    "category": "investment",
+    "price": 631000,
+    "description": "현대 생존에 필요한 investment 계열 소비. 살 때는 합리화가 쉽고, 카드값은 정직하다.",
+    "effects": {
+      "social_skill": 2
+    },
+    "passive_effects": {},
+    "one_time": true,
+    "icon": "☕"
+  },
+  {
+    "id": "item_29",
+    "name": "life 아이템 29",
+    "category": "life",
+    "price": 653000,
+    "description": "현대 생존에 필요한 life 계열 소비. 살 때는 합리화가 쉽고, 카드값은 정직하다.",
+    "effects": {
+      "social_skill": 3
+    },
+    "passive_effects": {},
+    "one_time": true,
+    "icon": "👔"
+  },
+  {
+    "id": "item_30",
+    "name": "gambling 아이템 30",
+    "category": "gambling",
+    "price": 675000,
+    "description": "현대 생존에 필요한 gambling 계열 소비. 살 때는 합리화가 쉽고, 카드값은 정직하다.",
+    "effects": {
+      "luck": 3
+    },
+    "passive_effects": {
+      "reputation": 2
+    },
+    "one_time": false,
+    "icon": "📚"
+  }
+]

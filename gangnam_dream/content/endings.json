@@ -1,0 +1,72 @@
+[
+  {
+    "id": "gangnam_dream",
+    "title": "강남드림 달성",
+    "grade": "S",
+    "condition": "total_asset >= 2000000000",
+    "description": "강남드림 달성. 이 도시는 당신에게 S 등급의 결말을 남겼다."
+  },
+  {
+    "id": "stable_success",
+    "title": "안정적인 성공",
+    "grade": "B",
+    "condition": "age >= 65 and total_asset >= 500000000",
+    "description": "안정적인 성공. 이 도시는 당신에게 B 등급의 결말을 남겼다."
+  },
+  {
+    "id": "ordinary_life",
+    "title": "그냥 사람",
+    "grade": "C",
+    "condition": "age >= 65",
+    "description": "그냥 사람. 이 도시는 당신에게 C 등급의 결말을 남겼다."
+  },
+  {
+    "id": "burnout",
+    "title": "과로사",
+    "grade": "F",
+    "condition": "health <= 0",
+    "description": "과로사. 이 도시는 당신에게 F 등급의 결말을 남겼다."
+  },
+  {
+    "id": "mental_break",
+    "title": "정신 붕괴",
+    "grade": "F",
+    "condition": "mental <= 0",
+    "description": "정신 붕괴. 이 도시는 당신에게 F 등급의 결말을 남겼다."
+  },
+  {
+    "id": "bankruptcy",
+    "title": "파산",
+    "grade": "F",
+    "condition": "money <= -10000000",
+    "description": "파산. 이 도시는 당신에게 F 등급의 결말을 남겼다."
+  },
+  {
+    "id": "crypto_ghost",
+    "title": "코인 망령",
+    "grade": "F",
+    "condition": "addiction_tendency >= 90",
+    "description": "코인 망령. 이 도시는 당신에게 F 등급의 결말을 남겼다."
+  },
+  {
+    "id": "startup_exit",
+    "title": "스타트업 엑싯",
+    "grade": "A",
+    "condition": "flags.startup_exit",
+    "description": "스타트업 엑싯. 이 도시는 당신에게 A 등급의 결말을 남겼다."
+  },
+  {
+    "id": "political_fix",
+    "title": "정치 테마주 졸업",
+    "grade": "B",
+    "condition": "flags.political_winner",
+    "description": "정치 테마주 졸업. 이 도시는 당신에게 B 등급의 결말을 남겼다."
+  },
+  {
+    "id": "lonely_rich",
+    "title": "외로운 부자",
+    "grade": "A",
+    "condition": "total_asset >= 1000000000 and relationships == 0",
+    "description": "외로운 부자. 이 도시는 당신에게 A 등급의 결말을 남겼다."
+  }
+]

@@ -1,0 +1,1582 @@
+[
+  {
+    "id": "news_001",
+    "category": "korean_stocks",
+    "headline": "2030 사이에서 {topic} 인증 열풍... FOMO 확산",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "startup",
+      "power": 0.091
+    },
+    "misleading_chance": 0.15,
+    "sentiment": "greed"
+  },
+  {
+    "id": "news_002",
+    "category": "us_stocks",
+    "headline": "2030 사이에서 {topic} 인증 열풍... FOMO 확산",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "real_estate",
+      "power": -0.059
+    },
+    "misleading_chance": 0.09,
+    "sentiment": "greed"
+  },
+  {
+    "id": "news_003",
+    "category": "real_estate",
+    "headline": "정부 {topic} 대책 발표, 시장은 엇갈린 반응",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "startup",
+      "power": 0.072
+    },
+    "misleading_chance": 0.1,
+    "sentiment": "fear"
+  },
+  {
+    "id": "news_004",
+    "category": "politics",
+    "headline": "정부 {topic} 대책 발표, 시장은 엇갈린 반응",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "crypto",
+      "power": -0.077
+    },
+    "misleading_chance": 0.23,
+    "sentiment": "fear"
+  },
+  {
+    "id": "news_005",
+    "category": "social_trends",
+    "headline": "정부 {topic} 대책 발표, 시장은 엇갈린 반응",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "startup",
+      "power": 0.014
+    },
+    "misleading_chance": 0.1,
+    "sentiment": "neutral"
+  },
+  {
+    "id": "news_006",
+    "category": "ai_boom",
+    "headline": "[속보] {topic}, 투자자 불안 커져... 커뮤니티는 갑론을박",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "real_estate",
+      "power": 0.033
+    },
+    "misleading_chance": 0.16,
+    "sentiment": "neutral"
+  },
+  {
+    "id": "news_007",
+    "category": "startup_culture",
+    "headline": "[속보] {topic}, 투자자 불안 커져... 커뮤니티는 갑론을박",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "startup",
+      "power": -0.068
+    },
+    "misleading_chance": 0.15,
+    "sentiment": "greed"
+  },
+  {
+    "id": "news_008",
+    "category": "employment_crisis",
+    "headline": "정부 {topic} 대책 발표, 시장은 엇갈린 반응",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "us_stock",
+      "power": 0.002
+    },
+    "misleading_chance": 0.17,
+    "sentiment": "greed"
+  },
+  {
+    "id": "news_009",
+    "category": "cryptocurrency",
+    "headline": "[속보] {topic}, 투자자 불안 커져... 커뮤니티는 갑론을박",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "us_stock",
+      "power": 0.09
+    },
+    "misleading_chance": 0.16,
+    "sentiment": "greed"
+  },
+  {
+    "id": "news_010",
+    "category": "korean_stocks",
+    "headline": "[속보] {topic}, 투자자 불안 커져... 커뮤니티는 갑론을박",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "us_stock",
+      "power": 0.056
+    },
+    "misleading_chance": 0.11,
+    "sentiment": "fear"
+  },
+  {
+    "id": "news_011",
+    "category": "us_stocks",
+    "headline": "[속보] {topic}, 투자자 불안 커져... 커뮤니티는 갑론을박",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "us_stock",
+      "power": -0.0
+    },
+    "misleading_chance": 0.24,
+    "sentiment": "neutral"
+  },
+  {
+    "id": "news_012",
+    "category": "real_estate",
+    "headline": "{topic} 관련주 급등락... 전문가들 \"과열 주의\"",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "crypto",
+      "power": 0.015
+    },
+    "misleading_chance": 0.23,
+    "sentiment": "greed"
+  },
+  {
+    "id": "news_013",
+    "category": "politics",
+    "headline": "[속보] {topic}, 투자자 불안 커져... 커뮤니티는 갑론을박",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "real_estate",
+      "power": 0.062
+    },
+    "misleading_chance": 0.2,
+    "sentiment": "greed"
+  },
+  {
+    "id": "news_014",
+    "category": "social_trends",
+    "headline": "[속보] {topic}, 투자자 불안 커져... 커뮤니티는 갑론을박",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "real_estate",
+      "power": -0.041
+    },
+    "misleading_chance": 0.24,
+    "sentiment": "neutral"
+  },
+  {
+    "id": "news_015",
+    "category": "ai_boom",
+    "headline": "{topic} 관련주 급등락... 전문가들 \"과열 주의\"",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "real_estate",
+      "power": -0.059
+    },
+    "misleading_chance": 0.18,
+    "sentiment": "neutral"
+  },
+  {
+    "id": "news_016",
+    "category": "startup_culture",
+    "headline": "정부 {topic} 대책 발표, 시장은 엇갈린 반응",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "us_stock",
+      "power": 0.084
+    },
+    "misleading_chance": 0.14,
+    "sentiment": "fear"
+  },
+  {
+    "id": "news_017",
+    "category": "employment_crisis",
+    "headline": "2030 사이에서 {topic} 인증 열풍... FOMO 확산",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "startup",
+      "power": 0.071
+    },
+    "misleading_chance": 0.21,
+    "sentiment": "fear"
+  },
+  {
+    "id": "news_018",
+    "category": "cryptocurrency",
+    "headline": "[속보] {topic}, 투자자 불안 커져... 커뮤니티는 갑론을박",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "real_estate",
+      "power": -0.063
+    },
+    "misleading_chance": 0.21,
+    "sentiment": "fear"
+  },
+  {
+    "id": "news_019",
+    "category": "korean_stocks",
+    "headline": "2030 사이에서 {topic} 인증 열풍... FOMO 확산",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "crypto",
+      "power": 0.055
+    },
+    "misleading_chance": 0.16,
+    "sentiment": "fear"
+  },
+  {
+    "id": "news_020",
+    "category": "us_stocks",
+    "headline": "2030 사이에서 {topic} 인증 열풍... FOMO 확산",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "crypto",
+      "power": -0.062
+    },
+    "misleading_chance": 0.1,
+    "sentiment": "neutral"
+  },
+  {
+    "id": "news_021",
+    "category": "real_estate",
+    "headline": "2030 사이에서 {topic} 인증 열풍... FOMO 확산",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "real_estate",
+      "power": 0.007
+    },
+    "misleading_chance": 0.16,
+    "sentiment": "neutral"
+  },
+  {
+    "id": "news_022",
+    "category": "politics",
+    "headline": "2030 사이에서 {topic} 인증 열풍... FOMO 확산",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "us_stock",
+      "power": -0.005
+    },
+    "misleading_chance": 0.25,
+    "sentiment": "neutral"
+  },
+  {
+    "id": "news_023",
+    "category": "social_trends",
+    "headline": "2030 사이에서 {topic} 인증 열풍... FOMO 확산",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "crypto",
+      "power": 0.094
+    },
+    "misleading_chance": 0.09,
+    "sentiment": "neutral"
+  },
+  {
+    "id": "news_024",
+    "category": "ai_boom",
+    "headline": "[속보] {topic}, 투자자 불안 커져... 커뮤니티는 갑론을박",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "real_estate",
+      "power": 0.071
+    },
+    "misleading_chance": 0.14,
+    "sentiment": "greed"
+  },
+  {
+    "id": "news_025",
+    "category": "startup_culture",
+    "headline": "[속보] {topic}, 투자자 불안 커져... 커뮤니티는 갑론을박",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "startup",
+      "power": 0.09
+    },
+    "misleading_chance": 0.11,
+    "sentiment": "neutral"
+  },
+  {
+    "id": "news_026",
+    "category": "employment_crisis",
+    "headline": "2030 사이에서 {topic} 인증 열풍... FOMO 확산",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "startup",
+      "power": 0.07
+    },
+    "misleading_chance": 0.09,
+    "sentiment": "fear"
+  },
+  {
+    "id": "news_027",
+    "category": "cryptocurrency",
+    "headline": "정부 {topic} 대책 발표, 시장은 엇갈린 반응",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "us_stock",
+      "power": -0.064
+    },
+    "misleading_chance": 0.13,
+    "sentiment": "fear"
+  },
+  {
+    "id": "news_028",
+    "category": "korean_stocks",
+    "headline": "정부 {topic} 대책 발표, 시장은 엇갈린 반응",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "real_estate",
+      "power": 0.096
+    },
+    "misleading_chance": 0.07,
+    "sentiment": "fear"
+  },
+  {
+    "id": "news_029",
+    "category": "us_stocks",
+    "headline": "2030 사이에서 {topic} 인증 열풍... FOMO 확산",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "real_estate",
+      "power": 0.015
+    },
+    "misleading_chance": 0.15,
+    "sentiment": "greed"
+  },
+  {
+    "id": "news_030",
+    "category": "real_estate",
+    "headline": "2030 사이에서 {topic} 인증 열풍... FOMO 확산",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "real_estate",
+      "power": 0.033
+    },
+    "misleading_chance": 0.08,
+    "sentiment": "neutral"
+  },
+  {
+    "id": "news_031",
+    "category": "politics",
+    "headline": "정부 {topic} 대책 발표, 시장은 엇갈린 반응",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "korean_stock",
+      "power": 0.072
+    },
+    "misleading_chance": 0.15,
+    "sentiment": "neutral"
+  },
+  {
+    "id": "news_032",
+    "category": "social_trends",
+    "headline": "[속보] {topic}, 투자자 불안 커져... 커뮤니티는 갑론을박",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "crypto",
+      "power": 0.018
+    },
+    "misleading_chance": 0.06,
+    "sentiment": "fear"
+  },
+  {
+    "id": "news_033",
+    "category": "ai_boom",
+    "headline": "{topic} 관련주 급등락... 전문가들 \"과열 주의\"",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "korean_stock",
+      "power": -0.054
+    },
+    "misleading_chance": 0.19,
+    "sentiment": "neutral"
+  },
+  {
+    "id": "news_034",
+    "category": "startup_culture",
+    "headline": "정부 {topic} 대책 발표, 시장은 엇갈린 반응",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "real_estate",
+      "power": 0.007
+    },
+    "misleading_chance": 0.11,
+    "sentiment": "fear"
+  },
+  {
+    "id": "news_035",
+    "category": "employment_crisis",
+    "headline": "정부 {topic} 대책 발표, 시장은 엇갈린 반응",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "us_stock",
+      "power": -0.071
+    },
+    "misleading_chance": 0.07,
+    "sentiment": "greed"
+  },
+  {
+    "id": "news_036",
+    "category": "cryptocurrency",
+    "headline": "{topic} 관련주 급등락... 전문가들 \"과열 주의\"",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "real_estate",
+      "power": -0.04
+    },
+    "misleading_chance": 0.18,
+    "sentiment": "greed"
+  },
+  {
+    "id": "news_037",
+    "category": "korean_stocks",
+    "headline": "정부 {topic} 대책 발표, 시장은 엇갈린 반응",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "crypto",
+      "power": 0.035
+    },
+    "misleading_chance": 0.18,
+    "sentiment": "neutral"
+  },
+  {
+    "id": "news_038",
+    "category": "us_stocks",
+    "headline": "정부 {topic} 대책 발표, 시장은 엇갈린 반응",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "startup",
+      "power": -0.071
+    },
+    "misleading_chance": 0.12,
+    "sentiment": "fear"
+  },
+  {
+    "id": "news_039",
+    "category": "real_estate",
+    "headline": "[속보] {topic}, 투자자 불안 커져... 커뮤니티는 갑론을박",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "crypto",
+      "power": 0.015
+    },
+    "misleading_chance": 0.25,
+    "sentiment": "greed"
+  },
+  {
+    "id": "news_040",
+    "category": "politics",
+    "headline": "정부 {topic} 대책 발표, 시장은 엇갈린 반응",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "real_estate",
+      "power": 0.055
+    },
+    "misleading_chance": 0.22,
+    "sentiment": "fear"
+  },
+  {
+    "id": "news_041",
+    "category": "social_trends",
+    "headline": "2030 사이에서 {topic} 인증 열풍... FOMO 확산",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "us_stock",
+      "power": -0.04
+    },
+    "misleading_chance": 0.23,
+    "sentiment": "fear"
+  },
+  {
+    "id": "news_042",
+    "category": "ai_boom",
+    "headline": "2030 사이에서 {topic} 인증 열풍... FOMO 확산",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "real_estate",
+      "power": 0.024
+    },
+    "misleading_chance": 0.24,
+    "sentiment": "greed"
+  },
+  {
+    "id": "news_043",
+    "category": "startup_culture",
+    "headline": "{topic} 관련주 급등락... 전문가들 \"과열 주의\"",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "real_estate",
+      "power": 0.049
+    },
+    "misleading_chance": 0.07,
+    "sentiment": "greed"
+  },
+  {
+    "id": "news_044",
+    "category": "employment_crisis",
+    "headline": "{topic} 관련주 급등락... 전문가들 \"과열 주의\"",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "us_stock",
+      "power": 0.019
+    },
+    "misleading_chance": 0.14,
+    "sentiment": "fear"
+  },
+  {
+    "id": "news_045",
+    "category": "cryptocurrency",
+    "headline": "[속보] {topic}, 투자자 불안 커져... 커뮤니티는 갑론을박",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "korean_stock",
+      "power": -0.048
+    },
+    "misleading_chance": 0.24,
+    "sentiment": "greed"
+  },
+  {
+    "id": "news_046",
+    "category": "korean_stocks",
+    "headline": "[속보] {topic}, 투자자 불안 커져... 커뮤니티는 갑론을박",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "us_stock",
+      "power": 0.029
+    },
+    "misleading_chance": 0.16,
+    "sentiment": "neutral"
+  },
+  {
+    "id": "news_047",
+    "category": "us_stocks",
+    "headline": "정부 {topic} 대책 발표, 시장은 엇갈린 반응",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "us_stock",
+      "power": -0.008
+    },
+    "misleading_chance": 0.2,
+    "sentiment": "greed"
+  },
+  {
+    "id": "news_048",
+    "category": "real_estate",
+    "headline": "2030 사이에서 {topic} 인증 열풍... FOMO 확산",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "real_estate",
+      "power": 0.072
+    },
+    "misleading_chance": 0.18,
+    "sentiment": "neutral"
+  },
+  {
+    "id": "news_049",
+    "category": "politics",
+    "headline": "[속보] {topic}, 투자자 불안 커져... 커뮤니티는 갑론을박",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "real_estate",
+      "power": 0.007
+    },
+    "misleading_chance": 0.06,
+    "sentiment": "neutral"
+  },
+  {
+    "id": "news_050",
+    "category": "social_trends",
+    "headline": "2030 사이에서 {topic} 인증 열풍... FOMO 확산",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "us_stock",
+      "power": -0.004
+    },
+    "misleading_chance": 0.05,
+    "sentiment": "fear"
+  },
+  {
+    "id": "news_051",
+    "category": "ai_boom",
+    "headline": "{topic} 관련주 급등락... 전문가들 \"과열 주의\"",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "crypto",
+      "power": 0.067
+    },
+    "misleading_chance": 0.13,
+    "sentiment": "greed"
+  },
+  {
+    "id": "news_052",
+    "category": "startup_culture",
+    "headline": "[속보] {topic}, 투자자 불안 커져... 커뮤니티는 갑론을박",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "korean_stock",
+      "power": 0.081
+    },
+    "misleading_chance": 0.19,
+    "sentiment": "neutral"
+  },
+  {
+    "id": "news_053",
+    "category": "employment_crisis",
+    "headline": "{topic} 관련주 급등락... 전문가들 \"과열 주의\"",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "real_estate",
+      "power": 0.033
+    },
+    "misleading_chance": 0.09,
+    "sentiment": "greed"
+  },
+  {
+    "id": "news_054",
+    "category": "cryptocurrency",
+    "headline": "[속보] {topic}, 투자자 불안 커져... 커뮤니티는 갑론을박",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "crypto",
+      "power": -0.014
+    },
+    "misleading_chance": 0.07,
+    "sentiment": "neutral"
+  },
+  {
+    "id": "news_055",
+    "category": "korean_stocks",
+    "headline": "{topic} 관련주 급등락... 전문가들 \"과열 주의\"",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "real_estate",
+      "power": 0.055
+    },
+    "misleading_chance": 0.11,
+    "sentiment": "greed"
+  },
+  {
+    "id": "news_056",
+    "category": "us_stocks",
+    "headline": "[속보] {topic}, 투자자 불안 커져... 커뮤니티는 갑론을박",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "startup",
+      "power": -0.08
+    },
+    "misleading_chance": 0.06,
+    "sentiment": "fear"
+  },
+  {
+    "id": "news_057",
+    "category": "real_estate",
+    "headline": "[속보] {topic}, 투자자 불안 커져... 커뮤니티는 갑론을박",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "us_stock",
+      "power": -0.049
+    },
+    "misleading_chance": 0.08,
+    "sentiment": "neutral"
+  },
+  {
+    "id": "news_058",
+    "category": "politics",
+    "headline": "정부 {topic} 대책 발표, 시장은 엇갈린 반응",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "crypto",
+      "power": 0.085
+    },
+    "misleading_chance": 0.08,
+    "sentiment": "fear"
+  },
+  {
+    "id": "news_059",
+    "category": "social_trends",
+    "headline": "[속보] {topic}, 투자자 불안 커져... 커뮤니티는 갑론을박",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "startup",
+      "power": -0.053
+    },
+    "misleading_chance": 0.1,
+    "sentiment": "neutral"
+  },
+  {
+    "id": "news_060",
+    "category": "ai_boom",
+    "headline": "정부 {topic} 대책 발표, 시장은 엇갈린 반응",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "us_stock",
+      "power": 0.031
+    },
+    "misleading_chance": 0.14,
+    "sentiment": "greed"
+  },
+  {
+    "id": "news_061",
+    "category": "startup_culture",
+    "headline": "[속보] {topic}, 투자자 불안 커져... 커뮤니티는 갑론을박",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "real_estate",
+      "power": 0.002
+    },
+    "misleading_chance": 0.09,
+    "sentiment": "greed"
+  },
+  {
+    "id": "news_062",
+    "category": "employment_crisis",
+    "headline": "정부 {topic} 대책 발표, 시장은 엇갈린 반응",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "real_estate",
+      "power": -0.025
+    },
+    "misleading_chance": 0.15,
+    "sentiment": "fear"
+  },
+  {
+    "id": "news_063",
+    "category": "cryptocurrency",
+    "headline": "2030 사이에서 {topic} 인증 열풍... FOMO 확산",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "crypto",
+      "power": 0.08
+    },
+    "misleading_chance": 0.11,
+    "sentiment": "neutral"
+  },
+  {
+    "id": "news_064",
+    "category": "korean_stocks",
+    "headline": "{topic} 관련주 급등락... 전문가들 \"과열 주의\"",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "korean_stock",
+      "power": 0.088
+    },
+    "misleading_chance": 0.19,
+    "sentiment": "fear"
+  },
+  {
+    "id": "news_065",
+    "category": "us_stocks",
+    "headline": "{topic} 관련주 급등락... 전문가들 \"과열 주의\"",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "us_stock",
+      "power": -0.023
+    },
+    "misleading_chance": 0.19,
+    "sentiment": "fear"
+  },
+  {
+    "id": "news_066",
+    "category": "real_estate",
+    "headline": "정부 {topic} 대책 발표, 시장은 엇갈린 반응",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "us_stock",
+      "power": -0.07
+    },
+    "misleading_chance": 0.08,
+    "sentiment": "neutral"
+  },
+  {
+    "id": "news_067",
+    "category": "politics",
+    "headline": "{topic} 관련주 급등락... 전문가들 \"과열 주의\"",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "korean_stock",
+      "power": -0.023
+    },
+    "misleading_chance": 0.14,
+    "sentiment": "neutral"
+  },
+  {
+    "id": "news_068",
+    "category": "social_trends",
+    "headline": "[속보] {topic}, 투자자 불안 커져... 커뮤니티는 갑론을박",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "crypto",
+      "power": 0.009
+    },
+    "misleading_chance": 0.05,
+    "sentiment": "greed"
+  },
+  {
+    "id": "news_069",
+    "category": "ai_boom",
+    "headline": "정부 {topic} 대책 발표, 시장은 엇갈린 반응",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "startup",
+      "power": 0.036
+    },
+    "misleading_chance": 0.1,
+    "sentiment": "neutral"
+  },
+  {
+    "id": "news_070",
+    "category": "startup_culture",
+    "headline": "2030 사이에서 {topic} 인증 열풍... FOMO 확산",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "startup",
+      "power": 0.012
+    },
+    "misleading_chance": 0.1,
+    "sentiment": "fear"
+  },
+  {
+    "id": "news_071",
+    "category": "employment_crisis",
+    "headline": "2030 사이에서 {topic} 인증 열풍... FOMO 확산",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "crypto",
+      "power": 0.057
+    },
+    "misleading_chance": 0.19,
+    "sentiment": "greed"
+  },
+  {
+    "id": "news_072",
+    "category": "cryptocurrency",
+    "headline": "2030 사이에서 {topic} 인증 열풍... FOMO 확산",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "crypto",
+      "power": 0.033
+    },
+    "misleading_chance": 0.15,
+    "sentiment": "neutral"
+  },
+  {
+    "id": "news_073",
+    "category": "korean_stocks",
+    "headline": "정부 {topic} 대책 발표, 시장은 엇갈린 반응",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "crypto",
+      "power": -0.031
+    },
+    "misleading_chance": 0.07,
+    "sentiment": "fear"
+  },
+  {
+    "id": "news_074",
+    "category": "us_stocks",
+    "headline": "{topic} 관련주 급등락... 전문가들 \"과열 주의\"",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "startup",
+      "power": 0.056
+    },
+    "misleading_chance": 0.06,
+    "sentiment": "greed"
+  },
+  {
+    "id": "news_075",
+    "category": "real_estate",
+    "headline": "[속보] {topic}, 투자자 불안 커져... 커뮤니티는 갑론을박",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "real_estate",
+      "power": 0.035
+    },
+    "misleading_chance": 0.24,
+    "sentiment": "neutral"
+  },
+  {
+    "id": "news_076",
+    "category": "politics",
+    "headline": "{topic} 관련주 급등락... 전문가들 \"과열 주의\"",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "real_estate",
+      "power": 0.02
+    },
+    "misleading_chance": 0.12,
+    "sentiment": "fear"
+  },
+  {
+    "id": "news_077",
+    "category": "social_trends",
+    "headline": "{topic} 관련주 급등락... 전문가들 \"과열 주의\"",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "us_stock",
+      "power": -0.068
+    },
+    "misleading_chance": 0.13,
+    "sentiment": "fear"
+  },
+  {
+    "id": "news_078",
+    "category": "ai_boom",
+    "headline": "2030 사이에서 {topic} 인증 열풍... FOMO 확산",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "startup",
+      "power": 0.031
+    },
+    "misleading_chance": 0.16,
+    "sentiment": "neutral"
+  },
+  {
+    "id": "news_079",
+    "category": "startup_culture",
+    "headline": "[속보] {topic}, 투자자 불안 커져... 커뮤니티는 갑론을박",
+    "topics": [
+      "AI",
+      "코인",
+      "강남 부동산",
+      "청년 취업",
+      "미국 기술주",
+      "전세 시장",
+      "스타트업 투자"
+    ],
+    "market_effect": {
+      "category": "startup",
+      "power": 0.033
+    },
+    "misleading_chance": 0.24,
+    "sentiment": "fear"
+  }
+]

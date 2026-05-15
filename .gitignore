@@ -6,3 +6,6 @@ OrbitSprint/Build/
 *.xcuserdata/
 xcuserdata/
 *.xcodeproj/xcuserdata/
+
+# Godot local editor/cache
+**/.godot/

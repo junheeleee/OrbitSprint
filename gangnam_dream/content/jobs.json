@@ -1,0 +1,281 @@
+[
+  {
+    "id": "job_01",
+    "name": "편의점 야간 알바",
+    "category": "tech",
+    "description": "편의점 야간 알바. 돈과 스트레스를 동시에 주는 현대 한국식 생존 루트.",
+    "base_salary": 1200000,
+    "requirements": {},
+    "stress_per_month": 8,
+    "stat_gains": {
+      "intelligence": 0,
+      "social_skill": 1,
+      "investment_skill": 0
+    },
+    "tier": 1,
+    "promotion_threshold": 6,
+    "promotion_bonus": 150000
+  },
+  {
+    "id": "job_02",
+    "name": "배달 라이더",
+    "category": "part_time",
+    "description": "배달 라이더. 돈과 스트레스를 동시에 주는 현대 한국식 생존 루트.",
+    "base_salary": 1620000,
+    "requirements": {},
+    "stress_per_month": 12,
+    "stat_gains": {
+      "intelligence": 1,
+      "social_skill": 2,
+      "investment_skill": 0
+    },
+    "tier": 1,
+    "promotion_threshold": 9,
+    "promotion_bonus": 220000
+  },
+  {
+    "id": "job_03",
+    "name": "중소기업 사무직",
+    "category": "part_time",
+    "description": "중소기업 사무직. 돈과 스트레스를 동시에 주는 현대 한국식 생존 루트.",
+    "base_salary": 2040000,
+    "requirements": {},
+    "stress_per_month": 16,
+    "stat_gains": {
+      "intelligence": 2,
+      "social_skill": 0,
+      "investment_skill": 0
+    },
+    "tier": 1,
+    "promotion_threshold": 12,
+    "promotion_bonus": 290000
+  },
+  {
+    "id": "job_04",
+    "name": "콜센터 상담원",
+    "category": "startup",
+    "description": "콜센터 상담원. 돈과 스트레스를 동시에 주는 현대 한국식 생존 루트.",
+    "base_salary": 2460000,
+    "requirements": {
+      "min_intelligence": 37
+    },
+    "stress_per_month": 20,
+    "stat_gains": {
+      "intelligence": 0,
+      "social_skill": 1,
+      "investment_skill": 0
+    },
+    "tier": 1,
+    "promotion_threshold": 15,
+    "promotion_bonus": 360000
+  },
+  {
+    "id": "job_05",
+    "name": "학원 조교",
+    "category": "part_time",
+    "description": "학원 조교. 돈과 스트레스를 동시에 주는 현대 한국식 생존 루트.",
+    "base_salary": 2880000,
+    "requirements": {
+      "min_intelligence": 41
+    },
+    "stress_per_month": 24,
+    "stat_gains": {
+      "intelligence": 1,
+      "social_skill": 2,
+      "investment_skill": 0
+    },
+    "tier": 2,
+    "promotion_threshold": 18,
+    "promotion_bonus": 430000
+  },
+  {
+    "id": "job_06",
+    "name": "프론트엔드 개발자",
+    "category": "office",
+    "description": "프론트엔드 개발자. 돈과 스트레스를 동시에 주는 현대 한국식 생존 루트.",
+    "base_salary": 3300000,
+    "requirements": {
+      "min_intelligence": 45
+    },
+    "stress_per_month": 28,
+    "stat_gains": {
+      "intelligence": 2,
+      "social_skill": 0,
+      "investment_skill": 0
+    },
+    "tier": 2,
+    "promotion_threshold": 6,
+    "promotion_bonus": 500000
+  },
+  {
+    "id": "job_07",
+    "name": "금융권 애널리스트",
+    "category": "sales",
+    "description": "금융권 애널리스트. 돈과 스트레스를 동시에 주는 현대 한국식 생존 루트.",
+    "base_salary": 3720000,
+    "requirements": {
+      "min_intelligence": 49
+    },
+    "stress_per_month": 32,
+    "stat_gains": {
+      "intelligence": 0,
+      "social_skill": 1,
+      "investment_skill": 1
+    },
+    "tier": 2,
+    "promotion_threshold": 9,
+    "promotion_bonus": 570000
+  },
+  {
+    "id": "job_08",
+    "name": "대기업 신입",
+    "category": "part_time",
+    "description": "대기업 신입. 돈과 스트레스를 동시에 주는 현대 한국식 생존 루트.",
+    "base_salary": 4140000,
+    "requirements": {
+      "min_intelligence": 53
+    },
+    "stress_per_month": 36,
+    "stat_gains": {
+      "intelligence": 1,
+      "social_skill": 2,
+      "investment_skill": 0
+    },
+    "tier": 2,
+    "promotion_threshold": 12,
+    "promotion_bonus": 640000
+  },
+  {
+    "id": "job_09",
+    "name": "공무원 준비생",
+    "category": "startup",
+    "description": "공무원 준비생. 돈과 스트레스를 동시에 주는 현대 한국식 생존 루트.",
+    "base_salary": 4560000,
+    "requirements": {
+      "min_intelligence": 57
+    },
+    "stress_per_month": 8,
+    "stat_gains": {
+      "intelligence": 2,
+      "social_skill": 0,
+      "investment_skill": 0
+    },
+    "tier": 3,
+    "promotion_threshold": 15,
+    "promotion_bonus": 710000
+  },
+  {
+    "id": "job_10",
+    "name": "부동산 중개보조",
+    "category": "office",
+    "description": "부동산 중개보조. 돈과 스트레스를 동시에 주는 현대 한국식 생존 루트.",
+    "base_salary": 4980000,
+    "requirements": {
+      "min_intelligence": 61
+    },
+    "stress_per_month": 12,
+    "stat_gains": {
+      "intelligence": 0,
+      "social_skill": 1,
+      "investment_skill": 0
+    },
+    "tier": 3,
+    "promotion_threshold": 18,
+    "promotion_bonus": 780000
+  },
+  {
+    "id": "job_11",
+    "name": "스타트업 창업자",
+    "category": "tech",
+    "description": "스타트업 창업자. 돈과 스트레스를 동시에 주는 현대 한국식 생존 루트.",
+    "base_salary": 5400000,
+    "requirements": {
+      "min_intelligence": 65
+    },
+    "stress_per_month": 16,
+    "stat_gains": {
+      "intelligence": 1,
+      "social_skill": 2,
+      "investment_skill": 1
+    },
+    "tier": 3,
+    "promotion_threshold": 6,
+    "promotion_bonus": 850000
+  },
+  {
+    "id": "job_12",
+    "name": "AI 자동화 컨설턴트",
+    "category": "sales",
+    "description": "AI 자동화 컨설턴트. 돈과 스트레스를 동시에 주는 현대 한국식 생존 루트.",
+    "base_salary": 5820000,
+    "requirements": {
+      "min_intelligence": 69
+    },
+    "stress_per_month": 20,
+    "stat_gains": {
+      "intelligence": 2,
+      "social_skill": 0,
+      "investment_skill": 1
+    },
+    "tier": 3,
+    "promotion_threshold": 9,
+    "promotion_bonus": 920000
+  },
+  {
+    "id": "job_13",
+    "name": "유튜브 편집자",
+    "category": "startup",
+    "description": "유튜브 편집자. 돈과 스트레스를 동시에 주는 현대 한국식 생존 루트.",
+    "base_salary": 6240000,
+    "requirements": {
+      "min_intelligence": 73
+    },
+    "stress_per_month": 24,
+    "stat_gains": {
+      "intelligence": 0,
+      "social_skill": 1,
+      "investment_skill": 0
+    },
+    "tier": 4,
+    "promotion_threshold": 12,
+    "promotion_bonus": 990000
+  },
+  {
+    "id": "job_14",
+    "name": "보험 영업직",
+    "category": "office",
+    "description": "보험 영업직. 돈과 스트레스를 동시에 주는 현대 한국식 생존 루트.",
+    "base_salary": 6660000,
+    "requirements": {
+      "min_intelligence": 77
+    },
+    "stress_per_month": 28,
+    "stat_gains": {
+      "intelligence": 1,
+      "social_skill": 2,
+      "investment_skill": 0
+    },
+    "tier": 4,
+    "promotion_threshold": 15,
+    "promotion_bonus": 1060000
+  },
+  {
+    "id": "job_15",
+    "name": "외국계 세일즈",
+    "category": "startup",
+    "description": "외국계 세일즈. 돈과 스트레스를 동시에 주는 현대 한국식 생존 루트.",
+    "base_salary": 7080000,
+    "requirements": {
+      "min_intelligence": 81
+    },
+    "stress_per_month": 32,
+    "stat_gains": {
+      "intelligence": 2,
+      "social_skill": 0,
+      "investment_skill": 0
+    },
+    "tier": 4,
+    "promotion_threshold": 18,
+    "promotion_bonus": 1130000
+  }
+]
