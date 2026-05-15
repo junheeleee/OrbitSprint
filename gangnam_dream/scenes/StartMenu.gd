@@ -8,6 +8,7 @@ func _ready():
 func _build_ui():
 	var bg = ColorRect.new()
 	bg.color = Color("#07111f")
+	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
 
@@ -38,6 +39,8 @@ func _build_ui():
 	box.add_child(_label("100만원, 스무 살, 서울. 이번 생은 어디까지 올라갈 수 있을까.", 15, "#dbe7ff", HORIZONTAL_ALIGNMENT_CENTER))
 
 	trait_option = OptionButton.new()
+	trait_option.custom_minimum_size = Vector2(360, 44)
+	trait_option.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	for trait_name in MetaProgression.get_unlocked_traits():
 		trait_option.add_item(trait_name)
 	box.add_child(trait_option)
@@ -82,7 +85,9 @@ func _label(text, size, color, align):
 	var label = Label.new()
 	label.text = text
 	label.horizontal_alignment = align
-	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	label.clip_text = true
+	label.custom_minimum_size = Vector2(360, 0)
 	label.add_theme_font_size_override("font_size", size)
 	label.add_theme_color_override("font_color", Color(color))
 	return label
@@ -90,7 +95,8 @@ func _label(text, size, color, align):
 func _button(text, color):
 	var button = Button.new()
 	button.text = text
-	button.custom_minimum_size = Vector2(0, 46)
+	button.custom_minimum_size = Vector2(360, 46)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	var normal = StyleBoxFlat.new()
 	normal.bg_color = Color(color)
 	normal.set_corner_radius_all(6)

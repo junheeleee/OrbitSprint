@@ -48,16 +48,17 @@ func _connect_signals():
 func _build_ui():
 	var bg = ColorRect.new()
 	bg.color = Color("#07111f")
+	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
 
 	var root = VBoxContainer.new()
 	root.set_anchors_preset(Control.PRESET_FULL_RECT)
+	root.offset_left = 10
+	root.offset_top = 10
+	root.offset_right = -10
+	root.offset_bottom = -10
 	root.add_theme_constant_override("separation", 8)
-	root.add_theme_constant_override("margin_left", 10)
-	root.add_theme_constant_override("margin_right", 10)
-	root.add_theme_constant_override("margin_top", 10)
-	root.add_theme_constant_override("margin_bottom", 10)
 	add_child(root)
 
 	_build_top_bar(root)
@@ -77,14 +78,19 @@ func _build_top_bar(parent):
 	panel.custom_minimum_size = Vector2(0, 52)
 	parent.add_child(panel)
 	var row = HBoxContainer.new()
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	row.add_theme_constant_override("separation", 18)
 	panel.add_child(row)
 	var title = _label("강남드림", 22, "#ffd166")
+	title.custom_minimum_size = Vector2(120, 0)
 	row.add_child(title)
 	for key in ["date", "age", "turn", "money", "tier", "market"]:
 		var label = _label("", 14, "#dbe7ff")
+		label.custom_minimum_size = Vector2(72, 0)
 		label.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		if key == "market":
+			label.custom_minimum_size = Vector2(180, 0)
 			label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		top_labels[key] = label
 		row.add_child(label)
@@ -92,6 +98,7 @@ func _build_top_bar(parent):
 func _build_left_panel(parent):
 	var panel = _panel("#101820", "#243447")
 	panel.custom_minimum_size = Vector2(250, 0)
+	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	parent.add_child(panel)
 	var box = VBoxContainer.new()
 	box.add_theme_constant_override("separation", 8)
@@ -100,9 +107,12 @@ func _build_left_panel(parent):
 	for key in ["job", "health", "mental", "stress", "intelligence", "social_skill", "investment_skill", "luck", "reputation", "asset"]:
 		var row = HBoxContainer.new()
 		box.add_child(row)
-		row.add_child(_label(_stat_name(key), 13, "#9fb3c8"))
+		var name_label = _label(_stat_name(key), 13, "#9fb3c8")
+		name_label.custom_minimum_size = Vector2(86, 0)
+		row.add_child(name_label)
 		var value = _label("", 13, "#ffffff")
 		value.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		value.custom_minimum_size = Vector2(120, 0)
 		value.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		stat_labels[key] = value
 		row.add_child(value)
@@ -117,6 +127,7 @@ func _build_left_panel(parent):
 func _build_center_panel(parent):
 	var center = VBoxContainer.new()
 	center.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	center.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	center.add_theme_constant_override("separation", 8)
 	parent.add_child(center)
 
@@ -149,6 +160,7 @@ func _build_center_panel(parent):
 func _build_right_panel(parent):
 	var tabs = TabContainer.new()
 	tabs.custom_minimum_size = Vector2(330, 0)
+	tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	parent.add_child(tabs)
 
 	investment_box = _tab_box(tabs, "투자")
@@ -157,6 +169,7 @@ func _build_right_panel(parent):
 
 func _build_bottom_bar(parent):
 	var row = HBoxContainer.new()
+	row.custom_minimum_size = Vector2(0, 54)
 	row.add_theme_constant_override("separation", 8)
 	parent.add_child(row)
 	next_button = _button("다음 달", "#1f6feb")
@@ -178,12 +191,14 @@ func _build_bottom_bar(parent):
 func _build_modal():
 	modal_layer = ColorRect.new()
 	modal_layer.color = Color(0, 0, 0, 0.65)
+	modal_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	modal_layer.set_anchors_preset(Control.PRESET_FULL_RECT)
 	modal_layer.visible = false
 	add_child(modal_layer)
 	var panel = _panel("#0f172a", "#64748b")
 	panel.set_anchors_preset(Control.PRESET_CENTER)
 	panel.custom_minimum_size = Vector2(620, 520)
+	panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	modal_layer.add_child(panel)
 	modal_body = VBoxContainer.new()
 	modal_body.add_theme_constant_override("separation", 8)
@@ -265,7 +280,7 @@ func _render_news():
 	var items = GameState.news_log.slice(max(0, GameState.news_log.size() - 4))
 	for news in items:
 		var text = str(news.get("headline", "")).format({"topic": _random_topic(news)})
-		news_box.add_child(_label(text, 13, "#dbe7ff"))
+		news_box.add_child(_wrap_label(text, 13, "#dbe7ff"))
 
 func _render_sidebars():
 	_clear_box(investment_box)
@@ -352,9 +367,11 @@ func _open_modal(title):
 	close.pressed.connect(_close_modal)
 	modal_body.add_child(close)
 	modal_layer.visible = true
+	modal_layer.mouse_filter = Control.MOUSE_FILTER_STOP
 
 func _close_modal():
 	modal_layer.visible = false
+	modal_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 func _show_ending(ending_id):
 	_open_modal("엔딩")
@@ -372,6 +389,7 @@ func _tab_box(tabs, title):
 	scroll.name = title
 	tabs.add_child(scroll)
 	var box = VBoxContainer.new()
+	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	box.add_theme_constant_override("separation", 6)
 	scroll.add_child(box)
 	return box
@@ -397,15 +415,24 @@ func _panel(bg, border):
 func _label(text, size, color):
 	var label = Label.new()
 	label.text = text
-	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	label.clip_text = true
 	label.add_theme_font_size_override("font_size", size)
 	label.add_theme_color_override("font_color", Color(color))
+	return label
+
+func _wrap_label(text, size, color):
+	var label = _label(text, size, color)
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.clip_text = false
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	return label
 
 func _button(text, color):
 	var button = Button.new()
 	button.text = text
 	button.custom_minimum_size = Vector2(0, 42)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	var normal = StyleBoxFlat.new()
 	normal.bg_color = Color(color)
 	normal.set_corner_radius_all(5)
