@@ -11,11 +11,12 @@ final class GameScene: SKScene {
     }
 
     private let state: GameState
-    private let innerRadius: CGFloat = 86
-    private let outerRadius: CGFloat = 136
     private let playerRadius: CGFloat = 14
-    private var currentRadius: CGFloat = 86
-    private var targetRadius: CGFloat = 86
+    private let orbitRadii: [CGFloat] = [76, 112, 148]
+    private var currentRadius: CGFloat = 76
+    private var targetRadius: CGFloat = 76
+    private var currentOrbitIndex = 0
+    private var orbitStepDirection = 1
     private var angle: CGFloat = -.pi / 2
     private var angularSpeed: CGFloat = 1.72
     private var lastUpdate: TimeInterval = 0
@@ -63,10 +64,29 @@ final class GameScene: SKScene {
     private func switchOrbitAndDirection() {
         guard !state.isGameOver else { return }
         guard !state.isPaused else { return }
-        targetRadius = targetRadius == innerRadius ? outerRadius : innerRadius
+        advanceOrbit()
         angularSpeed *= -1
         SoundPlayer.tap(enabled: state.isSoundEnabled)
         Haptics.tap(enabled: state.isHapticsEnabled)
+    }
+
+    private func advanceOrbit() {
+        currentOrbitIndex += orbitStepDirection
+        if currentOrbitIndex >= orbitRadii.count - 1 {
+            currentOrbitIndex = orbitRadii.count - 1
+        } else if currentOrbitIndex <= 0 {
+            currentOrbitIndex = 0
+        }
+        updateOrbitStepDirectionForEdge()
+        targetRadius = orbitRadii[currentOrbitIndex]
+    }
+
+    private func updateOrbitStepDirectionForEdge() {
+        if currentOrbitIndex >= orbitRadii.count - 1 {
+            orbitStepDirection = -1
+        } else if currentOrbitIndex <= 0 {
+            orbitStepDirection = 1
+        }
     }
 
     override func update(_ currentTime: TimeInterval) {
@@ -153,10 +173,10 @@ final class GameScene: SKScene {
     private func drawOrbits() {
         orbitLayer.removeAllChildren()
 
-        for radius in [innerRadius, outerRadius] {
+        for (index, radius) in orbitRadii.enumerated() {
             let ring = SKShapeNode(circleOfRadius: radius)
             ring.position = center
-            ring.strokeColor = SKColor.white.withAlphaComponent(radius == innerRadius ? 0.18 : 0.28)
+            ring.strokeColor = SKColor.white.withAlphaComponent(0.16 + CGFloat(index) * 0.08)
             ring.lineWidth = 2
             ring.glowWidth = 1
             orbitLayer.addChild(ring)
@@ -205,13 +225,13 @@ final class GameScene: SKScene {
         node.run(.sequence([.wait(forDuration: 6.0), .fadeOut(withDuration: 0.25), .removeFromParent()]))
 
         if CGFloat.random(in: 0...1) < 0.58 {
-            spawnSpark(on: oppositeRadius(from: radius), near: spawnAngle + CGFloat.random(in: -0.18...0.18))
+            spawnSpark(on: rewardRadius(awayFrom: radius), near: spawnAngle + CGFloat.random(in: -0.18...0.18))
         }
     }
 
     private func spawnSpark() {
         let spawnAngle = nextPlayableSpawnAngle(minLead: 0.72, maxLead: 2.35)
-        let radius = Bool.random() ? innerRadius : outerRadius
+        let radius = randomOrbitRadius()
         spawnSpark(on: radius, near: spawnAngle)
     }
 
@@ -233,7 +253,7 @@ final class GameScene: SKScene {
     }
 
     private func spawnPowerUp() {
-        let radius = Bool.random() ? innerRadius : outerRadius
+        let radius = randomOrbitRadius()
         let spawnAngle = nextPlayableSpawnAngle(minLead: 1.05, maxLead: 2.4)
         guard !hasNearbyObject(at: spawnAngle, clearance: 0.34, names: [NodeName.shard, NodeName.shield, NodeName.slow]) else { return }
 
@@ -320,6 +340,8 @@ final class GameScene: SKScene {
     private func recoverToSafePosition() {
         angle = safestRecoveryAngle()
         currentRadius = saferRecoveryRadius(at: angle)
+        currentOrbitIndex = nearestOrbitIndex(to: currentRadius)
+        updateOrbitStepDirectionForEdge()
         targetRadius = currentRadius
         updatePlayerPosition()
         removeNearbyShards(clearance: 1.15)
@@ -344,9 +366,9 @@ final class GameScene: SKScene {
     }
 
     private func saferRecoveryRadius(at recoveryAngle: CGFloat) -> CGFloat {
-        let innerRisk = shardRisk(on: innerRadius, near: recoveryAngle)
-        let outerRisk = shardRisk(on: outerRadius, near: recoveryAngle)
-        return innerRisk <= outerRisk ? innerRadius : outerRadius
+        orbitRadii.min { first, second in
+            shardRisk(on: first, near: recoveryAngle) < shardRisk(on: second, near: recoveryAngle)
+        } ?? orbitRadii[0]
     }
 
     private func shardRisk(on radius: CGFloat, near recoveryAngle: CGFloat) -> CGFloat {
@@ -399,13 +421,30 @@ final class GameScene: SKScene {
     private func chooseThreatRadius() -> CGFloat {
         let playerWillReachSoon = CGFloat.random(in: 0...1) < 0.64
         if playerWillReachSoon {
-            return currentRadius
+            return targetRadius
         }
-        return Bool.random() ? innerRadius : outerRadius
+        return randomOrbitRadius()
     }
 
-    private func oppositeRadius(from radius: CGFloat) -> CGFloat {
-        radius == innerRadius ? outerRadius : innerRadius
+    private func randomOrbitRadius() -> CGFloat {
+        orbitRadii.randomElement() ?? orbitRadii[0]
+    }
+
+    private func rewardRadius(awayFrom radius: CGFloat) -> CGFloat {
+        let index = nearestOrbitIndex(to: radius)
+        if index == 0 {
+            return orbitRadii[1]
+        }
+        if index == orbitRadii.count - 1 {
+            return orbitRadii[orbitRadii.count - 2]
+        }
+        return Bool.random() ? orbitRadii[index - 1] : orbitRadii[index + 1]
+    }
+
+    private func nearestOrbitIndex(to radius: CGFloat) -> Int {
+        orbitRadii.indices.min { first, second in
+            abs(orbitRadii[first] - radius) < abs(orbitRadii[second] - radius)
+        } ?? 0
     }
 
     private func nextPlayableSpawnAngle(minLead: CGFloat, maxLead: CGFloat) -> CGFloat {

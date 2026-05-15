@@ -4,12 +4,12 @@
 "hud.combo" = "%d 콤보";
 
 "loading.title" = "궤도 충전 중";
-"start.subtitle" = "한 번 탭하면 궤도와 방향이 동시에 바뀝니다. 패턴을 읽고 별빛을 이어 모으세요.";
+"start.subtitle" = "한 번 탭하면 방향이 반전되고 세 단계 궤도를 오르내립니다. 패턴을 읽고 별빛을 이어 모으세요.";
 "start.play" = "게임 시작";
 
 "tutorial.title" = "궤도로 뛰어들기";
 "tutorial.body" = "별빛을 연속으로 모아 배수를 키우고, 파워업으로 더 높은 레벨까지 버텨 보세요.";
-"tutorial.step.tap" = "화면 아무 곳이나 탭해서 안쪽/바깥쪽 궤도를 바꿉니다.";
+"tutorial.step.tap" = "화면 아무 곳이나 탭해서 1-2-3-2-1 순서로 궤도를 오르내립니다.";
 "tutorial.step.collect" = "별빛을 빠르게 이어 먹으면 최대 x5 콤보 배수가 붙습니다.";
 "tutorial.step.avoid" = "빨간 파편을 피하세요. 한 번 부딪히면 끝입니다.";
 "tutorial.step.powerups" = "파란 방패는 충돌을 막고, 보라 시간핵은 궤도를 느리게 합니다.";
