@@ -1,0 +1,35 @@
+"app.title" = "오빗 스프린트";
+"hud.best" = "최고";
+"hud.level" = "LV %d";
+"hud.combo" = "%d 콤보";
+
+"tutorial.title" = "궤도로 뛰어들기";
+"tutorial.body" = "별빛을 연속으로 모아 배수를 키우고, 파워업으로 더 높은 레벨까지 버텨 보세요.";
+"tutorial.step.tap" = "화면 아무 곳이나 탭해서 안쪽/바깥쪽 궤도를 바꿉니다.";
+"tutorial.step.collect" = "별빛을 빠르게 이어 먹으면 최대 x5 콤보 배수가 붙습니다.";
+"tutorial.step.avoid" = "빨간 파편을 피하세요. 한 번 부딪히면 끝입니다.";
+"tutorial.step.powerups" = "파란 방패는 충돌을 막고, 보라 시간핵은 궤도를 느리게 합니다.";
+"tutorial.start" = "시작하기";
+
+"gameover.title" = "충돌!";
+"gameover.score" = "점수 %d  |  최고 %d";
+"gameover.level" = "도달 레벨 %d";
+"gameover.restart" = "다시 달리기";
+
+"pause.title" = "일시정지";
+"pause.resume" = "계속하기";
+
+"settings.title" = "설정";
+"settings.play" = "플레이";
+"settings.sound" = "사운드";
+"settings.haptics" = "햅틱";
+"settings.theme" = "테마";
+"settings.record" = "기록";
+"settings.resetBest" = "최고 기록 초기화";
+"settings.help" = "도움말";
+"settings.showTutorial" = "튜토리얼 다시 보기";
+"settings.done" = "완료";
+
+"theme.aurora" = "오로라";
+"theme.solar" = "솔라";
+"theme.mono" = "모노";
