@@ -56,10 +56,21 @@ final class GameScene: SKScene {
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    }
+
+    func steerLeft() {
+        steer(direction: -1)
+    }
+
+    func steerRight() {
+        steer(direction: 1)
+    }
+
+    private func steer(direction: CGFloat) {
         guard !state.isGameOver else { return }
         guard !state.isPaused else { return }
         currentRadius = currentRadius == innerRadius ? outerRadius : innerRadius
-        angularSpeed *= -1
+        angularSpeed = abs(angularSpeed) * direction
         SoundPlayer.tap(enabled: state.isSoundEnabled)
         Haptics.tap(enabled: state.isHapticsEnabled)
     }
@@ -304,15 +315,56 @@ final class GameScene: SKScene {
     private func absorbShard(_ node: SKNode, invulnerabilityDuration: TimeInterval) {
         node.removeFromParent()
         invulnerableUntil = max(invulnerableUntil, elapsedTime + invulnerabilityDuration)
-        removeNearbyShards()
+        recoverToSafePosition()
         pulseInvulnerability()
     }
 
-    private func removeNearbyShards() {
+    private func recoverToSafePosition() {
+        angle = safestRecoveryAngle()
+        currentRadius = saferRecoveryRadius(at: angle)
+        updatePlayerPosition()
+        removeNearbyShards(clearance: 1.15)
+        spawnTimer = 0
+        sparkTimer = min(sparkTimer, 0.2)
+    }
+
+    private func safestRecoveryAngle() -> CGFloat {
+        let candidates = (0..<16).map { normalizedAngle(CGFloat($0) * .pi / 8) }
+        let shardAngles = objectLayer.children.compactMap { node -> CGFloat? in
+            guard node.name == NodeName.shard else { return nil }
+            return storedAngle(for: node)
+        }
+
+        guard !shardAngles.isEmpty else {
+            return normalizedAngle(angle + .pi)
+        }
+
+        return candidates.max { first, second in
+            nearestDistance(from: first, to: shardAngles) < nearestDistance(from: second, to: shardAngles)
+        } ?? normalizedAngle(angle + .pi)
+    }
+
+    private func saferRecoveryRadius(at recoveryAngle: CGFloat) -> CGFloat {
+        let innerRisk = shardRisk(on: innerRadius, near: recoveryAngle)
+        let outerRisk = shardRisk(on: outerRadius, near: recoveryAngle)
+        return innerRisk <= outerRisk ? innerRadius : outerRadius
+    }
+
+    private func shardRisk(on radius: CGFloat, near recoveryAngle: CGFloat) -> CGFloat {
+        objectLayer.children.reduce(CGFloat.zero) { total, node in
+            guard node.name == NodeName.shard else { return total }
+            guard let objectAngle = storedAngle(for: node) else { return total }
+            guard let objectRadius = storedRadius(for: node) else { return total }
+            let lanePenalty: CGFloat = objectRadius == radius ? 1 : 0.34
+            return total + lanePenalty / max(angularDistance(objectAngle, recoveryAngle), 0.12)
+        }
+    }
+
+    private func removeNearbyShards(clearance: CGFloat) {
         objectLayer.children.forEach { node in
             guard node.name == NodeName.shard else { return }
             guard let objectAngle = storedAngle(for: node) else { return }
-            if angularDistance(objectAngle, angle) < 0.72 {
+            if angularDistance(objectAngle, angle) < clearance {
                 node.removeFromParent()
             }
         }
@@ -392,6 +444,22 @@ final class GameScene: SKScene {
         }
 
         return nil
+    }
+
+    private func storedRadius(for node: SKNode) -> CGFloat? {
+        if let radius = node.userData?["radius"] as? CGFloat {
+            return radius
+        }
+
+        if let radius = node.userData?["radius"] as? NSNumber {
+            return CGFloat(truncating: radius)
+        }
+
+        return nil
+    }
+
+    private func nearestDistance(from angle: CGFloat, to angles: [CGFloat]) -> CGFloat {
+        angles.map { angularDistance(angle, $0) }.min() ?? .pi
     }
 
     private func angularDistance(_ first: CGFloat, _ second: CGFloat) -> CGFloat {

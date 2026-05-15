@@ -5,7 +5,7 @@
 
 "tutorial.title" = "Tap Into Orbit";
 "tutorial.body" = "Chain sparks for score multipliers, grab power-ups, and survive each faster level.";
-"tutorial.step.tap" = "Tap anywhere to switch between the inner and outer orbit.";
+"tutorial.step.tap" = "Use the left and right controls to switch orbit lanes and choose direction.";
 "tutorial.step.collect" = "Collect sparks quickly to build combo multipliers up to x5.";
 "tutorial.step.avoid" = "Avoid red shards. One crash ends the run.";
 "tutorial.step.powerups" = "Blue shields absorb a crash. Purple time cores slow the orbit.";
@@ -18,6 +18,9 @@
 
 "pause.title" = "Paused";
 "pause.resume" = "Resume";
+
+"control.left" = "Steer left";
+"control.right" = "Steer right";
 
 "settings.title" = "Settings";
 "settings.play" = "Play";

@@ -51,6 +51,20 @@ struct ContentView: View {
                     .padding(24)
                     .transition(.scale.combined(with: .opacity))
                 }
+
+                if gameState.hasSeenTutorial, !gameState.isGameOver, !gameState.isUserPaused {
+                    OrbitControlsView(
+                        steerLeft: {
+                            scene?.steerLeft()
+                        },
+                        steerRight: {
+                            scene?.steerRight()
+                        }
+                    )
+                    .padding(.horizontal, 26)
+                    .padding(.bottom, 28)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                }
             }
         }
         .background(
@@ -188,6 +202,43 @@ private struct PauseView: View {
         }
         .padding(22)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+    }
+}
+
+private struct OrbitControlsView: View {
+    let steerLeft: () -> Void
+    let steerRight: () -> Void
+
+    var body: some View {
+        HStack {
+            ControlButton(systemName: "chevron.left", action: steerLeft)
+
+            Spacer()
+
+            ControlButton(systemName: "chevron.right", action: steerRight)
+        }
+    }
+}
+
+private struct ControlButton: View {
+    let systemName: String
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: systemName)
+                .font(.system(size: 30, weight: .black))
+                .foregroundStyle(.white)
+                .frame(width: 78, height: 78)
+                .background(.white.opacity(0.16), in: Circle())
+                .overlay {
+                    Circle()
+                        .stroke(.white.opacity(0.34), lineWidth: 2)
+                }
+                .contentShape(Circle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(systemName == "chevron.left" ? Text("control.left") : Text("control.right"))
     }
 }
 
