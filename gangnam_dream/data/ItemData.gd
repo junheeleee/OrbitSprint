@@ -186,20 +186,20 @@ static var ITEMS: Array = [
 	}
 ]
 
-static func get_item(item_id: String) -> Dictionary:
+static func get_item(item_id):
 	for item in ITEMS:
 		if item["id"] == item_id:
 			return item
 	return {}
 
-static func get_items_by_category(category: String) -> Array:
+static func get_items_by_category(category):
 	var result: Array = []
 	for item in ITEMS:
 		if item["category"] == category:
 			result.append(item)
 	return result
 
-static func get_affordable_items(max_price: float) -> Array:
+static func get_affordable_items(max_price):
 	var result: Array = []
 	for item in ITEMS:
 		if float(item["price"]) <= max_price:

@@ -3,7 +3,7 @@ extends Node
 signal job_changed(new_job: Dictionary)
 signal promoted(job: Dictionary, bonus: float)
 
-func apply_for_job(job_id: String) -> Dictionary:
+func apply_for_job(job_id):
 	var job := DataRegistry.get_job(job_id)
 	if job.is_empty():
 		return {"success": false, "message": "존재하지 않는 직업입니다."}
@@ -20,7 +20,7 @@ func apply_for_job(job_id: String) -> Dictionary:
 	job_changed.emit(job)
 	return {"success": true, "message": "취업 완료"}
 
-func quit_job(voluntary: bool) -> void:
+func quit_job(voluntary):
 	if GameState.current_job.is_empty():
 		return
 	GameState.monthly_income -= float(GameState.current_job.get("base_salary", 0.0))
@@ -31,7 +31,7 @@ func quit_job(voluntary: bool) -> void:
 	if voluntary:
 		job_changed.emit({})
 
-func process_monthly_job() -> void:
+func process_monthly_job():
 	if GameState.current_job.is_empty():
 		GameState.modify_hidden_stat("stress", 2)
 		return
@@ -45,7 +45,7 @@ func process_monthly_job() -> void:
 	if GameState.job_tenure >= int(job.get("promotion_threshold", 999)) and GameState.work_performance >= 60 and randf() < 0.35:
 		_promote(job)
 
-func get_available_jobs() -> Array:
+func get_available_jobs():
 	var rows: Array = []
 	for job in DataRegistry.jobs:
 		var row := job.duplicate(true)
@@ -53,7 +53,7 @@ func get_available_jobs() -> Array:
 		rows.append(row)
 	return rows
 
-func _promote(job: Dictionary) -> void:
+func _promote(job):
 	var bonus := float(job.get("promotion_bonus", 0.0))
 	GameState.monthly_income += bonus
 	GameState.add_money(bonus * 2.0)
@@ -62,7 +62,7 @@ func _promote(job: Dictionary) -> void:
 	GameState.add_log("승진: 월급 +%s" % GameState.format_money(bonus), "job")
 	promoted.emit(job, bonus)
 
-func _check_requirements(req: Dictionary) -> bool:
+func _check_requirements(req):
 	for key in req:
 		var val = req[key]
 		match key:

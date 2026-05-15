@@ -108,21 +108,21 @@ static var JOBS: Array = [
 ]
 
 # 직업 찾기
-static func get_job(job_id: String) -> Dictionary:
+static func get_job(job_id):
 	for job in JOBS:
 		if job["id"] == job_id:
 			return job
 	return {}
 
 # 지원 가능한 직업 목록
-static func get_available_jobs() -> Array:
+static func get_available_jobs():
 	var available: Array = []
 	for job in JOBS:
 		if _check_requirements(job.get("requirements", {})):
 			available.append(job)
 	return available
 
-static func _check_requirements(req: Dictionary) -> bool:
+static func _check_requirements(req):
 	for key in req:
 		var val = req[key]
 		match key:

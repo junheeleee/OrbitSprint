@@ -26,10 +26,10 @@ var endings_by_id: Dictionary = {}
 var news_templates: Array = []
 var default_meta: Dictionary = {}
 
-func _ready() -> void:
+func _ready():
 	reload()
 
-func reload() -> void:
+func reload():
 	events.clear()
 	events_by_id.clear()
 	for path in EVENT_PATHS:
@@ -48,13 +48,13 @@ func reload() -> void:
 	news_templates = _load_array(NEWS_PATH)
 	default_meta = _load_dict(META_PATH)
 
-func find_event(event_id: String) -> Dictionary:
+func find_event(event_id):
 	return events_by_id.get(event_id, {})
 
-func get_all_events() -> Array:
+func get_all_events():
 	return events
 
-func get_events(category: String) -> Array:
+func get_events(category):
 	if category.is_empty():
 		return events
 	var filtered: Array = []
@@ -63,32 +63,32 @@ func get_events(category: String) -> Array:
 			filtered.append(event)
 	return filtered
 
-func get_assets_by_category(category: String) -> Array:
+func get_assets_by_category(category):
 	var filtered: Array = []
 	for asset in assets:
 		if asset.get("category", "") == category:
 			filtered.append(asset)
 	return filtered
 
-func get_asset(asset_id: String) -> Dictionary:
+func get_asset(asset_id):
 	return assets_by_id.get(asset_id, {})
 
-func get_job(job_id: String) -> Dictionary:
+func get_job(job_id):
 	return jobs_by_id.get(job_id, {})
 
-func get_item(item_id: String) -> Dictionary:
+func get_item(item_id):
 	return items_by_id.get(item_id, {})
 
-func get_ending(ending_id: String) -> Dictionary:
+func get_ending(ending_id):
 	return endings_by_id.get(ending_id, {})
 
-func _index_by_id(rows: Array) -> Dictionary:
+func _index_by_id(rows):
 	var indexed: Dictionary = {}
 	for row in rows:
 		indexed[row.get("id", "")] = row
 	return indexed
 
-func _load_array(path: String) -> Array:
+func _load_array(path):
 	var parsed = _parse_json(path)
 	if parsed is Array:
 		return parsed
@@ -97,14 +97,14 @@ func _load_array(path: String) -> Array:
 	push_warning("Expected JSON array at %s" % path)
 	return []
 
-func _load_dict(path: String) -> Dictionary:
+func _load_dict(path):
 	var parsed = _parse_json(path)
 	if parsed is Dictionary:
 		return parsed
 	push_warning("Expected JSON object at %s" % path)
 	return {}
 
-func _parse_json(path: String) -> Variant:
+func _parse_json(path):
 	if not FileAccess.file_exists(path):
 		push_warning("Missing content file: %s" % path)
 		return null

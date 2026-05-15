@@ -1,6 +1,6 @@
 extends Node
 
-func get_ending(ending_id: String) -> Dictionary:
+func get_ending(ending_id):
 	var ending := DataRegistry.get_ending(ending_id)
 	if ending.is_empty():
 		return {
@@ -11,7 +11,7 @@ func get_ending(ending_id: String) -> Dictionary:
 		}
 	return ending
 
-func evaluate_current_ending() -> Dictionary:
+func evaluate_current_ending():
 	var total := GameState.get_total_asset_value()
 	if GameState.health <= 0:
 		return get_ending("health_collapse")
@@ -25,5 +25,5 @@ func evaluate_current_ending() -> Dictionary:
 		return get_ending("debt_spiral")
 	return get_ending("ordinary_retirement")
 
-func get_score() -> int:
+func get_score():
 	return int(GameState.get_total_asset_value() / 100_000.0) + GameState.turn * 10 + GameState.reputation * 100

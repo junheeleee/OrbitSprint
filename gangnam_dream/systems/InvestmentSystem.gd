@@ -6,13 +6,13 @@ signal portfolio_updated()
 
 var cycle_timer := 0
 
-func initialize() -> void:
+func initialize():
 	if GameState.market_prices.is_empty():
 		for asset in DataRegistry.assets:
 			GameState.market_prices[asset.get("id", "")] = float(asset.get("initial_price", asset.get("base_price", 10_000.0)))
 	_roll_cycle()
 
-func process_month(news_items: Array) -> void:
+func process_month(news_items):
 	cycle_timer -= 1
 	if cycle_timer <= 0:
 		_roll_cycle()
@@ -21,7 +21,7 @@ func process_month(news_items: Array) -> void:
 	_apply_dividends()
 	portfolio_updated.emit()
 
-func buy_asset(asset_id: String, amount_krw: float) -> Dictionary:
+func buy_asset(asset_id, amount_krw):
 	var asset := DataRegistry.get_asset(asset_id)
 	if asset.is_empty():
 		return {"success": false, "message": "존재하지 않는 자산입니다."}
@@ -51,7 +51,7 @@ func buy_asset(asset_id: String, amount_krw: float) -> Dictionary:
 	portfolio_updated.emit()
 	return {"success": true, "message": "매수 완료", "quantity": quantity}
 
-func sell_asset(asset_id: String, sell_ratio: float) -> Dictionary:
+func sell_asset(asset_id, sell_ratio):
 	if not GameState.portfolio.has(asset_id):
 		return {"success": false, "message": "보유하지 않은 자산입니다."}
 	var asset := DataRegistry.get_asset(asset_id)
@@ -71,7 +71,7 @@ func sell_asset(asset_id: String, sell_ratio: float) -> Dictionary:
 	portfolio_updated.emit()
 	return {"success": true, "message": "매도 완료", "profit": profit}
 
-func get_asset_rows() -> Array:
+func get_asset_rows():
 	var rows: Array = []
 	for asset in DataRegistry.assets:
 		var id := str(asset.get("id", ""))
@@ -88,7 +88,7 @@ func get_asset_rows() -> Array:
 		})
 	return rows
 
-func _roll_cycle() -> void:
+func _roll_cycle():
 	cycle_timer = randi_range(5, 11)
 	var fear_greed := int(GameState.market_context.get("fear_greed", 50))
 	var roll := randf()
@@ -101,7 +101,7 @@ func _roll_cycle() -> void:
 	GameState.market_context["crash_risk"] = 0.02 + max(0.0, float(fear_greed - 70)) / 450.0
 	GameState.add_log("시장 국면 전환: %s" % cycle, "market")
 
-func _update_asset(asset: Dictionary, news_items: Array) -> void:
+func _update_asset(asset, news_items):
 	var id := str(asset.get("id", ""))
 	var old_price := float(GameState.market_prices.get(id, asset.get("initial_price", 10_000.0)))
 	var volatility := float(asset.get("volatility", 0.1))
@@ -126,7 +126,7 @@ func _update_asset(asset: Dictionary, news_items: Array) -> void:
 	GameState.market_prices[id] = new_price
 	price_updated.emit(id, new_price, (new_price - old_price) / max(old_price, 0.01))
 
-func _news_bias_for_asset(asset: Dictionary, news_items: Array) -> float:
+func _news_bias_for_asset(asset, news_items):
 	var bias := 0.0
 	for news in news_items:
 		var effect: Dictionary = news.get("market_effect", news.get("market_effects", {}))
@@ -134,7 +134,7 @@ func _news_bias_for_asset(asset: Dictionary, news_items: Array) -> float:
 			bias += float(effect.get("power", 0.0))
 	return bias
 
-func _apply_dividends() -> void:
+func _apply_dividends():
 	for asset_id in GameState.portfolio:
 		var asset := DataRegistry.get_asset(asset_id)
 		if asset.get("category", "") in ["korean_stock", "real_estate"]:

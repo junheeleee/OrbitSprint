@@ -2,10 +2,10 @@ extends Control
 
 var trait_option: OptionButton
 
-func _ready() -> void:
+func _ready():
 	_build_ui()
 
-func _build_ui() -> void:
+func _build_ui():
 	var bg := ColorRect.new()
 	bg.color = Color("#07111f")
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -67,18 +67,18 @@ func _build_ui() -> void:
 	var meta := MetaProgression.data
 	box.add_child(_label("누적 런 %d회 / 최고 자산 %s" % [meta.get("total_runs", 0), _format_money(meta.get("best_asset", 0))], 13, "#94a3b8", HORIZONTAL_ALIGNMENT_CENTER))
 
-func _start_new_run() -> void:
+func _start_new_run():
 	var trait := "흙수저 생존본능"
 	if trait_option.get_item_count() > 0:
 		trait = trait_option.get_item_text(trait_option.selected)
 	GameState.start_new_game(trait)
 	get_tree().change_scene_to_file("res://scenes/MainGame.tscn")
 
-func _load_slot(slot: int) -> void:
+func _load_slot(slot):
 	if SaveManager.load_game(slot):
 		get_tree().change_scene_to_file("res://scenes/MainGame.tscn")
 
-func _label(text: String, size: int, color: String, align: HorizontalAlignment) -> Label:
+func _label(text, size, color, align):
 	var label := Label.new()
 	label.text = text
 	label.horizontal_alignment = align
@@ -87,7 +87,7 @@ func _label(text: String, size: int, color: String, align: HorizontalAlignment) 
 	label.add_theme_color_override("font_color", Color(color))
 	return label
 
-func _button(text: String, color: String) -> Button:
+func _button(text, color):
 	var button := Button.new()
 	button.text = text
 	button.custom_minimum_size = Vector2(0, 46)
@@ -101,7 +101,7 @@ func _button(text: String, color: String) -> Button:
 	button.add_theme_color_override("font_color", Color("#ffffff"))
 	return button
 
-func _format_money(amount: float) -> String:
+func _format_money(amount):
 	if abs(amount) >= 100_000_000:
 		return "%.1f억원" % (amount / 100_000_000.0)
 	if abs(amount) >= 10_000:

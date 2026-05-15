@@ -4,7 +4,7 @@ signal news_generated(news_items: Array)
 
 var last_news: Array = []
 
-func generate_monthly_news() -> Array:
+func generate_monthly_news():
 	var pool := DataRegistry.news_templates.duplicate(true)
 	pool.shuffle()
 	var count := randi_range(3, 5)
@@ -23,7 +23,7 @@ func generate_monthly_news() -> Array:
 	news_generated.emit(selected)
 	return selected
 
-func _apply_news_pressure(item: Dictionary) -> void:
+func _apply_news_pressure(item):
 	var sentiment := str(item.get("sentiment", "neutral"))
 	var fear_delta := 0
 	match sentiment:

@@ -51,13 +51,13 @@ var market_context := {
 	"momentum": 0.0,
 }
 
-func _ready() -> void:
+func _ready():
 	randomize()
 
-func new_game() -> void:
+func new_game():
 	start_new_game("흙수저 생존본능")
 
-func start_new_game(trait: String) -> void:
+func start_new_game(trait):
 	player_name = "김민준"
 	age = 20
 	year = 2026
@@ -105,17 +105,17 @@ func start_new_game(trait: String) -> void:
 	stats_changed.emit()
 	run_started.emit()
 
-func _apply_trait_bonus(trait: String) -> void:
+func _apply_trait_bonus(trait):
 	var bonuses := {}
 	if has_node("/root/MetaProgression"):
 		bonuses = MetaProgression.get_trait_bonus(trait)
 	apply_effects(bonuses)
 
-func _init_market_prices() -> void:
+func _init_market_prices():
 	for asset in DataRegistry.assets:
 		market_prices[asset.get("id", "")] = float(asset.get("initial_price", asset.get("base_price", 10_000.0)))
 
-func advance_calendar() -> void:
+func advance_calendar():
 	if is_game_over:
 		return
 	turn += 1
@@ -126,7 +126,7 @@ func advance_calendar() -> void:
 		age += 1
 	turn_advanced.emit(turn)
 
-func apply_monthly_pressure() -> void:
+func apply_monthly_pressure():
 	add_money(monthly_income - fixed_expense)
 	modify_hidden_stat("stress", 2)
 	if stress > 70:
@@ -139,7 +139,7 @@ func apply_monthly_pressure() -> void:
 		modify_stat("mental", -2)
 	check_game_over()
 
-func apply_choice(event: Dictionary, choice: Dictionary) -> void:
+func apply_choice(event, choice):
 	apply_effects(choice.get("effects", {}))
 	for rel_effect in choice.get("relationship_effects", []):
 		apply_relationship_effect(rel_effect)
@@ -155,7 +155,7 @@ func apply_choice(event: Dictionary, choice: Dictionary) -> void:
 	})
 	add_log("%s: %s" % [event.get("title", "이벤트"), choice.get("result_text", choice.get("text", ""))], "event")
 
-func apply_effects(effects: Dictionary) -> void:
+func apply_effects(effects):
 	for key in effects:
 		var value = effects[key]
 		match key:
@@ -175,7 +175,7 @@ func apply_effects(effects: Dictionary) -> void:
 				flags.erase(str(value))
 	stats_changed.emit()
 
-func apply_relationship_effect(effect: Dictionary) -> void:
+func apply_relationship_effect(effect):
 	var rel_id := str(effect.get("id", effect.get("type", "unknown")))
 	var found := false
 	for rel in relationships:
@@ -195,7 +195,7 @@ func apply_relationship_effect(effect: Dictionary) -> void:
 		})
 	stats_changed.emit()
 
-func apply_investment_effect(effect: Dictionary) -> void:
+func apply_investment_effect(effect):
 	var asset_id := str(effect.get("asset_id", ""))
 	if asset_id.is_empty():
 		return
@@ -208,12 +208,12 @@ func apply_investment_effect(effect: Dictionary) -> void:
 			bubble_assets.append(asset_id)
 		market_context["bubble_assets"] = bubble_assets
 
-func add_money(amount: float) -> void:
+func add_money(amount):
 	money += amount
 	money_changed.emit(money)
 	stats_changed.emit()
 
-func modify_stat(stat_name: String, amount: int) -> void:
+func modify_stat(stat_name, amount):
 	match stat_name:
 		"health":
 			health = clamp(health + amount, 0, 100)
@@ -230,7 +230,7 @@ func modify_stat(stat_name: String, amount: int) -> void:
 		"luck":
 			luck = clamp(luck + amount, 0, 100)
 
-func modify_hidden_stat(stat_name: String, amount: int) -> void:
+func modify_hidden_stat(stat_name, amount):
 	match stat_name:
 		"stress":
 			stress = clamp(stress + amount, 0, 100)
@@ -241,7 +241,7 @@ func modify_hidden_stat(stat_name: String, amount: int) -> void:
 		"addiction_tendency":
 			addiction_tendency = clamp(addiction_tendency + amount, 0, 100)
 
-func add_item(item_id: String, quantity: int) -> void:
+func add_item(item_id, quantity):
 	var item := DataRegistry.get_item(item_id)
 	if item.is_empty():
 		return
@@ -255,7 +255,7 @@ func add_item(item_id: String, quantity: int) -> void:
 	inventory.append(owned_item)
 	stats_changed.emit()
 
-func remove_item(item_id: String, quantity: int) -> bool:
+func remove_item(item_id, quantity):
 	for i in range(inventory.size()):
 		if inventory[i].get("id", "") == item_id:
 			inventory[i]["quantity"] = int(inventory[i].get("quantity", 1)) - quantity
@@ -265,7 +265,7 @@ func remove_item(item_id: String, quantity: int) -> bool:
 			return true
 	return false
 
-func add_log(message: String, log_type: String) -> void:
+func add_log(message, log_type):
 	var entry := {
 		"turn": turn,
 		"date": get_date_string(),
@@ -277,10 +277,10 @@ func add_log(message: String, log_type: String) -> void:
 		action_log.pop_front()
 	log_added.emit(entry)
 
-func get_date_string() -> String:
+func get_date_string():
 	return "%d년 %d월" % [year, month]
 
-func format_money(amount: float) -> String:
+func format_money(amount):
 	var sign := ""
 	if amount < 0:
 		sign = "-"
@@ -291,14 +291,14 @@ func format_money(amount: float) -> String:
 		return "%s%.0f만원" % [sign, abs_amount / 10_000.0]
 	return "%s%.0f원" % [sign, abs_amount]
 
-func get_total_asset_value() -> float:
+func get_total_asset_value():
 	var total := money
 	for asset_id in portfolio:
 		var holding: Dictionary = portfolio[asset_id]
 		total += float(holding.get("quantity", 0.0)) * float(market_prices.get(asset_id, holding.get("avg_price", 0.0)))
 	return total
 
-func get_wealth_tier() -> String:
+func get_wealth_tier():
 	var total := get_total_asset_value()
 	if total >= 2_000_000_000:
 		return "강남 상류층"
@@ -310,7 +310,7 @@ func get_wealth_tier() -> String:
 		return "버티는 청년"
 	return "월세 생존자"
 
-func check_game_over() -> void:
+func check_game_over():
 	if is_game_over:
 		return
 	if health <= 0:
@@ -324,7 +324,7 @@ func check_game_over() -> void:
 	elif get_total_asset_value() >= 2_000_000_000:
 		finish_run("gangnam_dream")
 
-func finish_run(ending_id: String) -> void:
+func finish_run(ending_id):
 	is_game_over = true
 	MetaProgression.record_run({
 		"ending_id": ending_id,
@@ -335,7 +335,7 @@ func finish_run(ending_id: String) -> void:
 	})
 	game_over.emit(ending_id)
 
-func serialize() -> Dictionary:
+func serialize():
 	return {
 		"player_name": player_name,
 		"age": age,
@@ -372,7 +372,7 @@ func serialize() -> Dictionary:
 		"market_context": market_context,
 	}
 
-func load_from_dict(data: Dictionary) -> void:
+func load_from_dict(data):
 	var allowed := serialize().keys()
 	for key in data:
 		if allowed.has(key):

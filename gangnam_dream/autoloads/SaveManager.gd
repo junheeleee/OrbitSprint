@@ -7,7 +7,7 @@ const SAVE_VERSION := 2
 const SLOT_COUNT := 3
 const AUTOSAVE_SLOT := 0
 
-func save_game(slot: int) -> bool:
+func save_game(slot):
 	var payload := {
 		"version": SAVE_VERSION,
 		"slot": slot,
@@ -22,10 +22,10 @@ func save_game(slot: int) -> bool:
 	save_completed.emit(true, slot)
 	return true
 
-func autosave() -> bool:
+func autosave():
 	return save_game(AUTOSAVE_SLOT)
 
-func load_game(slot: int) -> bool:
+func load_game(slot):
 	if not has_save(slot):
 		load_completed.emit(false, slot)
 		return false
@@ -37,20 +37,20 @@ func load_game(slot: int) -> bool:
 	load_completed.emit(true, slot)
 	return true
 
-func has_save(slot: int) -> bool:
+func has_save(slot):
 	return FileAccess.file_exists(_slot_path(slot))
 
-func delete_save(slot: int) -> void:
+func delete_save(slot):
 	if has_save(slot):
 		DirAccess.remove_absolute(ProjectSettings.globalize_path(_slot_path(slot)))
 
-func get_slots() -> Array:
+func get_slots():
 	var slots: Array = []
 	for slot in range(SLOT_COUNT + 1):
 		slots.append(get_save_info(slot))
 	return slots
 
-func get_save_info(slot: int) -> Dictionary:
+func get_save_info(slot):
 	if not has_save(slot):
 		return {"slot": slot, "empty": true}
 	var parsed = JSON.parse_string(FileAccess.get_file_as_string(_slot_path(slot)))
@@ -70,12 +70,12 @@ func get_save_info(slot: int) -> Dictionary:
 		"total_assets": _estimate_total_assets(state),
 	}
 
-func _slot_path(slot: int) -> String:
+func _slot_path(slot):
 	if slot == AUTOSAVE_SLOT:
 		return "user://gangnam_dream_autosave.json"
 	return "user://gangnam_dream_slot_%d.json" % slot
 
-func _estimate_total_assets(state: Dictionary) -> float:
+func _estimate_total_assets(state):
 	var total := float(state.get("money", 0.0))
 	var portfolio: Dictionary = state.get("portfolio", {})
 	var prices: Dictionary = state.get("market_prices", {})

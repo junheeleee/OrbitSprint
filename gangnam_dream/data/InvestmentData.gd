@@ -162,14 +162,14 @@ static var ASSETS: Array = [
 ]
 
 # 자산 찾기
-static func get_asset(asset_id: String) -> Dictionary:
+static func get_asset(asset_id):
 	for asset in ASSETS:
 		if asset["id"] == asset_id:
 			return asset
 	return {}
 
 # 카테고리별 자산 목록
-static func get_assets_by_category(category: int) -> Array:
+static func get_assets_by_category(category):
 	var result: Array = []
 	for asset in ASSETS:
 		if asset["category"] == category:
@@ -177,7 +177,7 @@ static func get_assets_by_category(category: int) -> Array:
 	return result
 
 # 카테고리 이름
-static func category_name(category: int) -> String:
+static func category_name(category):
 	match category:
 		AssetCategory.KOREAN_STOCK: return "국내 주식"
 		AssetCategory.US_STOCK: return "미국 주식"
@@ -188,7 +188,7 @@ static func category_name(category: int) -> String:
 	return "기타"
 
 # 초기 시장 가격 딕셔너리
-static func get_initial_prices() -> Dictionary:
+static func get_initial_prices():
 	var prices: Dictionary = {}
 	for asset in ASSETS:
 		prices[asset["id"]] = asset["initial_price"]

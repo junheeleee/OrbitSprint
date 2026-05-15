@@ -3,7 +3,7 @@ extends Node
 signal relationship_added(rel: Dictionary)
 signal relationship_changed(rel: Dictionary)
 
-func process_monthly_relationships() -> void:
+func process_monthly_relationships():
 	for rel in GameState.relationships.duplicate():
 		rel["affection"] = clamp(int(rel.get("affection", rel.get("affinity", 40))) - 1, 0, 100)
 		var trust_decay := 0
@@ -17,18 +17,18 @@ func process_monthly_relationships() -> void:
 		else:
 			relationship_changed.emit(rel)
 
-func add_relationship(rel_data: Dictionary) -> void:
+func add_relationship(rel_data):
 	GameState.apply_relationship_effect(rel_data)
 	relationship_added.emit(rel_data)
 
-func get_affinity_label(value: int) -> String:
+func get_affinity_label(value):
 	if value >= 85: return "운명 공동체"
 	if value >= 65: return "가까운 사이"
 	if value >= 45: return "느슨한 인연"
 	if value >= 25: return "불안한 관계"
 	return "멀어진 관계"
 
-func _apply_passive(rel: Dictionary) -> void:
+func _apply_passive(rel):
 	var affection := int(rel.get("affection", 40))
 	if affection < 55:
 		return

@@ -37,7 +37,7 @@ static var COMPANY_HEADLINES: Array = [
 # ─────────────────────────────────────────
 #  헤드라인 생성
 # ─────────────────────────────────────────
-static func generate_headlines(month: int, year: int) -> Array:
+static func generate_headlines(month, year):
 	var headlines: Array = []
 	var count = randi_range(2, 4)
 
@@ -51,7 +51,7 @@ static func generate_headlines(month: int, year: int) -> Array:
 
 	return headlines
 
-static func _resolve_headline(template: Dictionary, month: int, year: int) -> Dictionary:
+static func _resolve_headline(template, month, year):
 	var text: String = template["text"]
 
 	# 템플릿 변수 치환
@@ -71,7 +71,7 @@ static func _resolve_headline(template: Dictionary, month: int, year: int) -> Di
 	}
 
 # 월별 특수 뉴스 (계절·이벤트)
-static func get_seasonal_news(month: int) -> String:
+static func get_seasonal_news(month):
 	match month:
 		1: return "새해 증시 개장... 투자자들 '올해는 다르다' 다짐"
 		2: return "설 연휴 앞두고 소비 심리 지수 {dir}".format({"dir": ["상승", "하락"][randi() % 2]})

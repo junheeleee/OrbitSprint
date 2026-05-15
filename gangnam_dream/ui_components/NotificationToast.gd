@@ -5,7 +5,7 @@ signal dismissed()
 @onready var label: Label = Label.new()
 var lifetime := 2.4
 
-func _ready() -> void:
+func _ready():
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color("#0f172a")
 	style.border_color = Color("#f97316")
@@ -19,7 +19,7 @@ func _ready() -> void:
 	add_child(label)
 	label.add_theme_color_override("font_color", Color("#dbe7ff"))
 
-func show_message(message: String, color: Color) -> void:
+func show_message(message, color):
 	label.text = message
 	label.add_theme_color_override("font_color", color)
 	var tween := create_tween()
@@ -29,6 +29,6 @@ func show_message(message: String, color: Color) -> void:
 	tween.tween_property(self, "modulate:a", 0.0, 0.22)
 	tween.finished.connect(_dismiss)
 
-func _dismiss() -> void:
+func _dismiss():
 	dismissed.emit()
 	queue_free()

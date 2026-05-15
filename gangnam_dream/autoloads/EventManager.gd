@@ -8,26 +8,26 @@ var current_event: Dictionary = {}
 var event_cooldowns: Dictionary = {}
 var recent_event_ids: Array = []
 
-func process_month_events() -> void:
+func process_month_events():
 	_tick_cooldowns()
 	if pending_events.is_empty():
 		var event := select_random_event()
 		if not event.is_empty():
 			queue_event(event)
 
-func select_random_event() -> Dictionary:
+func select_random_event():
 	var eligible: Array = []
 	for event in DataRegistry.events:
 		if _is_event_eligible(event):
 			eligible.append(event)
 	return _weighted_pick(eligible)
 
-func queue_event(event: Dictionary) -> void:
+func queue_event(event):
 	if event.is_empty():
 		return
 	pending_events.append(event)
 
-func get_next_event() -> Dictionary:
+func get_next_event():
 	if pending_events.is_empty():
 		current_event = {}
 		return {}
@@ -35,7 +35,7 @@ func get_next_event() -> Dictionary:
 	event_started.emit(current_event)
 	return current_event
 
-func resolve_current_event(choice_index: int) -> void:
+func resolve_current_event(choice_index):
 	if current_event.is_empty():
 		return
 	var choices: Array = current_event.get("choices", [])
@@ -58,25 +58,25 @@ func resolve_current_event(choice_index: int) -> void:
 	event_resolved.emit(current_event, choice)
 	current_event = {}
 
-func trigger_event_by_id(event_id: String) -> void:
+func trigger_event_by_id(event_id):
 	var event := DataRegistry.find_event(event_id)
 	if not event.is_empty():
 		queue_event(event)
 
-func _tick_cooldowns() -> void:
+func _tick_cooldowns():
 	for event_id in event_cooldowns.keys():
 		event_cooldowns[event_id] = int(event_cooldowns[event_id]) - 1
 		if int(event_cooldowns[event_id]) <= 0:
 			event_cooldowns.erase(event_id)
 
-func _remember_recent(event_id: String) -> void:
+func _remember_recent(event_id):
 	if event_id.is_empty():
 		return
 	recent_event_ids.append(event_id)
 	if recent_event_ids.size() > 14:
 		recent_event_ids.pop_front()
 
-func _is_event_eligible(event: Dictionary) -> bool:
+func _is_event_eligible(event):
 	var event_id := str(event.get("id", ""))
 	if event_id.is_empty():
 		return false
@@ -86,7 +86,7 @@ func _is_event_eligible(event: Dictionary) -> bool:
 		return _check_hidden_chance(event)
 	return _check_conditions(event.get("conditions", {}))
 
-func _check_hidden_chance(event: Dictionary) -> bool:
+func _check_hidden_chance(event):
 	if not _check_conditions(event.get("conditions", {})):
 		return false
 	var rarity := str(event.get("rarity", "rare"))
@@ -97,7 +97,7 @@ func _check_hidden_chance(event: Dictionary) -> bool:
 		chance = 0.012
 	return randf() < chance + float(GameState.luck) / 8000.0
 
-func _check_conditions(conditions: Dictionary) -> bool:
+func _check_conditions(conditions):
 	for key in conditions:
 		var req = conditions[key]
 		match key:
@@ -145,7 +145,7 @@ func _check_conditions(conditions: Dictionary) -> bool:
 				if GameState.flags.get(str(req), false): return false
 	return true
 
-func _weighted_pick(events: Array) -> Dictionary:
+func _weighted_pick(events):
 	if events.is_empty():
 		return {}
 	var total := 0.0
@@ -159,7 +159,7 @@ func _weighted_pick(events: Array) -> Dictionary:
 			return event
 	return events.back()
 
-func _effective_weight(event: Dictionary) -> float:
+func _effective_weight(event):
 	var weight := float(event.get("weight", 1.0))
 	match str(event.get("rarity", "common")):
 		"common":

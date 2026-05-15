@@ -3,7 +3,7 @@ extends HBoxContainer
 var name_label := Label.new()
 var value_label := Label.new()
 
-func _ready() -> void:
+func _ready():
 	add_theme_constant_override("separation", 8)
 	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
@@ -11,7 +11,7 @@ func _ready() -> void:
 	add_child(name_label)
 	add_child(value_label)
 
-func configure(label_text: String, value_text: String, color: Color) -> void:
+func configure(label_text, value_text, color):
 	name_label.text = label_text
 	value_label.text = value_text
 	value_label.add_theme_color_override("font_color", color)
