@@ -16,8 +16,10 @@ final class GameScene: SKScene {
     private let playerRadius: CGFloat = 14
     private var currentRadius: CGFloat = 86
     private var angle: CGFloat = -.pi / 2
-    private var angularSpeed: CGFloat = 1.95
+    private var angularSpeed: CGFloat = 1.72
     private var lastUpdate: TimeInterval = 0
+    private var elapsedTime: TimeInterval = 0
+    private var safeUntil: TimeInterval = 1.6
     private var spawnTimer: TimeInterval = 0
     private var sparkTimer: TimeInterval = 0
     private var powerUpTimer: TimeInterval = 0
@@ -69,8 +71,9 @@ final class GameScene: SKScene {
         guard !state.isPaused else { return }
         let delta = lastUpdate > 0 ? min(currentTime - lastUpdate, 1 / 20) : 0
         lastUpdate = currentTime
+        elapsedTime += delta
 
-        difficulty = 1 + CGFloat(state.score) * 0.025
+        difficulty = 1 + min(CGFloat(state.score) * 0.012, 1.45)
         let timeScale: CGFloat = state.slowTimeRemaining > 0 ? 0.62 : 1
         angle += angularSpeed * difficulty * timeScale * CGFloat(delta)
         spawnTimer += delta
@@ -83,12 +86,12 @@ final class GameScene: SKScene {
             state.breakCombo()
         }
 
-        if spawnTimer > max(0.34, 1.08 - Double(state.level) * 0.055) {
+        if elapsedTime > safeUntil, spawnTimer > max(0.62, 1.42 - Double(state.level) * 0.052) {
             spawnShard()
             spawnTimer = 0
         }
 
-        if sparkTimer > max(0.52, 0.78 - Double(state.level) * 0.018) {
+        if elapsedTime > 0.45, sparkTimer > max(0.58, 0.92 - Double(state.level) * 0.018) {
             spawnSpark()
             sparkTimer = 0
         }
@@ -112,6 +115,8 @@ final class GameScene: SKScene {
         player.lineWidth = 3
         player.glowWidth = 7
         addChild(player)
+        player.alpha = 0.64
+        player.run(.sequence([.wait(forDuration: safeUntil), .fadeAlpha(to: 1, duration: 0.25)]))
 
         applyTheme()
         drawStars()
@@ -172,33 +177,47 @@ final class GameScene: SKScene {
     }
 
     private func spawnShard() {
-        let radius = Bool.random() ? innerRadius : outerRadius
+        let radius = chooseThreatRadius()
+        let spawnAngle = nextPlayableSpawnAngle(minLead: 0.95, maxLead: 1.78)
+        guard canSpawnThreat(at: spawnAngle) else { return }
+
         let node = SKShapeNode(rectOf: CGSize(width: 22, height: 22), cornerRadius: 4)
         node.name = NodeName.shard
-        node.position = point(on: radius, angle: CGFloat.random(in: 0...(2 * .pi)))
+        node.position = point(on: radius, angle: spawnAngle)
         node.zRotation = CGFloat.random(in: 0...(2 * .pi))
         node.fillColor = state.selectedTheme.shardColor
         node.strokeColor = .white.withAlphaComponent(0.42)
         node.lineWidth = 2
         node.glowWidth = 5
-        node.userData = ["radius": radius]
+        node.userData = ["radius": radius, "angle": spawnAngle]
         objectLayer.addChild(node)
 
         let spin = SKAction.rotate(byAngle: .pi * 2, duration: TimeInterval(CGFloat.random(in: 1.0...1.8)))
         node.run(.repeatForever(spin))
         node.run(.sequence([.wait(forDuration: 6.0), .fadeOut(withDuration: 0.25), .removeFromParent()]))
+
+        if CGFloat.random(in: 0...1) < 0.58 {
+            spawnSpark(on: oppositeRadius(from: radius), near: spawnAngle + CGFloat.random(in: -0.18...0.18))
+        }
     }
 
     private func spawnSpark() {
+        let spawnAngle = nextPlayableSpawnAngle(minLead: 0.72, maxLead: 2.35)
         let radius = Bool.random() ? innerRadius : outerRadius
+        spawnSpark(on: radius, near: spawnAngle)
+    }
+
+    private func spawnSpark(on radius: CGFloat, near spawnAngle: CGFloat) {
+        guard !hasNearbyObject(at: spawnAngle, clearance: 0.24, names: [NodeName.spark]) else { return }
+
         let node = SKShapeNode(circleOfRadius: 9)
         node.name = NodeName.spark
-        node.position = point(on: radius, angle: CGFloat.random(in: 0...(2 * .pi)))
+        node.position = point(on: radius, angle: spawnAngle)
         node.fillColor = state.selectedTheme.sparkColor
         node.strokeColor = .white
         node.lineWidth = 2
         node.glowWidth = 8
-        node.userData = ["radius": radius]
+        node.userData = ["radius": radius, "angle": spawnAngle]
         objectLayer.addChild(node)
         let pulse = SKAction.sequence([.scale(to: 1.25, duration: 0.35), .scale(to: 1.0, duration: 0.35)])
         node.run(.repeatForever(pulse))
@@ -207,6 +226,9 @@ final class GameScene: SKScene {
 
     private func spawnPowerUp() {
         let radius = Bool.random() ? innerRadius : outerRadius
+        let spawnAngle = nextPlayableSpawnAngle(minLead: 1.05, maxLead: 2.4)
+        guard !hasNearbyObject(at: spawnAngle, clearance: 0.34, names: [NodeName.shard, NodeName.shield, NodeName.slow]) else { return }
+
         let isShield = state.shieldCharges == 0 || Bool.random()
         let node: SKShapeNode
 
@@ -220,11 +242,11 @@ final class GameScene: SKScene {
             node.fillColor = SKColor(red: 0.64, green: 0.38, blue: 1.0, alpha: 1)
         }
 
-        node.position = point(on: radius, angle: CGFloat.random(in: 0...(2 * .pi)))
+        node.position = point(on: radius, angle: spawnAngle)
         node.strokeColor = .white
         node.lineWidth = 2
         node.glowWidth = 9
-        node.userData = ["radius": radius]
+        node.userData = ["radius": radius, "angle": spawnAngle]
         objectLayer.addChild(node)
 
         let pulse = SKAction.sequence([.scale(to: 1.2, duration: 0.4), .scale(to: 0.92, duration: 0.4)])
@@ -255,6 +277,11 @@ final class GameScene: SKScene {
                 Haptics.collect(enabled: state.isHapticsEnabled)
                 flash(color: SKColor(red: 0.64, green: 0.38, blue: 1.0, alpha: 0.18))
             } else if node.name == NodeName.shard {
+                guard elapsedTime > safeUntil else {
+                    node.removeFromParent()
+                    flash(color: SKColor.white.withAlphaComponent(0.12))
+                    continue
+                }
                 if state.consumeShield() {
                     node.removeFromParent()
                     Haptics.fail(enabled: state.isHapticsEnabled)
@@ -285,6 +312,68 @@ final class GameScene: SKScene {
 
     private func point(on radius: CGFloat, angle: CGFloat) -> CGPoint {
         CGPoint(x: center.x + cos(angle) * radius, y: center.y + sin(angle) * radius)
+    }
+
+    private func chooseThreatRadius() -> CGFloat {
+        let playerWillReachSoon = CGFloat.random(in: 0...1) < 0.64
+        if playerWillReachSoon {
+            return currentRadius
+        }
+        return Bool.random() ? innerRadius : outerRadius
+    }
+
+    private func oppositeRadius(from radius: CGFloat) -> CGFloat {
+        radius == innerRadius ? outerRadius : innerRadius
+    }
+
+    private func nextPlayableSpawnAngle(minLead: CGFloat, maxLead: CGFloat) -> CGFloat {
+        let direction: CGFloat = angularSpeed >= 0 ? 1 : -1
+        return normalizedAngle(angle + direction * CGFloat.random(in: minLead...maxLead))
+    }
+
+    private func canSpawnThreat(at spawnAngle: CGFloat) -> Bool {
+        if angularDistance(angle, spawnAngle) < 0.82 {
+            return false
+        }
+
+        return !hasNearbyObject(
+            at: spawnAngle,
+            clearance: state.level < 6 ? 0.58 : 0.46,
+            names: [NodeName.shard]
+        )
+    }
+
+    private func hasNearbyObject(at spawnAngle: CGFloat, clearance: CGFloat, names: Set<String>) -> Bool {
+        objectLayer.children.contains { node in
+            guard let name = node.name, names.contains(name) else { return false }
+            guard let objectAngle = storedAngle(for: node) else { return false }
+            return angularDistance(objectAngle, spawnAngle) < clearance
+        }
+    }
+
+    private func storedAngle(for node: SKNode) -> CGFloat? {
+        if let angle = node.userData?["angle"] as? CGFloat {
+            return angle
+        }
+
+        if let angle = node.userData?["angle"] as? NSNumber {
+            return CGFloat(truncating: angle)
+        }
+
+        return nil
+    }
+
+    private func angularDistance(_ first: CGFloat, _ second: CGFloat) -> CGFloat {
+        let difference = abs(normalizedAngle(first) - normalizedAngle(second))
+        return min(difference, 2 * .pi - difference)
+    }
+
+    private func normalizedAngle(_ value: CGFloat) -> CGFloat {
+        var angle = value.truncatingRemainder(dividingBy: 2 * .pi)
+        if angle < 0 {
+            angle += 2 * .pi
+        }
+        return angle
     }
 
     private var center: CGPoint {
