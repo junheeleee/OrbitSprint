@@ -6,7 +6,10 @@ signal relationship_changed(rel: Dictionary)
 func process_monthly_relationships() -> void:
 	for rel in GameState.relationships.duplicate():
 		rel["affection"] = clamp(int(rel.get("affection", rel.get("affinity", 40))) - 1, 0, 100)
-		rel["trust"] = clamp(int(rel.get("trust", 40)) - (1 if GameState.stress > 75 else 0), 0, 100)
+		var trust_decay := 0
+		if GameState.stress > 75:
+			trust_decay = 1
+		rel["trust"] = clamp(int(rel.get("trust", 40)) - trust_decay, 0, 100)
 		_apply_passive(rel)
 		if int(rel.get("affection", 0)) <= 0 and int(rel.get("trust", 0)) <= 10:
 			GameState.relationships.erase(rel)
@@ -40,4 +43,5 @@ func _apply_passive(rel: Dictionary) -> void:
 			if randf() < 0.35:
 				GameState.modify_hidden_stat("reputation", 1)
 		"family":
-			GameState.modify_stat("mental", 1 if randf() < 0.35 else 0)
+			if randf() < 0.35:
+				GameState.modify_stat("mental", 1)

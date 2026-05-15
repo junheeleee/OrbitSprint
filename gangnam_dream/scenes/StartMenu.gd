@@ -49,12 +49,17 @@ func _build_ui() -> void:
 	box.add_child(_label("저장 슬롯", 16, "#58a6ff", HORIZONTAL_ALIGNMENT_LEFT))
 	for slot in range(0, 4):
 		var info := SaveManager.get_save_info(slot)
-		var label := "자동저장" if slot == 0 else "슬롯 %d" % slot
+		var label := "슬롯 %d" % slot
+		if slot == 0:
+			label = "자동저장"
 		if info.get("empty", true):
 			label += " / 비어 있음"
 		else:
 			label += " / %d년 %d월 / 자산 %s" % [info.get("year", 2026), info.get("month", 1), _format_money(info.get("total_assets", 0))]
-		var button := _button(label, "#1f6feb" if not info.get("empty", true) else "#30363d")
+		var button_color := "#30363d"
+		if not info.get("empty", true):
+			button_color = "#1f6feb"
+		var button := _button(label, button_color)
 		button.disabled = info.get("empty", true)
 		button.pressed.connect(Callable(self, "_load_slot").bind(slot))
 		box.add_child(button)
@@ -63,7 +68,9 @@ func _build_ui() -> void:
 	box.add_child(_label("누적 런 %d회 / 최고 자산 %s" % [meta.get("total_runs", 0), _format_money(meta.get("best_asset", 0))], 13, "#94a3b8", HORIZONTAL_ALIGNMENT_CENTER))
 
 func _start_new_run() -> void:
-	var trait := trait_option.get_item_text(trait_option.selected) if trait_option.get_item_count() > 0 else "흙수저 생존본능"
+	var trait := "흙수저 생존본능"
+	if trait_option.get_item_count() > 0:
+		trait = trait_option.get_item_text(trait_option.selected)
 	GameState.new_game(trait)
 	get_tree().change_scene_to_file("res://scenes/MainGame.tscn")
 

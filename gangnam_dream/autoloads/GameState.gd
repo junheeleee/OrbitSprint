@@ -103,7 +103,9 @@ func new_game(trait: String = "흙수저 생존본능") -> void:
 	run_started.emit()
 
 func _apply_trait_bonus(trait: String) -> void:
-	var bonuses := MetaProgression.get_trait_bonus(trait) if has_node("/root/MetaProgression") else {}
+	var bonuses := {}
+	if has_node("/root/MetaProgression"):
+		bonuses = MetaProgression.get_trait_bonus(trait)
 	apply_effects(bonuses)
 
 func _init_market_prices() -> void:
@@ -276,7 +278,9 @@ func get_date_string() -> String:
 	return "%d년 %d월" % [year, month]
 
 func format_money(amount: float) -> String:
-	var sign := "-" if amount < 0 else ""
+	var sign := ""
+	if amount < 0:
+		sign = "-"
 	var abs_amount := abs(amount)
 	if abs_amount >= 100_000_000:
 		return "%s%.1f억원" % [sign, abs_amount / 100_000_000.0]

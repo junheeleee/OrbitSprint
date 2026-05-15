@@ -83,7 +83,9 @@ func _build_top_bar(parent: Node) -> void:
 	row.add_child(title)
 	for key in ["date", "age", "turn", "money", "tier", "market"]:
 		var label := _label("", 14, "#dbe7ff")
-		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL if key == "market" else Control.SIZE_SHRINK_CENTER
+		label.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		if key == "market":
+			label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		top_labels[key] = label
 		row.add_child(label)
 
@@ -294,7 +296,10 @@ func _render_log() -> void:
 func _open_jobs() -> void:
 	_open_modal("직업 선택")
 	for job in job_system.get_available_jobs():
-		var button := _button("%s / 월급 %s" % [job.get("name", ""), GameState.format_money(job.get("base_salary", 0))], "#9a6700" if job.get("eligible", false) else "#30363d")
+		var button_color := "#30363d"
+		if job.get("eligible", false):
+			button_color = "#9a6700"
+		var button := _button("%s / 월급 %s" % [job.get("name", ""), GameState.format_money(job.get("base_salary", 0))], button_color)
 		button.disabled = not job.get("eligible", false)
 		button.pressed.connect(Callable(self, "_on_job_selected").bind(job.get("id", "")))
 		modal_body.add_child(button)

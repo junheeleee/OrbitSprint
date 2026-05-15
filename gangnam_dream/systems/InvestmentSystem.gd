@@ -44,7 +44,8 @@ func buy_asset(asset_id: String, amount_krw: float) -> Dictionary:
 	else:
 		GameState.portfolio[asset_id] = {"quantity": quantity, "avg_price": current_price}
 	GameState.add_money(-amount_krw)
-	GameState.modify_stat("investment_skill", 1 if randf() < 0.35 else 0)
+	if randf() < 0.35:
+		GameState.modify_stat("investment_skill", 1)
 	GameState.add_log("%s 매수: %s" % [asset.get("name", asset_id), GameState.format_money(amount_krw)], "trade")
 	trade_executed.emit(asset_id, "buy", quantity, current_price)
 	portfolio_updated.emit()
@@ -114,8 +115,12 @@ func _update_asset(asset: Dictionary, news_items: Array) -> void:
 	var greed_bias := (fear_greed - 50.0) / 1000.0 * float(asset.get("fear_greed_sensitivity", 0.1))
 	var random_move := (randf() + randf() + randf() - 1.5) * volatility
 	var news_bias := _news_bias_for_asset(asset, news_items)
-	var bubble_bonus := volatility * 0.6 if GameState.market_context.get("bubble_assets", []).has(id) else 0.0
-	var crash := -randf_range(0.22, 0.55) if randf() < float(GameState.market_context.get("crash_risk", 0.03)) * volatility else 0.0
+	var bubble_bonus := 0.0
+	if GameState.market_context.get("bubble_assets", []).has(id):
+		bubble_bonus = volatility * 0.6
+	var crash := 0.0
+	if randf() < float(GameState.market_context.get("crash_risk", 0.03)) * volatility:
+		crash = -randf_range(0.22, 0.55)
 	var total_change := clamp(cycle_bias + greed_bias + random_move + news_bias + bubble_bonus + crash, -0.65, 0.95)
 	var new_price := max(10.0, old_price * (1.0 + total_change))
 	GameState.market_prices[id] = new_price
