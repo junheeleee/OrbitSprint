@@ -100,7 +100,7 @@ gangnam_dream/
 
 ## 실행 방법
 
-1. Godot 4.2 이상을 설치합니다.
+1. Godot 4.6 이상을 설치합니다.
 2. Godot에서 `gangnam_dream/project.godot`를 엽니다.
 3. `F5` 또는 실행 버튼으로 시작합니다.
 
