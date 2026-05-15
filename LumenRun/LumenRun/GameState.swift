@@ -43,7 +43,7 @@ final class GameState: ObservableObject {
     private let hapticsEnabledKey = "hapticsEnabled"
     private let selectedThemeKey = "selectedTheme"
     private let feverComboThreshold = 12
-    private let feverDuration: TimeInterval = 10
+    private let feverDuration: TimeInterval = 5
 
     var isFeverActive: Bool {
         feverRemaining > 0
@@ -91,6 +91,7 @@ final class GameState: ObservableObject {
         if !isFeverActive {
             combo += 1
             if combo >= feverComboThreshold {
+                combo = 0
                 feverRemaining = feverDuration
                 SoundPlayer.feverStart(enabled: isSoundEnabled)
                 SoundPlayer.setFeverActive(true, enabled: isSoundEnabled)
