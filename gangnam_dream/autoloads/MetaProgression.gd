@@ -21,13 +21,13 @@ func save_meta():
 func get_unlocked_traits():
 	return data.get("unlocked_traits", ["흙수저 생존본능"])
 
-func get_trait_bonus(trait):
-	return data.get("trait_bonuses", {}).get(trait, {})
+func get_trait_bonus(trait_name):
+	return data.get("trait_bonuses", {}).get(trait_name, {})
 
-func unlock_trait(trait):
+func unlock_trait(trait_name):
 	var traits: Array = data.get("unlocked_traits", [])
-	if not traits.has(trait):
-		traits.append(trait)
+	if not traits.has(trait_name):
+		traits.append(trait_name)
 		data["unlocked_traits"] = traits
 		save_meta()
 

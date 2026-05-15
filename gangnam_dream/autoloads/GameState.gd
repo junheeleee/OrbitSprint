@@ -57,14 +57,14 @@ func _ready():
 func new_game():
 	start_new_game("흙수저 생존본능")
 
-func start_new_game(trait):
+func start_new_game(selected_trait):
 	player_name = "김민준"
 	age = 20
 	year = 2026
 	month = 1
 	turn = 1
 	is_game_over = false
-	current_trait = trait
+	current_trait = selected_trait
 
 	money = 1_000_000.0
 	monthly_income = 0.0
@@ -99,16 +99,16 @@ func start_new_game(trait):
 		"momentum": 0.0,
 	}
 
-	_apply_trait_bonus(trait)
+	_apply_trait_bonus(selected_trait)
 	_init_market_prices()
-	add_log("새 런 시작: %s" % trait, "system")
+	add_log("새 런 시작: %s" % selected_trait, "system")
 	stats_changed.emit()
 	run_started.emit()
 
-func _apply_trait_bonus(trait):
+func _apply_trait_bonus(selected_trait):
 	var bonuses := {}
 	if has_node("/root/MetaProgression"):
-		bonuses = MetaProgression.get_trait_bonus(trait)
+		bonuses = MetaProgression.get_trait_bonus(selected_trait)
 	apply_effects(bonuses)
 
 func _init_market_prices():

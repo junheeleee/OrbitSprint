@@ -38,8 +38,8 @@ func _build_ui():
 	box.add_child(_label("100만원, 스무 살, 서울. 이번 생은 어디까지 올라갈 수 있을까.", 15, "#dbe7ff", HORIZONTAL_ALIGNMENT_CENTER))
 
 	trait_option = OptionButton.new()
-	for trait in MetaProgression.get_unlocked_traits():
-		trait_option.add_item(trait)
+	for trait_name in MetaProgression.get_unlocked_traits():
+		trait_option.add_item(trait_name)
 	box.add_child(trait_option)
 
 	var new_game := _button("새 런 시작", "#238636")
@@ -68,10 +68,10 @@ func _build_ui():
 	box.add_child(_label("누적 런 %d회 / 최고 자산 %s" % [meta.get("total_runs", 0), _format_money(meta.get("best_asset", 0))], 13, "#94a3b8", HORIZONTAL_ALIGNMENT_CENTER))
 
 func _start_new_run():
-	var trait := "흙수저 생존본능"
+	var selected_trait := "흙수저 생존본능"
 	if trait_option.get_item_count() > 0:
-		trait = trait_option.get_item_text(trait_option.selected)
-	GameState.start_new_game(trait)
+		selected_trait = trait_option.get_item_text(trait_option.selected)
+	GameState.start_new_game(selected_trait)
 	get_tree().change_scene_to_file("res://scenes/MainGame.tscn")
 
 func _load_slot(slot):
