@@ -38,7 +38,7 @@ final class GameScene: SKScene {
     private var renderedShieldCharges = -1
 
     private lazy var player = SKShapeNode(circleOfRadius: playerRadius)
-    private lazy var shieldAura = SKShapeNode(path: polygonPath(radius: 30, sides: 6))
+    private lazy var shieldAura = SKShapeNode(path: shieldPath(radius: 30))
     private let orbitLayer = SKNode()
     private let objectLayer = SKNode()
     private let effectLayer = SKNode()
@@ -304,7 +304,7 @@ final class GameScene: SKScene {
         let node: SKShapeNode
 
         if isShield {
-            node = SKShapeNode(path: polygonPath(radius: 15, sides: 6))
+            node = SKShapeNode(path: shieldPath(radius: 15))
             node.name = NodeName.shield
             node.fillColor = state.selectedTheme.shieldColor
         } else {
@@ -554,6 +554,43 @@ final class GameScene: SKScene {
                 .removeFromParent()
             ]))
         }
+
+        // FEVER! 텍스트
+        let label = SKLabelNode(text: "FEVER!")
+        label.fontName = "AvenirNext-Heavy"
+        label.fontSize = 52
+        label.fontColor = state.selectedTheme.feverColor
+        label.position = center
+        label.zPosition = 30
+        label.alpha = 0
+        label.setScale(0.4)
+        addChild(label)
+
+        // 그림자용 복사본
+        let shadow = SKLabelNode(text: "FEVER!")
+        shadow.fontName = "AvenirNext-Heavy"
+        shadow.fontSize = 52
+        shadow.fontColor = state.selectedTheme.feverColor.withAlphaComponent(0.35)
+        shadow.position = CGPoint(x: center.x + 2, y: center.y - 3)
+        shadow.zPosition = 29
+        shadow.alpha = 0
+        shadow.setScale(0.4)
+        addChild(shadow)
+
+        let appear = SKAction.group([
+            .fadeIn(withDuration: 0.08),
+            .scale(to: 1.15, duration: 0.18)
+        ])
+        let settle = SKAction.scale(to: 1.0, duration: 0.1)
+        let hold = SKAction.wait(forDuration: 0.55)
+        let disappear = SKAction.group([
+            .fadeOut(withDuration: 0.3),
+            .scale(to: 1.3, duration: 0.3),
+            .moveBy(x: 0, y: 18, duration: 0.3)
+        ])
+        let seq = SKAction.sequence([appear, settle, hold, disappear, .removeFromParent()])
+        label.run(seq)
+        shadow.run(seq)
     }
 
     private func updatePlayerPosition() {
@@ -749,6 +786,31 @@ final class GameScene: SKScene {
                 path.addLine(to: point)
             }
         }
+        path.closeSubpath()
+        return path
+    }
+
+    private func shieldPath(radius: CGFloat) -> CGPath {
+        // 클래식 방패 모양: 위는 평평하고 아래로 갈수록 좁아지며 뾰족하게 끝남
+        let path = CGMutablePath()
+        let w = radius
+        let top = radius * 0.75
+        let shoulder = radius * 0.1
+        let tip = -radius * 1.15
+
+        path.move(to: CGPoint(x: -w, y: top))
+        path.addLine(to: CGPoint(x: w, y: top))
+        // 오른쪽 어깨 → 오른쪽 곡선 → 뾰족한 하단
+        path.addLine(to: CGPoint(x: w, y: shoulder))
+        path.addQuadCurve(
+            to: CGPoint(x: 0, y: tip),
+            control: CGPoint(x: w * 0.72, y: tip * 0.55)
+        )
+        // 뾰족한 하단 → 왼쪽 곡선 → 왼쪽 어깨
+        path.addQuadCurve(
+            to: CGPoint(x: -w, y: shoulder),
+            control: CGPoint(x: -w * 0.72, y: tip * 0.55)
+        )
         path.closeSubpath()
         return path
     }

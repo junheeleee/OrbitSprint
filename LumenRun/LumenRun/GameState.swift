@@ -43,7 +43,7 @@ final class GameState: ObservableObject {
     private let hapticsEnabledKey = "hapticsEnabled"
     private let selectedThemeKey = "selectedTheme"
     private let feverComboThreshold = 12
-    private let feverDuration: TimeInterval = 7.5
+    private let feverDuration: TimeInterval = 10
 
     var isFeverActive: Bool {
         feverRemaining > 0
@@ -88,14 +88,13 @@ final class GameState: ObservableObject {
     }
 
     func collectSpark() {
-        combo += 1
-        if combo >= feverComboThreshold {
-            let wasFeverActive = isFeverActive
-            feverRemaining = feverDuration
-            if !wasFeverActive {
+        if !isFeverActive {
+            combo += 1
+            if combo >= feverComboThreshold {
+                feverRemaining = feverDuration
                 SoundPlayer.feverStart(enabled: isSoundEnabled)
+                SoundPlayer.setFeverActive(true, enabled: isSoundEnabled)
             }
-            SoundPlayer.setFeverActive(true, enabled: isSoundEnabled)
         }
 
         multiplier = min(isFeverActive ? 8 : 5, 1 + combo / 5)
