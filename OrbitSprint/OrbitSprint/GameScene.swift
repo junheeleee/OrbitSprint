@@ -58,19 +58,18 @@ final class GameScene: SKScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     }
 
-    func steerLeft() {
-        steer(direction: -1)
-    }
-
-    func steerRight() {
-        steer(direction: 1)
-    }
-
-    private func steer(direction: CGFloat) {
+    func switchOrbitLane() {
         guard !state.isGameOver else { return }
         guard !state.isPaused else { return }
         currentRadius = currentRadius == innerRadius ? outerRadius : innerRadius
-        angularSpeed = abs(angularSpeed) * direction
+        SoundPlayer.tap(enabled: state.isSoundEnabled)
+        Haptics.tap(enabled: state.isHapticsEnabled)
+    }
+
+    func reverseDirection() {
+        guard !state.isGameOver else { return }
+        guard !state.isPaused else { return }
+        angularSpeed *= -1
         SoundPlayer.tap(enabled: state.isSoundEnabled)
         Haptics.tap(enabled: state.isHapticsEnabled)
     }
@@ -304,6 +303,8 @@ final class GameScene: SKScene {
                     continue
                 }
                 Haptics.fail(enabled: state.isHapticsEnabled)
+                node.removeFromParent()
+                removeNearbyShards(clearance: 0.9)
                 state.endGame()
                 player.run(.sequence([.scale(to: 1.45, duration: 0.08), .scale(to: 0.1, duration: 0.16)]))
                 flash(color: state.selectedTheme.shardColor.withAlphaComponent(0.24))

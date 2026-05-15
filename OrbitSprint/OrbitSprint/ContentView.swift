@@ -54,11 +54,11 @@ struct ContentView: View {
 
                 if gameState.hasSeenTutorial, !gameState.isGameOver, !gameState.isUserPaused {
                     OrbitControlsView(
-                        steerLeft: {
-                            scene?.steerLeft()
+                        switchLane: {
+                            scene?.switchOrbitLane()
                         },
-                        steerRight: {
-                            scene?.steerRight()
+                        reverseDirection: {
+                            scene?.reverseDirection()
                         }
                     )
                     .padding(.horizontal, 26)
@@ -206,39 +206,58 @@ private struct PauseView: View {
 }
 
 private struct OrbitControlsView: View {
-    let steerLeft: () -> Void
-    let steerRight: () -> Void
+    let switchLane: () -> Void
+    let reverseDirection: () -> Void
 
     var body: some View {
         HStack {
-            ControlButton(systemName: "chevron.left", action: steerLeft)
+            ControlButton(
+                title: "control.orbit",
+                systemName: "arrow.up.arrow.down",
+                tint: Color(red: 0.2, green: 0.72, blue: 1.0),
+                action: switchLane
+            )
 
             Spacer()
 
-            ControlButton(systemName: "chevron.right", action: steerRight)
+            ControlButton(
+                title: "control.reverse",
+                systemName: "arrow.left.arrow.right",
+                tint: Color(red: 1.0, green: 0.72, blue: 0.28),
+                action: reverseDirection
+            )
         }
     }
 }
 
 private struct ControlButton: View {
+    let title: LocalizedStringKey
     let systemName: String
+    let tint: Color
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
-            Image(systemName: systemName)
-                .font(.system(size: 30, weight: .black))
-                .foregroundStyle(.white)
-                .frame(width: 78, height: 78)
-                .background(.white.opacity(0.16), in: Circle())
-                .overlay {
-                    Circle()
-                        .stroke(.white.opacity(0.34), lineWidth: 2)
-                }
-                .contentShape(Circle())
+            VStack(spacing: 7) {
+                Image(systemName: systemName)
+                    .font(.system(size: 28, weight: .black))
+
+                Text(title)
+                    .font(.caption2.weight(.black))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.78)
+            }
+            .foregroundStyle(.white)
+            .frame(width: 92, height: 78)
+            .background(tint.opacity(0.34), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: 8, style: .continuous)
+                    .stroke(tint.opacity(0.78), lineWidth: 2)
+            }
+            .contentShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
         }
         .buttonStyle(.plain)
-        .accessibilityLabel(systemName == "chevron.left" ? Text("control.left") : Text("control.right"))
+        .accessibilityLabel(Text(title))
     }
 }
 
