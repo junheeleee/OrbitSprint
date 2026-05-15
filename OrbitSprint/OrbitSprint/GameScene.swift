@@ -13,6 +13,7 @@ final class GameScene: SKScene {
     private let state: GameState
     private let playerRadius: CGFloat = 14
     private let orbitRadii: [CGFloat] = [76, 112, 148]
+    private let collisionRadiusTolerance: CGFloat = 20
     private var currentRadius: CGFloat = 76
     private var targetRadius: CGFloat = 76
     private var currentOrbitIndex = 0
@@ -206,7 +207,7 @@ final class GameScene: SKScene {
 
     private func spawnShard() {
         let radius = chooseThreatRadius()
-        let spawnAngle = nextPlayableSpawnAngle(minLead: 0.95, maxLead: 1.78)
+        let spawnAngle = nextThreatSpawnAngle(on: radius, minLead: 0.95, maxLead: 1.78)
         guard canSpawnThreat(at: spawnAngle) else { return }
 
         let node = SKShapeNode(rectOf: CGSize(width: 22, height: 22), cornerRadius: 4)
@@ -284,6 +285,7 @@ final class GameScene: SKScene {
 
     private func checkCollisions() {
         for node in objectLayer.children {
+            guard isOnCollidingRadius(with: node) else { continue }
             guard player.frame.insetBy(dx: -3, dy: -3).intersects(node.frame) else { continue }
 
             if node.name == NodeName.spark {
@@ -447,9 +449,27 @@ final class GameScene: SKScene {
         } ?? 0
     }
 
+    private func isOnCollidingRadius(with node: SKNode) -> Bool {
+        guard let objectRadius = storedRadius(for: node) else { return true }
+        return abs(objectRadius - currentRadius) <= collisionRadiusTolerance
+    }
+
+    private func nextThreatSpawnAngle(on radius: CGFloat, minLead: CGFloat, maxLead: CGFloat) -> CGFloat {
+        let radiusIndex = nearestOrbitIndex(to: radius)
+        if radiusIndex == nearestOrbitIndex(to: currentRadius) || radiusIndex == currentOrbitIndex {
+            return nextTrailingSpawnAngle(minLead: minLead, maxLead: maxLead)
+        }
+        return nextPlayableSpawnAngle(minLead: minLead, maxLead: maxLead)
+    }
+
     private func nextPlayableSpawnAngle(minLead: CGFloat, maxLead: CGFloat) -> CGFloat {
         let direction: CGFloat = angularSpeed >= 0 ? 1 : -1
         return normalizedAngle(angle + direction * CGFloat.random(in: minLead...maxLead))
+    }
+
+    private func nextTrailingSpawnAngle(minLead: CGFloat, maxLead: CGFloat) -> CGFloat {
+        let direction: CGFloat = angularSpeed >= 0 ? 1 : -1
+        return normalizedAngle(angle - direction * CGFloat.random(in: minLead...maxLead))
     }
 
     private func canSpawnThreat(at spawnAngle: CGFloat) -> Bool {
