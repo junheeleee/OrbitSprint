@@ -7,6 +7,7 @@ final class GameState: ObservableObject {
     @Published var multiplier = 1
     @Published var level = 1
     @Published var shieldCharges = 0
+    @Published var shieldTimeRemaining: TimeInterval = 0
     @Published var slowTimeRemaining: TimeInterval = 0
     @Published var feverRemaining: TimeInterval = 0
     @Published var isLoading = true {
@@ -44,6 +45,8 @@ final class GameState: ObservableObject {
     private let selectedThemeKey = "selectedTheme"
     private let feverComboThreshold = 12
     private let feverDuration: TimeInterval = 5
+    private let shieldDuration: TimeInterval = 8
+    private let shieldExtensionDuration: TimeInterval = 6
 
     var isFeverActive: Bool {
         feverRemaining > 0
@@ -65,6 +68,7 @@ final class GameState: ObservableObject {
         multiplier = 1
         level = 1
         shieldCharges = 0
+        shieldTimeRemaining = 0
         slowTimeRemaining = 0
         feverRemaining = 0
         SoundPlayer.setFeverActive(false, enabled: isSoundEnabled)
@@ -123,13 +127,21 @@ final class GameState: ObservableObject {
     }
 
     func grantShield() {
-        shieldCharges = min(3, shieldCharges + 1)
+        if shieldTimeRemaining > 0 {
+            // 실드 발동 중 - 시간 연장
+            shieldTimeRemaining = min(shieldTimeRemaining + shieldExtensionDuration, shieldDuration * 2)
+        } else {
+            // 새 실드 발동
+            shieldCharges = 1
+            shieldTimeRemaining = shieldDuration
+        }
         SoundPlayer.shield(enabled: isSoundEnabled)
     }
 
     func consumeShield() -> Bool {
-        guard shieldCharges > 0 else { return false }
-        shieldCharges -= 1
+        guard shieldTimeRemaining > 0 else { return false }
+        shieldTimeRemaining = 0
+        shieldCharges = 0
         breakCombo()
         SoundPlayer.shieldBreak(enabled: isSoundEnabled)
         return true
@@ -141,6 +153,13 @@ final class GameState: ObservableObject {
     }
 
     func tick(delta: TimeInterval) {
+        if shieldTimeRemaining > 0 {
+            shieldTimeRemaining = max(0, shieldTimeRemaining - delta)
+            if shieldTimeRemaining == 0 {
+                shieldCharges = 0
+            }
+        }
+
         if slowTimeRemaining > 0 {
             slowTimeRemaining = max(0, slowTimeRemaining - delta)
         }

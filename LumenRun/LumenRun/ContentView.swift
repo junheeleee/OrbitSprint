@@ -170,8 +170,8 @@ private struct HUDView: View {
                         }
                     }
                     HStack(spacing: 5) {
-                        if gameState.shieldCharges > 0 {
-                            Label("\(gameState.shieldCharges)", systemImage: "shield.fill")
+                        if gameState.shieldTimeRemaining > 0 {
+                            Label("\(Int(ceil(gameState.shieldTimeRemaining)))", systemImage: "shield.fill")
                                 .font(.caption.weight(.black))
                                 .foregroundStyle(Color(red: 0.45, green: 0.82, blue: 1.0))
                         }
