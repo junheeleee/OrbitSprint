@@ -8,6 +8,7 @@ final class GameState: ObservableObject {
     @Published var level = 1
     @Published var shieldCharges = 0
     @Published var slowTimeRemaining: TimeInterval = 0
+    @Published var feverRemaining: TimeInterval = 0
     @Published var isLoading = true {
         didSet { updatePauseState() }
     }
@@ -26,6 +27,7 @@ final class GameState: ObservableObject {
         didSet {
             UserDefaults.standard.set(isSoundEnabled, forKey: soundEnabledKey)
             SoundPlayer.setMusicEnabled(isSoundEnabled)
+            SoundPlayer.setFeverActive(isFeverActive, enabled: isSoundEnabled)
         }
     }
     @Published var isHapticsEnabled: Bool {
@@ -40,6 +42,12 @@ final class GameState: ObservableObject {
     private let soundEnabledKey = "soundEnabled"
     private let hapticsEnabledKey = "hapticsEnabled"
     private let selectedThemeKey = "selectedTheme"
+    private let feverComboThreshold = 12
+    private let feverDuration: TimeInterval = 7.5
+
+    var isFeverActive: Bool {
+        feverRemaining > 0
+    }
 
     init() {
         let defaults = UserDefaults.standard
@@ -58,6 +66,8 @@ final class GameState: ObservableObject {
         level = 1
         shieldCharges = 0
         slowTimeRemaining = 0
+        feverRemaining = 0
+        SoundPlayer.setFeverActive(false, enabled: isSoundEnabled)
         isGameOver = false
         isUserPaused = false
         isStartScreenPresented = false
@@ -79,10 +89,19 @@ final class GameState: ObservableObject {
 
     func collectSpark() {
         combo += 1
-        multiplier = min(5, 1 + combo / 5)
-        score += multiplier
+        if combo >= feverComboThreshold {
+            let wasFeverActive = isFeverActive
+            feverRemaining = feverDuration
+            if !wasFeverActive {
+                SoundPlayer.feverStart(enabled: isSoundEnabled)
+            }
+            SoundPlayer.setFeverActive(true, enabled: isSoundEnabled)
+        }
+
+        multiplier = min(isFeverActive ? 8 : 5, 1 + combo / 5)
+        score += multiplier + (isFeverActive ? 1 : 0)
         level = max(1, score / 15 + 1)
-        SoundPlayer.collect(enabled: isSoundEnabled)
+        SoundPlayer.lumen(enabled: isSoundEnabled)
         if score > bestScore {
             bestScore = score
             UserDefaults.standard.set(bestScore, forKey: bestScoreKey)
@@ -92,35 +111,49 @@ final class GameState: ObservableObject {
     func breakCombo() {
         combo = 0
         multiplier = 1
+        if isFeverActive {
+            feverRemaining = 0
+            SoundPlayer.setFeverActive(false, enabled: isSoundEnabled)
+        }
     }
 
     func grantShield() {
         shieldCharges = min(3, shieldCharges + 1)
-        SoundPlayer.collect(enabled: isSoundEnabled)
+        SoundPlayer.shield(enabled: isSoundEnabled)
     }
 
     func consumeShield() -> Bool {
         guard shieldCharges > 0 else { return false }
         shieldCharges -= 1
         breakCombo()
-        SoundPlayer.fail(enabled: isSoundEnabled)
+        SoundPlayer.shieldBreak(enabled: isSoundEnabled)
         return true
     }
 
     func triggerSlowTime(duration: TimeInterval) {
         slowTimeRemaining = max(slowTimeRemaining, duration)
-        SoundPlayer.collect(enabled: isSoundEnabled)
+        SoundPlayer.timeCore(enabled: isSoundEnabled)
     }
 
     func tick(delta: TimeInterval) {
-        guard slowTimeRemaining > 0 else { return }
-        slowTimeRemaining = max(0, slowTimeRemaining - delta)
+        if slowTimeRemaining > 0 {
+            slowTimeRemaining = max(0, slowTimeRemaining - delta)
+        }
+
+        if feverRemaining > 0 {
+            feverRemaining = max(0, feverRemaining - delta)
+            if feverRemaining == 0 {
+                SoundPlayer.setFeverActive(false, enabled: isSoundEnabled)
+            }
+        }
     }
 
     func endGame() {
         isGameOver = true
+        feverRemaining = 0
         updatePauseState()
-        SoundPlayer.fail(enabled: isSoundEnabled)
+        SoundPlayer.crash(enabled: isSoundEnabled)
+        SoundPlayer.setFeverActive(false, enabled: isSoundEnabled)
     }
 
     func completeTutorial() {

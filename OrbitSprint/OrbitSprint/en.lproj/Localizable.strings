@@ -1,24 +1,27 @@
-"app.title" = "ORBIT SPRINT";
+"app.title" = "LUMEN RELAY";
 "hud.best" = "BEST";
 "hud.level" = "LV %d";
 "hud.combo" = "%d COMBO";
+"hud.fever" = "FEVER SYNC";
 
-"loading.title" = "Charging Orbit";
-"start.subtitle" = "One tap reverses direction and moves through three orbit depths. Read the pattern, chase the spark.";
-"start.play" = "Start Run";
+"loading.title" = "Waking the Relay";
+"start.eyebrow" = "NEON CORE RUNNER";
+"start.subtitle" = "Guide a Lumen Core through the broken relay. Chain light, dodge glitch shards, and ignite Fever Sync.";
+"start.play" = "Enter Relay";
 
-"tutorial.title" = "Tap Into Orbit";
-"tutorial.body" = "Chain sparks for score multipliers, grab power-ups, and survive each faster level.";
+"tutorial.title" = "Relay Protocol";
+"tutorial.body" = "Read the lanes, gather lumen sparks, and keep the core synced as the relay accelerates.";
 "tutorial.step.tap" = "Tap anywhere to move 1-2-3-2-1 through the orbit depths.";
-"tutorial.step.collect" = "Collect sparks quickly to build combo multipliers up to x5.";
-"tutorial.step.avoid" = "Avoid red shards. One crash ends the run.";
-"tutorial.step.powerups" = "Blue shields absorb a crash. Purple time cores slow the orbit.";
-"tutorial.start" = "Start Run";
+"tutorial.step.collect" = "Collect golden lumen sparks to raise your sync multiplier.";
+"tutorial.step.avoid" = "Avoid magenta glitch shards. One direct crash ends the run.";
+"tutorial.step.powerups" = "Blue shields absorb a crash. Violet time cores slow the relay.";
+"tutorial.step.fever" = "Chain 12 sparks to trigger Fever Sync with boosted scoring and a faster soundtrack.";
+"tutorial.start" = "Start Relay";
 
-"gameover.title" = "CRASHED";
+"gameover.title" = "SYNC LOST";
 "gameover.score" = "Score %d  |  Best %d";
 "gameover.level" = "Reached Level %d";
-"gameover.restart" = "Run Again";
+"gameover.restart" = "Reboot Relay";
 
 "pause.title" = "Paused";
 "pause.resume" = "Resume";
@@ -34,6 +37,6 @@
 "settings.showTutorial" = "Show Tutorial Again";
 "settings.done" = "Done";
 
-"theme.aurora" = "Aurora";
-"theme.solar" = "Solar";
-"theme.mono" = "Mono";
+"theme.aurora" = "Neon Tide";
+"theme.solar" = "Solar Rift";
+"theme.mono" = "Ghost Signal";

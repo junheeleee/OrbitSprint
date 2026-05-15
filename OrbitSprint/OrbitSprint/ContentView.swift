@@ -14,6 +14,11 @@ struct ContentView: View {
                     .ignoresSafeArea()
             }
 
+            if gameState.isFeverActive {
+                FeverBackdrop()
+                    .transition(.opacity)
+            }
+
             gameOverlay
 
             if gameState.isLoading {
@@ -51,6 +56,7 @@ struct ContentView: View {
         }
         .animation(.spring(response: 0.35, dampingFraction: 0.82), value: gameState.isGameOver)
         .animation(.spring(response: 0.35, dampingFraction: 0.82), value: gameState.isUserPaused)
+        .animation(.easeInOut(duration: 0.22), value: gameState.isFeverActive)
     }
 
     private func makeScene() -> GameScene {
@@ -140,10 +146,28 @@ private struct HUDView: View {
             HStack(spacing: 14) {
                 VStack(alignment: .trailing, spacing: 4) {
                     if gameState.combo > 0 {
-                        Text(String(format: NSLocalizedString("hud.combo", comment: ""), gameState.combo))
-                            .font(.caption.weight(.black))
-                            .foregroundStyle(Color(red: 1.0, green: 0.82, blue: 0.28))
-                            .monospacedDigit()
+                        VStack(alignment: .trailing, spacing: 3) {
+                            if gameState.isFeverActive {
+                                Text("hud.fever")
+                                    .font(.caption2.weight(.black))
+                                    .foregroundStyle(.black)
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 3)
+                                    .background(
+                                        LinearGradient(
+                                            colors: gameState.selectedTheme.feverColors,
+                                            startPoint: .leading,
+                                            endPoint: .trailing
+                                        ),
+                                        in: Capsule()
+                                    )
+                            }
+
+                            Text(String(format: NSLocalizedString("hud.combo", comment: ""), gameState.combo))
+                                .font(.caption.weight(.black))
+                                .foregroundStyle(gameState.isFeverActive ? .white : Color(red: 1.0, green: 0.82, blue: 0.28))
+                                .monospacedDigit()
+                        }
                     }
                     HStack(spacing: 5) {
                         if gameState.shieldCharges > 0 {
@@ -222,13 +246,13 @@ private struct LoadingView: View {
     var body: some View {
         ZStack {
             Rectangle()
-                .fill(.black.opacity(0.42))
+                .fill(.black.opacity(0.5))
                 .ignoresSafeArea()
 
             VStack(spacing: 18) {
-                Image(systemName: "orbit")
+                Image(systemName: "sparkles")
                     .font(.system(size: 54, weight: .black))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.cyan, .pink)
                     .symbolEffect(.pulse)
 
                 Text("loading.title")
@@ -247,11 +271,22 @@ private struct StartView: View {
     let start: () -> Void
 
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: 22) {
             VStack(spacing: 8) {
+                Text("start.eyebrow")
+                    .font(.caption.weight(.black))
+                    .foregroundStyle(Color(red: 0.0, green: 0.92, blue: 0.82))
+                    .tracking(1.8)
+
                 Text("app.title")
-                    .font(.system(size: 42, weight: .black, design: .rounded))
-                    .foregroundStyle(.white)
+                    .font(.system(size: 46, weight: .black, design: .rounded))
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: gameState.selectedTheme.feverColors,
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
                     .multilineTextAlignment(.center)
 
                 Text("start.subtitle")
@@ -264,7 +299,7 @@ private struct StartView: View {
             VStack(alignment: .leading, spacing: 12) {
                 TutorialRow(icon: "hand.tap.fill", text: "tutorial.step.tap")
                 TutorialRow(icon: "sparkles", text: "tutorial.step.collect")
-                TutorialRow(icon: "bolt.shield.fill", text: "tutorial.step.powerups")
+                TutorialRow(icon: "flame.fill", text: "tutorial.step.fever")
             }
 
             Button(action: start) {
@@ -278,6 +313,24 @@ private struct StartView: View {
         }
         .padding(24)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: 8, style: .continuous)
+                .stroke(.white.opacity(0.18), lineWidth: 1)
+        }
+    }
+}
+
+private struct FeverBackdrop: View {
+    @EnvironmentObject private var gameState: GameState
+
+    var body: some View {
+        LinearGradient(
+            colors: gameState.selectedTheme.feverColors.map { $0.opacity(0.24) },
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+        .ignoresSafeArea()
+        .allowsHitTesting(false)
     }
 }
 

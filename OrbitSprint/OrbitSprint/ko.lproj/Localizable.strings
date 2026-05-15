@@ -1,24 +1,27 @@
-"app.title" = "오빗 스프린트";
+"app.title" = "루멘 릴레이";
 "hud.best" = "최고";
 "hud.level" = "LV %d";
 "hud.combo" = "%d 콤보";
+"hud.fever" = "피버 싱크";
 
-"loading.title" = "궤도 충전 중";
-"start.subtitle" = "한 번 탭하면 방향이 반전되고 세 단계 궤도를 오르내립니다. 패턴을 읽고 별빛을 이어 모으세요.";
-"start.play" = "게임 시작";
+"loading.title" = "릴레이 기동 중";
+"start.eyebrow" = "네온 코어 러너";
+"start.subtitle" = "루멘 코어를 이끌고 망가진 릴레이를 통과하세요. 빛을 잇고, 글리치 파편을 피하고, 피버 싱크를 점화하세요.";
+"start.play" = "릴레이 진입";
 
-"tutorial.title" = "궤도로 뛰어들기";
-"tutorial.body" = "별빛을 연속으로 모아 배수를 키우고, 파워업으로 더 높은 레벨까지 버텨 보세요.";
+"tutorial.title" = "릴레이 프로토콜";
+"tutorial.body" = "레인을 읽고 루멘을 모으며, 점점 빨라지는 릴레이 안에서 코어의 싱크를 유지하세요.";
 "tutorial.step.tap" = "화면 아무 곳이나 탭해서 1-2-3-2-1 순서로 궤도를 오르내립니다.";
-"tutorial.step.collect" = "별빛을 빠르게 이어 먹으면 최대 x5 콤보 배수가 붙습니다.";
-"tutorial.step.avoid" = "빨간 파편을 피하세요. 한 번 부딪히면 끝입니다.";
-"tutorial.step.powerups" = "파란 방패는 충돌을 막고, 보라 시간핵은 궤도를 느리게 합니다.";
-"tutorial.start" = "시작하기";
+"tutorial.step.collect" = "황금 루멘을 이어 모으면 싱크 배수가 올라갑니다.";
+"tutorial.step.avoid" = "마젠타 글리치 파편을 피하세요. 직접 충돌하면 끝입니다.";
+"tutorial.step.powerups" = "파란 실드는 충돌을 막고, 보라 타임 코어는 릴레이를 느리게 합니다.";
+"tutorial.step.fever" = "루멘 12개를 연속으로 모으면 점수와 음악이 폭발하는 피버 싱크가 켜집니다.";
+"tutorial.start" = "릴레이 시작";
 
-"gameover.title" = "충돌!";
+"gameover.title" = "싱크 끊김";
 "gameover.score" = "점수 %d  |  최고 %d";
 "gameover.level" = "도달 레벨 %d";
-"gameover.restart" = "다시 달리기";
+"gameover.restart" = "릴레이 재기동";
 
 "pause.title" = "일시정지";
 "pause.resume" = "계속하기";
@@ -34,6 +37,6 @@
 "settings.showTutorial" = "튜토리얼 다시 보기";
 "settings.done" = "완료";
 
-"theme.aurora" = "오로라";
-"theme.solar" = "솔라";
-"theme.mono" = "모노";
+"theme.aurora" = "네온 타이드";
+"theme.solar" = "솔라 리프트";
+"theme.mono" = "고스트 시그널";

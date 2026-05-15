@@ -22,6 +22,13 @@
 		1A2B3C4D5E6F70000000000D /* fail.wav in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000098 /* fail.wav */; };
 		1A2B3C4D5E6F70000000000E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000099 /* PrivacyInfo.xcprivacy */; };
 		1A2B3C4D5E6F7000000000A0 /* background.wav in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7000000000A1 /* background.wav */; };
+		1A2B3C4D5E6F7000000000B0 /* lumen.wav in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7000000000C0 /* lumen.wav */; };
+		1A2B3C4D5E6F7000000000B1 /* shield.wav in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7000000000C1 /* shield.wav */; };
+		1A2B3C4D5E6F7000000000B2 /* timecore.wav in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7000000000C2 /* timecore.wav */; };
+		1A2B3C4D5E6F7000000000B3 /* crash.wav in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7000000000C3 /* crash.wav */; };
+		1A2B3C4D5E6F7000000000B4 /* shieldbreak.wav in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7000000000C4 /* shieldbreak.wav */; };
+		1A2B3C4D5E6F7000000000B5 /* fever.wav in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7000000000C5 /* fever.wav */; };
+		1A2B3C4D5E6F7000000000B6 /* feverloop.wav in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7000000000C6 /* feverloop.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +51,13 @@
 		1A2B3C4D5E6F700000000098 /* fail.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Sounds/fail.wav; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000099 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		1A2B3C4D5E6F7000000000A1 /* background.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Sounds/background.wav; sourceTree = "<group>"; };
+		1A2B3C4D5E6F7000000000C0 /* lumen.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Sounds/lumen.wav; sourceTree = "<group>"; };
+		1A2B3C4D5E6F7000000000C1 /* shield.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Sounds/shield.wav; sourceTree = "<group>"; };
+		1A2B3C4D5E6F7000000000C2 /* timecore.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Sounds/timecore.wav; sourceTree = "<group>"; };
+		1A2B3C4D5E6F7000000000C3 /* crash.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Sounds/crash.wav; sourceTree = "<group>"; };
+		1A2B3C4D5E6F7000000000C4 /* shieldbreak.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Sounds/shieldbreak.wav; sourceTree = "<group>"; };
+		1A2B3C4D5E6F7000000000C5 /* fever.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Sounds/fever.wav; sourceTree = "<group>"; };
+		1A2B3C4D5E6F7000000000C6 /* feverloop.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Sounds/feverloop.wav; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +96,13 @@
 				1A2B3C4D5E6F700000000097 /* collect.wav */,
 				1A2B3C4D5E6F700000000098 /* fail.wav */,
 				1A2B3C4D5E6F7000000000A1 /* background.wav */,
+				1A2B3C4D5E6F7000000000C0 /* lumen.wav */,
+				1A2B3C4D5E6F7000000000C1 /* shield.wav */,
+				1A2B3C4D5E6F7000000000C2 /* timecore.wav */,
+				1A2B3C4D5E6F7000000000C3 /* crash.wav */,
+				1A2B3C4D5E6F7000000000C4 /* shieldbreak.wav */,
+				1A2B3C4D5E6F7000000000C5 /* fever.wav */,
+				1A2B3C4D5E6F7000000000C6 /* feverloop.wav */,
 				1A2B3C4D5E6F700000000099 /* PrivacyInfo.xcprivacy */,
 				1A2B3C4D5E6F700000000017 /* Info.plist */,
 			);
@@ -162,6 +183,13 @@
 				1A2B3C4D5E6F70000000000C /* collect.wav in Resources */,
 				1A2B3C4D5E6F70000000000D /* fail.wav in Resources */,
 				1A2B3C4D5E6F7000000000A0 /* background.wav in Resources */,
+				1A2B3C4D5E6F7000000000B0 /* lumen.wav in Resources */,
+				1A2B3C4D5E6F7000000000B1 /* shield.wav in Resources */,
+				1A2B3C4D5E6F7000000000B2 /* timecore.wav in Resources */,
+				1A2B3C4D5E6F7000000000B3 /* crash.wav in Resources */,
+				1A2B3C4D5E6F7000000000B4 /* shieldbreak.wav in Resources */,
+				1A2B3C4D5E6F7000000000B5 /* fever.wav in Resources */,
+				1A2B3C4D5E6F7000000000B6 /* feverloop.wav in Resources */,
 				1A2B3C4D5E6F70000000000E /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
