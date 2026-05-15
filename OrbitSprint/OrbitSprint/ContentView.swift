@@ -5,6 +5,7 @@ struct ContentView: View {
     @EnvironmentObject private var gameState: GameState
     @Environment(\.scenePhase) private var scenePhase
     @State private var scene: GameScene?
+    @State private var didScheduleLoading = false
 
     var body: some View {
         ZStack {
@@ -13,58 +14,17 @@ struct ContentView: View {
                     .ignoresSafeArea()
             }
 
-            VStack(spacing: 0) {
-                HUDView(
-                    openSettings: {
-                    gameState.pauseForSettings()
-                    },
-                    togglePause: {
-                        gameState.togglePause()
-                    }
-                )
-                    .padding(.horizontal, 20)
-                    .padding(.top, 14)
+            gameOverlay
 
-                Spacer()
-
-                if !gameState.hasSeenTutorial {
-                    TutorialView {
-                        gameState.completeTutorial()
-                    }
-                    .padding(24)
-                    .transition(.scale.combined(with: .opacity))
+            if gameState.isLoading {
+                LoadingView()
+                    .transition(.opacity)
+            } else if gameState.isStartScreenPresented {
+                StartView {
+                    gameState.startRun()
                 }
-
-                if gameState.isGameOver {
-                    GameOverView {
-                        gameState.reset()
-                        scene = makeScene()
-                    }
-                    .padding(24)
-                        .transition(.scale.combined(with: .opacity))
-                }
-
-                if gameState.isUserPaused, gameState.hasSeenTutorial, !gameState.isGameOver {
-                    PauseView {
-                        gameState.resume()
-                    }
-                    .padding(24)
-                    .transition(.scale.combined(with: .opacity))
-                }
-
-                if gameState.hasSeenTutorial, !gameState.isGameOver, !gameState.isUserPaused {
-                    OrbitControlsView(
-                        switchLane: {
-                            scene?.switchOrbitLane()
-                        },
-                        reverseDirection: {
-                            scene?.reverseDirection()
-                        }
-                    )
-                    .padding(.horizontal, 26)
-                    .padding(.bottom, 28)
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
-                }
+                .padding(24)
+                .transition(.scale.combined(with: .opacity))
             }
         }
         .background(
@@ -84,6 +44,7 @@ struct ContentView: View {
                 scene = makeScene()
             }
             SoundPlayer.setMusicEnabled(gameState.isSoundEnabled)
+            scheduleLoadingFinish()
         }
         .onChange(of: scenePhase) { _, newPhase in
             gameState.setSceneActive(newPhase == .active)
@@ -96,6 +57,58 @@ struct ContentView: View {
         let scene = GameScene(state: gameState)
         scene.scaleMode = .resizeFill
         return scene
+    }
+
+    private var gameOverlay: some View {
+        VStack(spacing: 0) {
+            if !gameState.isLoading, !gameState.isStartScreenPresented {
+                HUDView(
+                    openSettings: {
+                    gameState.pauseForSettings()
+                    },
+                    togglePause: {
+                        gameState.togglePause()
+                    }
+                )
+                .padding(.horizontal, 20)
+                .padding(.top, 14)
+            }
+
+            Spacer()
+
+            if !gameState.hasSeenTutorial, !gameState.isStartScreenPresented, !gameState.isLoading {
+                TutorialView {
+                    gameState.completeTutorial()
+                }
+                .padding(24)
+                .transition(.scale.combined(with: .opacity))
+            }
+
+            if gameState.isGameOver {
+                GameOverView {
+                    gameState.reset()
+                    scene = makeScene()
+                }
+                .padding(24)
+                .transition(.scale.combined(with: .opacity))
+            }
+
+            if gameState.isUserPaused, gameState.hasSeenTutorial, !gameState.isGameOver {
+                PauseView {
+                    gameState.resume()
+                }
+                .padding(24)
+                .transition(.scale.combined(with: .opacity))
+            }
+        }
+    }
+
+    private func scheduleLoadingFinish() {
+        guard !didScheduleLoading else { return }
+        didScheduleLoading = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.15) {
+            gameState.finishLoading()
+        }
     }
 }
 
@@ -205,59 +218,66 @@ private struct PauseView: View {
     }
 }
 
-private struct OrbitControlsView: View {
-    let switchLane: () -> Void
-    let reverseDirection: () -> Void
-
+private struct LoadingView: View {
     var body: some View {
-        HStack {
-            ControlButton(
-                title: "control.orbit",
-                systemName: "arrow.up.arrow.down",
-                tint: Color(red: 0.2, green: 0.72, blue: 1.0),
-                action: switchLane
-            )
+        ZStack {
+            Rectangle()
+                .fill(.black.opacity(0.42))
+                .ignoresSafeArea()
 
-            Spacer()
+            VStack(spacing: 18) {
+                Image(systemName: "orbit")
+                    .font(.system(size: 54, weight: .black))
+                    .foregroundStyle(.white)
+                    .symbolEffect(.pulse)
 
-            ControlButton(
-                title: "control.reverse",
-                systemName: "arrow.left.arrow.right",
-                tint: Color(red: 1.0, green: 0.72, blue: 0.28),
-                action: reverseDirection
-            )
+                Text("loading.title")
+                    .font(.system(size: 34, weight: .black, design: .rounded))
+                    .foregroundStyle(.white)
+
+                ProgressView()
+                    .tint(.white)
+            }
         }
     }
 }
 
-private struct ControlButton: View {
-    let title: LocalizedStringKey
-    let systemName: String
-    let tint: Color
-    let action: () -> Void
+private struct StartView: View {
+    @EnvironmentObject private var gameState: GameState
+    let start: () -> Void
 
     var body: some View {
-        Button(action: action) {
-            VStack(spacing: 7) {
-                Image(systemName: systemName)
-                    .font(.system(size: 28, weight: .black))
+        VStack(spacing: 20) {
+            VStack(spacing: 8) {
+                Text("app.title")
+                    .font(.system(size: 42, weight: .black, design: .rounded))
+                    .foregroundStyle(.white)
+                    .multilineTextAlignment(.center)
 
-                Text(title)
-                    .font(.caption2.weight(.black))
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.78)
+                Text("start.subtitle")
+                    .font(.headline.weight(.semibold))
+                    .foregroundStyle(.white.opacity(0.72))
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
             }
-            .foregroundStyle(.white)
-            .frame(width: 92, height: 78)
-            .background(tint.opacity(0.34), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
-            .overlay {
-                RoundedRectangle(cornerRadius: 8, style: .continuous)
-                    .stroke(tint.opacity(0.78), lineWidth: 2)
+
+            VStack(alignment: .leading, spacing: 12) {
+                TutorialRow(icon: "hand.tap.fill", text: "tutorial.step.tap")
+                TutorialRow(icon: "sparkles", text: "tutorial.step.collect")
+                TutorialRow(icon: "bolt.shield.fill", text: "tutorial.step.powerups")
             }
-            .contentShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+
+            Button(action: start) {
+                Label("start.play", systemImage: "play.fill")
+                    .font(.headline.weight(.bold))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 14)
+            }
+            .buttonStyle(.borderedProminent)
+            .tint(gameState.selectedTheme.accentColor)
         }
-        .buttonStyle(.plain)
-        .accessibilityLabel(Text(title))
+        .padding(24)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
     }
 }
 

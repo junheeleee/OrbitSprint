@@ -15,6 +15,7 @@ final class GameScene: SKScene {
     private let outerRadius: CGFloat = 136
     private let playerRadius: CGFloat = 14
     private var currentRadius: CGFloat = 86
+    private var targetRadius: CGFloat = 86
     private var angle: CGFloat = -.pi / 2
     private var angularSpeed: CGFloat = 1.72
     private var lastUpdate: TimeInterval = 0
@@ -56,26 +57,13 @@ final class GameScene: SKScene {
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let touch = touches.first else { return }
-        let location = touch.location(in: self)
-        if location.x < center.x {
-            switchOrbitLane()
-        } else {
-            reverseDirection()
-        }
+        switchOrbitAndDirection()
     }
 
-    func switchOrbitLane() {
+    private func switchOrbitAndDirection() {
         guard !state.isGameOver else { return }
         guard !state.isPaused else { return }
-        currentRadius = currentRadius == innerRadius ? outerRadius : innerRadius
-        SoundPlayer.tap(enabled: state.isSoundEnabled)
-        Haptics.tap(enabled: state.isHapticsEnabled)
-    }
-
-    func reverseDirection() {
-        guard !state.isGameOver else { return }
-        guard !state.isPaused else { return }
+        targetRadius = targetRadius == innerRadius ? outerRadius : innerRadius
         angularSpeed *= -1
         SoundPlayer.tap(enabled: state.isSoundEnabled)
         Haptics.tap(enabled: state.isHapticsEnabled)
@@ -94,6 +82,7 @@ final class GameScene: SKScene {
         difficulty = 1 + min(CGFloat(state.score) * 0.012, 1.45)
         let timeScale: CGFloat = state.slowTimeRemaining > 0 ? 0.62 : 1
         angle += angularSpeed * difficulty * timeScale * CGFloat(delta)
+        currentRadius += (targetRadius - currentRadius) * min(1, CGFloat(delta) * 14)
         spawnTimer += delta
         sparkTimer += delta
         powerUpTimer += delta
@@ -134,6 +123,7 @@ final class GameScene: SKScene {
         player.glowWidth = 7
         addChild(player)
         player.alpha = 0.64
+        targetRadius = currentRadius
         player.run(.sequence([.wait(forDuration: safeUntil), .fadeAlpha(to: 1, duration: 0.25)]))
 
         applyTheme()
@@ -330,6 +320,7 @@ final class GameScene: SKScene {
     private func recoverToSafePosition() {
         angle = safestRecoveryAngle()
         currentRadius = saferRecoveryRadius(at: angle)
+        targetRadius = currentRadius
         updatePlayerPosition()
         removeNearbyShards(clearance: 1.15)
         spawnTimer = 0

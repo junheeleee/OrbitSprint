@@ -8,6 +8,12 @@ final class GameState: ObservableObject {
     @Published var level = 1
     @Published var shieldCharges = 0
     @Published var slowTimeRemaining: TimeInterval = 0
+    @Published var isLoading = true {
+        didSet { updatePauseState() }
+    }
+    @Published var isStartScreenPresented = true {
+        didSet { updatePauseState() }
+    }
     @Published var isGameOver = false
     @Published var isPaused: Bool
     @Published var isUserPaused = false
@@ -39,7 +45,7 @@ final class GameState: ObservableObject {
         let defaults = UserDefaults.standard
         bestScore = defaults.integer(forKey: bestScoreKey)
         hasSeenTutorial = defaults.bool(forKey: tutorialKey)
-        isPaused = !defaults.bool(forKey: tutorialKey)
+        isPaused = true
         isSoundEnabled = defaults.object(forKey: soundEnabledKey) as? Bool ?? true
         isHapticsEnabled = defaults.object(forKey: hapticsEnabledKey) as? Bool ?? true
         selectedTheme = GameTheme(rawValue: defaults.string(forKey: selectedThemeKey) ?? "") ?? .aurora
@@ -54,6 +60,20 @@ final class GameState: ObservableObject {
         slowTimeRemaining = 0
         isGameOver = false
         isUserPaused = false
+        isStartScreenPresented = false
+        updatePauseState()
+    }
+
+    func finishLoading() {
+        isLoading = false
+    }
+
+    func startRun() {
+        hasSeenTutorial = true
+        UserDefaults.standard.set(true, forKey: tutorialKey)
+        isStartScreenPresented = false
+        isUserPaused = false
+        isGameOver = false
         updatePauseState()
     }
 
@@ -135,6 +155,7 @@ final class GameState: ObservableObject {
 
     func showTutorialAgain() {
         isSettingsPresented = false
+        isStartScreenPresented = true
         hasSeenTutorial = false
         isUserPaused = false
         UserDefaults.standard.set(false, forKey: tutorialKey)
@@ -147,6 +168,6 @@ final class GameState: ObservableObject {
     }
 
     private func updatePauseState() {
-        isPaused = !hasSeenTutorial || isGameOver || isSettingsPresented || isUserPaused || !isSceneActive
+        isPaused = isLoading || isStartScreenPresented || !hasSeenTutorial || isGameOver || isSettingsPresented || isUserPaused || !isSceneActive
     }
 }
