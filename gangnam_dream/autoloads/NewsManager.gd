@@ -5,9 +5,9 @@ signal news_generated(news_items: Array)
 var last_news: Array = []
 
 func generate_monthly_news():
-	var pool := DataRegistry.news_templates.duplicate(true)
+	var pool = DataRegistry.news_templates.duplicate(true)
 	pool.shuffle()
-	var count := randi_range(3, 5)
+	var count = randi_range(3, 5)
 	var selected: Array = []
 	for i in range(min(count, pool.size())):
 		var item: Dictionary = pool[i].duplicate(true)
@@ -24,8 +24,8 @@ func generate_monthly_news():
 	return selected
 
 func _apply_news_pressure(item):
-	var sentiment := str(item.get("sentiment", "neutral"))
-	var fear_delta := 0
+	var sentiment = str(item.get("sentiment", "neutral"))
+	var fear_delta = 0
 	match sentiment:
 		"greed":
 			fear_delta = 7
@@ -42,7 +42,7 @@ func _apply_news_pressure(item):
 	var market_effects: Dictionary = item.get("market_effects", {})
 	for asset_id in market_effects:
 		if GameState.market_prices.has(asset_id):
-			var delta := float(market_effects[asset_id])
+			var delta = float(market_effects[asset_id])
 			if bool(item.get("misleading", false)):
 				delta *= -0.45
 			GameState.market_prices[asset_id] *= 1.0 + delta

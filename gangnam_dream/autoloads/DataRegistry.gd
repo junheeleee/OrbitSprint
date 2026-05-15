@@ -1,17 +1,17 @@
 extends Node
 
-const EVENT_PATHS := [
+const EVENT_PATHS = [
 	"res://content/events/life_events.json",
 	"res://content/events/investment_events.json",
 	"res://content/events/relationship_events.json",
 	"res://content/events/hidden_events.json",
 ]
-const ASSETS_PATH := "res://content/assets.json"
-const JOBS_PATH := "res://content/jobs.json"
-const ITEMS_PATH := "res://content/items.json"
-const ENDINGS_PATH := "res://content/endings.json"
-const NEWS_PATH := "res://content/news_templates.json"
-const META_PATH := "res://content/meta/default_meta.json"
+const ASSETS_PATH = "res://content/assets.json"
+const JOBS_PATH = "res://content/jobs.json"
+const ITEMS_PATH = "res://content/items.json"
+const ENDINGS_PATH = "res://content/endings.json"
+const NEWS_PATH = "res://content/news_templates.json"
+const META_PATH = "res://content/meta/default_meta.json"
 
 var events: Array = []
 var events_by_id: Dictionary = {}
@@ -108,7 +108,7 @@ func _parse_json(path):
 	if not FileAccess.file_exists(path):
 		push_warning("Missing content file: %s" % path)
 		return null
-	var text := FileAccess.get_file_as_string(path)
+	var text = FileAccess.get_file_as_string(path)
 	var parsed = JSON.parse_string(text)
 	if parsed == null:
 		push_warning("Invalid JSON file: %s" % path)

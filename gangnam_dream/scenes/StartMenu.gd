@@ -6,18 +6,18 @@ func _ready():
 	_build_ui()
 
 func _build_ui():
-	var bg := ColorRect.new()
+	var bg = ColorRect.new()
 	bg.color = Color("#07111f")
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
 
-	var wrap := CenterContainer.new()
+	var wrap = CenterContainer.new()
 	wrap.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(wrap)
 
-	var panel := PanelContainer.new()
+	var panel = PanelContainer.new()
 	panel.custom_minimum_size = Vector2(560, 640)
-	var style := StyleBoxFlat.new()
+	var style = StyleBoxFlat.new()
 	style.bg_color = Color("#0f172a")
 	style.border_color = Color("#334155")
 	style.set_border_width_all(1)
@@ -29,7 +29,7 @@ func _build_ui():
 	panel.add_theme_stylebox_override("panel", style)
 	wrap.add_child(panel)
 
-	var box := VBoxContainer.new()
+	var box = VBoxContainer.new()
 	box.add_theme_constant_override("separation", 14)
 	panel.add_child(box)
 
@@ -42,33 +42,33 @@ func _build_ui():
 		trait_option.add_item(trait_name)
 	box.add_child(trait_option)
 
-	var new_game := _button("새 런 시작", "#238636")
+	var new_game = _button("새 런 시작", "#238636")
 	new_game.pressed.connect(_start_new_run)
 	box.add_child(new_game)
 
 	box.add_child(_label("저장 슬롯", 16, "#58a6ff", HORIZONTAL_ALIGNMENT_LEFT))
 	for slot in range(0, 4):
-		var info := SaveManager.get_save_info(slot)
-		var label := "슬롯 %d" % slot
+		var info = SaveManager.get_save_info(slot)
+		var label = "슬롯 %d" % slot
 		if slot == 0:
 			label = "자동저장"
 		if info.get("empty", true):
 			label += " / 비어 있음"
 		else:
 			label += " / %d년 %d월 / 자산 %s" % [info.get("year", 2026), info.get("month", 1), _format_money(info.get("total_assets", 0))]
-		var button_color := "#30363d"
+		var button_color = "#30363d"
 		if not info.get("empty", true):
 			button_color = "#1f6feb"
-		var button := _button(label, button_color)
+		var button = _button(label, button_color)
 		button.disabled = info.get("empty", true)
 		button.pressed.connect(Callable(self, "_load_slot").bind(slot))
 		box.add_child(button)
 
-	var meta := MetaProgression.data
+	var meta = MetaProgression.data
 	box.add_child(_label("누적 런 %d회 / 최고 자산 %s" % [meta.get("total_runs", 0), _format_money(meta.get("best_asset", 0))], 13, "#94a3b8", HORIZONTAL_ALIGNMENT_CENTER))
 
 func _start_new_run():
-	var selected_trait := "흙수저 생존본능"
+	var selected_trait = "흙수저 생존본능"
 	if trait_option.get_item_count() > 0:
 		selected_trait = trait_option.get_item_text(trait_option.selected)
 	GameState.start_new_game(selected_trait)
@@ -79,7 +79,7 @@ func _load_slot(slot):
 		get_tree().change_scene_to_file("res://scenes/MainGame.tscn")
 
 func _label(text, size, color, align):
-	var label := Label.new()
+	var label = Label.new()
 	label.text = text
 	label.horizontal_alignment = align
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -88,13 +88,13 @@ func _label(text, size, color, align):
 	return label
 
 func _button(text, color):
-	var button := Button.new()
+	var button = Button.new()
 	button.text = text
 	button.custom_minimum_size = Vector2(0, 46)
-	var normal := StyleBoxFlat.new()
+	var normal = StyleBoxFlat.new()
 	normal.bg_color = Color(color)
 	normal.set_corner_radius_all(6)
-	var hover := normal.duplicate()
+	var hover = normal.duplicate()
 	hover.bg_color = Color(color).lightened(0.12)
 	button.add_theme_stylebox_override("normal", normal)
 	button.add_theme_stylebox_override("hover", hover)

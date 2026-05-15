@@ -1,7 +1,7 @@
 extends Node
 
 func get_ending(ending_id):
-	var ending := DataRegistry.get_ending(ending_id)
+	var ending = DataRegistry.get_ending(ending_id)
 	if ending.is_empty():
 		return {
 			"id": ending_id,
@@ -12,7 +12,7 @@ func get_ending(ending_id):
 	return ending
 
 func evaluate_current_ending():
-	var total := GameState.get_total_asset_value()
+	var total = GameState.get_total_asset_value()
 	if GameState.health <= 0:
 		return get_ending("health_collapse")
 	if GameState.mental <= 0:

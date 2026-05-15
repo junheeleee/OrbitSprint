@@ -6,7 +6,7 @@ signal relationship_changed(rel: Dictionary)
 func process_monthly_relationships():
 	for rel in GameState.relationships.duplicate():
 		rel["affection"] = clamp(int(rel.get("affection", rel.get("affinity", 40))) - 1, 0, 100)
-		var trust_decay := 0
+		var trust_decay = 0
 		if GameState.stress > 75:
 			trust_decay = 1
 		rel["trust"] = clamp(int(rel.get("trust", 40)) - trust_decay, 0, 100)
@@ -29,7 +29,7 @@ func get_affinity_label(value):
 	return "멀어진 관계"
 
 func _apply_passive(rel):
-	var affection := int(rel.get("affection", 40))
+	var affection = int(rel.get("affection", 40))
 	if affection < 55:
 		return
 	match str(rel.get("type", "friends")):

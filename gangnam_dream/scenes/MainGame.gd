@@ -46,12 +46,12 @@ func _connect_signals():
 	GameState.game_over.connect(_show_ending)
 
 func _build_ui():
-	var bg := ColorRect.new()
+	var bg = ColorRect.new()
 	bg.color = Color("#07111f")
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
 
-	var root := VBoxContainer.new()
+	var root = VBoxContainer.new()
 	root.set_anchors_preset(Control.PRESET_FULL_RECT)
 	root.add_theme_constant_override("separation", 8)
 	root.add_theme_constant_override("margin_left", 10)
@@ -62,7 +62,7 @@ func _build_ui():
 
 	_build_top_bar(root)
 
-	var main := HBoxContainer.new()
+	var main = HBoxContainer.new()
 	main.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	main.add_theme_constant_override("separation", 8)
 	root.add_child(main)
@@ -73,16 +73,16 @@ func _build_ui():
 	_build_modal()
 
 func _build_top_bar(parent):
-	var panel := _panel("#0d1b2f", "#1f3a5b")
+	var panel = _panel("#0d1b2f", "#1f3a5b")
 	panel.custom_minimum_size = Vector2(0, 52)
 	parent.add_child(panel)
-	var row := HBoxContainer.new()
+	var row = HBoxContainer.new()
 	row.add_theme_constant_override("separation", 18)
 	panel.add_child(row)
-	var title := _label("강남드림", 22, "#ffd166")
+	var title = _label("강남드림", 22, "#ffd166")
 	row.add_child(title)
 	for key in ["date", "age", "turn", "money", "tier", "market"]:
-		var label := _label("", 14, "#dbe7ff")
+		var label = _label("", 14, "#dbe7ff")
 		label.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		if key == "market":
 			label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -90,18 +90,18 @@ func _build_top_bar(parent):
 		row.add_child(label)
 
 func _build_left_panel(parent):
-	var panel := _panel("#101820", "#243447")
+	var panel = _panel("#101820", "#243447")
 	panel.custom_minimum_size = Vector2(250, 0)
 	parent.add_child(panel)
-	var box := VBoxContainer.new()
+	var box = VBoxContainer.new()
 	box.add_theme_constant_override("separation", 8)
 	panel.add_child(box)
 	box.add_child(_label("PLAYER", 15, "#58a6ff"))
 	for key in ["job", "health", "mental", "stress", "intelligence", "social_skill", "investment_skill", "luck", "reputation", "asset"]:
-		var row := HBoxContainer.new()
+		var row = HBoxContainer.new()
 		box.add_child(row)
 		row.add_child(_label(_stat_name(key), 13, "#9fb3c8"))
-		var value := _label("", 13, "#ffffff")
+		var value = _label("", 13, "#ffffff")
 		value.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 		value.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		stat_labels[key] = value
@@ -115,22 +115,22 @@ func _build_left_panel(parent):
 	box.add_child(log_box)
 
 func _build_center_panel(parent):
-	var center := VBoxContainer.new()
+	var center = VBoxContainer.new()
 	center.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	center.add_theme_constant_override("separation", 8)
 	parent.add_child(center)
 
-	var news_panel := _panel("#111827", "#26344d")
+	var news_panel = _panel("#111827", "#26344d")
 	news_panel.custom_minimum_size = Vector2(0, 150)
 	center.add_child(news_panel)
 	news_box = VBoxContainer.new()
 	news_box.add_theme_constant_override("separation", 4)
 	news_panel.add_child(news_box)
 
-	var event_panel := _panel("#0f172a", "#334155")
+	var event_panel = _panel("#0f172a", "#334155")
 	event_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	center.add_child(event_panel)
-	var event_layout := VBoxContainer.new()
+	var event_layout = VBoxContainer.new()
 	event_layout.add_theme_constant_override("separation", 10)
 	event_panel.add_child(event_layout)
 	event_title = _label("이벤트 대기 중", 24, "#ffd166")
@@ -147,7 +147,7 @@ func _build_center_panel(parent):
 	event_layout.add_child(choice_box)
 
 func _build_right_panel(parent):
-	var tabs := TabContainer.new()
+	var tabs = TabContainer.new()
 	tabs.custom_minimum_size = Vector2(330, 0)
 	parent.add_child(tabs)
 
@@ -156,22 +156,22 @@ func _build_right_panel(parent):
 	inventory_box = _tab_box(tabs, "아이템")
 
 func _build_bottom_bar(parent):
-	var row := HBoxContainer.new()
+	var row = HBoxContainer.new()
 	row.add_theme_constant_override("separation", 8)
 	parent.add_child(row)
 	next_button = _button("다음 달", "#1f6feb")
 	next_button.pressed.connect(_on_next_month)
 	row.add_child(next_button)
-	var job_button := _button("직업", "#9a6700")
+	var job_button = _button("직업", "#9a6700")
 	job_button.pressed.connect(_open_jobs)
 	row.add_child(job_button)
-	var invest_button := _button("투자", "#238636")
+	var invest_button = _button("투자", "#238636")
 	invest_button.pressed.connect(_open_investments)
 	row.add_child(invest_button)
-	var shop_button := _button("상점", "#8957e5")
+	var shop_button = _button("상점", "#8957e5")
 	shop_button.pressed.connect(_open_shop)
 	row.add_child(shop_button)
-	var save_button := _button("저장", "#30363d")
+	var save_button = _button("저장", "#30363d")
 	save_button.pressed.connect(Callable(self, "_on_save_pressed"))
 	row.add_child(save_button)
 
@@ -181,7 +181,7 @@ func _build_modal():
 	modal_layer.set_anchors_preset(Control.PRESET_FULL_RECT)
 	modal_layer.visible = false
 	add_child(modal_layer)
-	var panel := _panel("#0f172a", "#64748b")
+	var panel = _panel("#0f172a", "#64748b")
 	panel.set_anchors_preset(Control.PRESET_CENTER)
 	panel.custom_minimum_size = Vector2(620, 520)
 	modal_layer.add_child(panel)
@@ -191,7 +191,7 @@ func _build_modal():
 
 func _begin_month():
 	if GameState.news_log.is_empty() or GameState.turn > 1:
-		var news := NewsManager.generate_monthly_news()
+		var news = NewsManager.generate_monthly_news()
 		investment_system.process_month(news)
 	EventManager.process_month_events()
 	current_event = EventManager.get_next_event()
@@ -230,7 +230,7 @@ func _render_event():
 	var choices: Array = current_event.get("choices", [])
 	for i in range(choices.size()):
 		var choice: Dictionary = choices[i]
-		var button := _button("%d. %s" % [i + 1, choice.get("text", "선택")], "#1f6feb")
+		var button = _button("%d. %s" % [i + 1, choice.get("text", "선택")], "#1f6feb")
 		button.pressed.connect(Callable(self, "_choose").bind(i))
 		choice_box.add_child(button)
 
@@ -262,9 +262,9 @@ func _render_news():
 	for child in news_box.get_children():
 		child.queue_free()
 	news_box.add_child(_label("BREAKING NEWS", 15, "#f97316"))
-	var items := GameState.news_log.slice(max(0, GameState.news_log.size() - 4))
+	var items = GameState.news_log.slice(max(0, GameState.news_log.size() - 4))
 	for news in items:
-		var text := str(news.get("headline", "")).format({"topic": _random_topic(news)})
+		var text = str(news.get("headline", "")).format({"topic": _random_topic(news)})
 		news_box.add_child(_label(text, 13, "#dbe7ff"))
 
 func _render_sidebars():
@@ -296,10 +296,10 @@ func _render_log():
 func _open_jobs():
 	_open_modal("직업 선택")
 	for job in job_system.get_available_jobs():
-		var button_color := "#30363d"
+		var button_color = "#30363d"
 		if job.get("eligible", false):
 			button_color = "#9a6700"
-		var button := _button("%s / 월급 %s" % [job.get("name", ""), GameState.format_money(job.get("base_salary", 0))], button_color)
+		var button = _button("%s / 월급 %s" % [job.get("name", ""), GameState.format_money(job.get("base_salary", 0))], button_color)
 		button.disabled = not job.get("eligible", false)
 		button.pressed.connect(Callable(self, "_on_job_selected").bind(job.get("id", "")))
 		modal_body.add_child(button)
@@ -307,18 +307,18 @@ func _open_jobs():
 func _open_investments():
 	_open_modal("투자")
 	for row in investment_system.get_asset_rows():
-		var buy := _button("%s 매수 10만원 / 현재 %s" % [row["name"], GameState.format_money(row["price"])], "#238636")
+		var buy = _button("%s 매수 10만원 / 현재 %s" % [row["name"], GameState.format_money(row["price"])], "#238636")
 		buy.pressed.connect(Callable(self, "_on_buy_asset").bind(row["id"]))
 		modal_body.add_child(buy)
 		if GameState.portfolio.has(row["id"]):
-			var sell := _button("%s 전량 매도" % row["name"], "#da3633")
+			var sell = _button("%s 전량 매도" % row["name"], "#da3633")
 			sell.pressed.connect(Callable(self, "_on_sell_asset").bind(row["id"]))
 			modal_body.add_child(sell)
 
 func _open_shop():
 	_open_modal("상점")
 	for item in inventory_system.get_shop_items().slice(0, 18):
-		var button := _button("%s / %s" % [item.get("name", ""), GameState.format_money(item.get("price", 0))], "#8957e5")
+		var button = _button("%s / %s" % [item.get("name", ""), GameState.format_money(item.get("price", 0))], "#8957e5")
 		button.pressed.connect(Callable(self, "_on_shop_item").bind(item.get("id", "")))
 		modal_body.add_child(button)
 
@@ -348,7 +348,7 @@ func _on_shop_item(item_id):
 func _open_modal(title):
 	_clear_box(modal_body)
 	modal_body.add_child(_label(title, 22, "#ffd166"))
-	var close := _button("닫기", "#30363d")
+	var close = _button("닫기", "#30363d")
 	close.pressed.connect(_close_modal)
 	modal_body.add_child(close)
 	modal_layer.visible = true
@@ -358,9 +358,9 @@ func _close_modal():
 
 func _show_ending(ending_id):
 	_open_modal("엔딩")
-	var ending := EndingSystem.get_ending(ending_id)
+	var ending = EndingSystem.get_ending(ending_id)
 	modal_body.add_child(_label("%s [%s]" % [ending.get("title", "엔딩"), ending.get("grade", "?")], 24, "#ffd166"))
-	var body := RichTextLabel.new()
+	var body = RichTextLabel.new()
 	body.bbcode_enabled = false
 	body.text = "%s\n\n최종 자산: %s\n점수: %d" % [ending.get("description", ""), GameState.format_money(GameState.get_total_asset_value()), EndingSystem.get_score()]
 	body.custom_minimum_size = Vector2(560, 260)
@@ -368,10 +368,10 @@ func _show_ending(ending_id):
 	modal_body.add_child(body)
 
 func _tab_box(tabs, title):
-	var scroll := ScrollContainer.new()
+	var scroll = ScrollContainer.new()
 	scroll.name = title
 	tabs.add_child(scroll)
-	var box := VBoxContainer.new()
+	var box = VBoxContainer.new()
 	box.add_theme_constant_override("separation", 6)
 	scroll.add_child(box)
 	return box
@@ -381,8 +381,8 @@ func _clear_box(box):
 		child.queue_free()
 
 func _panel(bg, border):
-	var panel := PanelContainer.new()
-	var style := StyleBoxFlat.new()
+	var panel = PanelContainer.new()
+	var style = StyleBoxFlat.new()
 	style.bg_color = Color(bg)
 	style.border_color = Color(border)
 	style.set_border_width_all(1)
@@ -395,7 +395,7 @@ func _panel(bg, border):
 	return panel
 
 func _label(text, size, color):
-	var label := Label.new()
+	var label = Label.new()
 	label.text = text
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	label.add_theme_font_size_override("font_size", size)
@@ -403,13 +403,13 @@ func _label(text, size, color):
 	return label
 
 func _button(text, color):
-	var button := Button.new()
+	var button = Button.new()
 	button.text = text
 	button.custom_minimum_size = Vector2(0, 42)
-	var normal := StyleBoxFlat.new()
+	var normal = StyleBoxFlat.new()
 	normal.bg_color = Color(color)
 	normal.set_corner_radius_all(5)
-	var hover := normal.duplicate()
+	var hover = normal.duplicate()
 	hover.bg_color = Color(color).lightened(0.12)
 	button.add_theme_stylebox_override("normal", normal)
 	button.add_theme_stylebox_override("hover", hover)

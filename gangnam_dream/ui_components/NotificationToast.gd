@@ -3,10 +3,10 @@ extends PanelContainer
 signal dismissed()
 
 @onready var label: Label = Label.new()
-var lifetime := 2.4
+var lifetime = 2.4
 
 func _ready():
-	var style := StyleBoxFlat.new()
+	var style = StyleBoxFlat.new()
 	style.bg_color = Color("#0f172a")
 	style.border_color = Color("#f97316")
 	style.set_border_width_all(1)
@@ -22,7 +22,7 @@ func _ready():
 func show_message(message, color):
 	label.text = message
 	label.add_theme_color_override("font_color", color)
-	var tween := create_tween()
+	var tween = create_tween()
 	modulate.a = 0.0
 	tween.tween_property(self, "modulate:a", 1.0, 0.16)
 	tween.tween_interval(lifetime)

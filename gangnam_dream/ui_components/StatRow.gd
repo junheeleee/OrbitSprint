@@ -1,7 +1,7 @@
 extends HBoxContainer
 
-var name_label := Label.new()
-var value_label := Label.new()
+var name_label = Label.new()
+var value_label = Label.new()
 
 func _ready():
 	add_theme_constant_override("separation", 8)

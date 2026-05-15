@@ -1,6 +1,6 @@
 extends Node
 
-const META_SAVE_PATH := "user://gangnam_dream_meta.json"
+const META_SAVE_PATH = "user://gangnam_dream_meta.json"
 
 var data: Dictionary = {}
 
@@ -15,7 +15,7 @@ func load_meta():
 			data.merge(parsed, true)
 
 func save_meta():
-	var file := FileAccess.open(META_SAVE_PATH, FileAccess.WRITE)
+	var file = FileAccess.open(META_SAVE_PATH, FileAccess.WRITE)
 	file.store_string(JSON.stringify(data, "\t"))
 
 func get_unlocked_traits():
@@ -53,7 +53,7 @@ func record_run(summary):
 	save_meta()
 
 func _check_progression_unlocks(summary):
-	var total_assets := float(summary.get("total_assets", 0.0))
+	var total_assets = float(summary.get("total_assets", 0.0))
 	if total_assets >= 50_000_000:
 		unlock_trait("야근 면역자")
 	if total_assets >= 200_000_000:

@@ -3,18 +3,18 @@ extends Node
 signal save_completed(success: bool, slot: int)
 signal load_completed(success: bool, slot: int)
 
-const SAVE_VERSION := 2
-const SLOT_COUNT := 3
-const AUTOSAVE_SLOT := 0
+const SAVE_VERSION = 2
+const SLOT_COUNT = 3
+const AUTOSAVE_SLOT = 0
 
 func save_game(slot):
-	var payload := {
+	var payload = {
 		"version": SAVE_VERSION,
 		"slot": slot,
 		"saved_at": Time.get_datetime_string_from_system(),
 		"state": GameState.serialize(),
 	}
-	var file := FileAccess.open(_slot_path(slot), FileAccess.WRITE)
+	var file = FileAccess.open(_slot_path(slot), FileAccess.WRITE)
 	if file == null:
 		save_completed.emit(false, slot)
 		return false
@@ -76,7 +76,7 @@ func _slot_path(slot):
 	return "user://gangnam_dream_slot_%d.json" % slot
 
 func _estimate_total_assets(state):
-	var total := float(state.get("money", 0.0))
+	var total = float(state.get("money", 0.0))
 	var portfolio: Dictionary = state.get("portfolio", {})
 	var prices: Dictionary = state.get("market_prices", {})
 	for asset_id in portfolio:

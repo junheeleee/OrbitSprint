@@ -7,33 +7,33 @@ signal game_over(ending_id: String)
 signal log_added(entry: Dictionary)
 signal run_started()
 
-var player_name := "김민준"
-var age := 20
-var year := 2026
-var month := 1
-var turn := 1
-var is_game_over := false
-var current_trait := "흙수저 생존본능"
+var player_name = "김민준"
+var age = 20
+var year = 2026
+var month = 1
+var turn = 1
+var is_game_over = false
+var current_trait = "흙수저 생존본능"
 
-var money := 1_000_000.0
-var monthly_income := 0.0
-var fixed_expense := 650_000.0
-var health := 70
-var mental := 70
-var intelligence := 50
-var social_skill := 40
-var appearance := 50
-var investment_skill := 12
-var luck := 45
+var money = 1_000_000.0
+var monthly_income = 0.0
+var fixed_expense = 650_000.0
+var health = 70
+var mental = 70
+var intelligence = 50
+var social_skill = 40
+var appearance = 50
+var investment_skill = 12
+var luck = 45
 
-var stress := 25
-var reputation := 10
-var gambling_tendency := 0
-var addiction_tendency := 0
+var stress = 25
+var reputation = 10
+var gambling_tendency = 0
+var addiction_tendency = 0
 
 var current_job: Dictionary = {}
-var job_tenure := 0
-var work_performance := 50
+var job_tenure = 0
+var work_performance = 50
 
 var portfolio: Dictionary = {}
 var relationships: Array = []
@@ -43,7 +43,7 @@ var event_log: Array = []
 var action_log: Array = []
 var flags: Dictionary = {}
 var market_prices: Dictionary = {}
-var market_context := {
+var market_context = {
 	"fear_greed": 50,
 	"cycle": "neutral",
 	"bubble_assets": [],
@@ -106,7 +106,7 @@ func start_new_game(selected_trait):
 	run_started.emit()
 
 func _apply_trait_bonus(selected_trait):
-	var bonuses := {}
+	var bonuses = {}
 	if has_node("/root/MetaProgression"):
 		bonuses = MetaProgression.get_trait_bonus(selected_trait)
 	apply_effects(bonuses)
@@ -176,8 +176,8 @@ func apply_effects(effects):
 	stats_changed.emit()
 
 func apply_relationship_effect(effect):
-	var rel_id := str(effect.get("id", effect.get("type", "unknown")))
-	var found := false
+	var rel_id = str(effect.get("id", effect.get("type", "unknown")))
+	var found = false
 	for rel in relationships:
 		if rel.get("id", "") == rel_id:
 			rel["affection"] = clamp(int(rel.get("affection", 40)) + int(effect.get("affection", 0)), 0, 100)
@@ -196,7 +196,7 @@ func apply_relationship_effect(effect):
 	stats_changed.emit()
 
 func apply_investment_effect(effect):
-	var asset_id := str(effect.get("asset_id", ""))
+	var asset_id = str(effect.get("asset_id", ""))
 	if asset_id.is_empty():
 		return
 	if not market_prices.has(asset_id):
@@ -242,7 +242,7 @@ func modify_hidden_stat(stat_name, amount):
 			addiction_tendency = clamp(addiction_tendency + amount, 0, 100)
 
 func add_item(item_id, quantity):
-	var item := DataRegistry.get_item(item_id)
+	var item = DataRegistry.get_item(item_id)
 	if item.is_empty():
 		return
 	for owned in inventory:
@@ -250,7 +250,7 @@ func add_item(item_id, quantity):
 			owned["quantity"] = int(owned.get("quantity", 0)) + quantity
 			stats_changed.emit()
 			return
-	var owned_item := item.duplicate(true)
+	var owned_item = item.duplicate(true)
 	owned_item["quantity"] = quantity
 	inventory.append(owned_item)
 	stats_changed.emit()
@@ -266,7 +266,7 @@ func remove_item(item_id, quantity):
 	return false
 
 func add_log(message, log_type):
-	var entry := {
+	var entry = {
 		"turn": turn,
 		"date": get_date_string(),
 		"message": message,
@@ -281,10 +281,10 @@ func get_date_string():
 	return "%d년 %d월" % [year, month]
 
 func format_money(amount):
-	var sign := ""
+	var sign = ""
 	if amount < 0:
 		sign = "-"
-	var abs_amount := abs(amount)
+	var abs_amount = abs(amount)
 	if abs_amount >= 100_000_000:
 		return "%s%.1f억원" % [sign, abs_amount / 100_000_000.0]
 	if abs_amount >= 10_000:
@@ -292,14 +292,14 @@ func format_money(amount):
 	return "%s%.0f원" % [sign, abs_amount]
 
 func get_total_asset_value():
-	var total := money
+	var total = money
 	for asset_id in portfolio:
 		var holding: Dictionary = portfolio[asset_id]
 		total += float(holding.get("quantity", 0.0)) * float(market_prices.get(asset_id, holding.get("avg_price", 0.0)))
 	return total
 
 func get_wealth_tier():
-	var total := get_total_asset_value()
+	var total = get_total_asset_value()
 	if total >= 2_000_000_000:
 		return "강남 상류층"
 	if total >= 500_000_000:
@@ -373,7 +373,7 @@ func serialize():
 	}
 
 func load_from_dict(data):
-	var allowed := serialize().keys()
+	var allowed = serialize().keys()
 	for key in data:
 		if allowed.has(key):
 			set(key, data[key])

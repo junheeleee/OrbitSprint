@@ -11,7 +11,7 @@ var recent_event_ids: Array = []
 func process_month_events():
 	_tick_cooldowns()
 	if pending_events.is_empty():
-		var event := select_random_event()
+		var event = select_random_event()
 		if not event.is_empty():
 			queue_event(event)
 
@@ -44,14 +44,14 @@ func resolve_current_event(choice_index):
 	var choice: Dictionary = choices[choice_index]
 	GameState.apply_choice(current_event, choice)
 
-	var cooldown := int(current_event.get("cooldown", 6))
+	var cooldown = int(current_event.get("cooldown", 6))
 	if cooldown > 0:
 		event_cooldowns[current_event.get("id", "")] = cooldown
 	_remember_recent(current_event.get("id", ""))
 
-	var follow_up := str(choice.get("follow_up_event", ""))
+	var follow_up = str(choice.get("follow_up_event", ""))
 	if not follow_up.is_empty():
-		var chained := DataRegistry.find_event(follow_up)
+		var chained = DataRegistry.find_event(follow_up)
 		if not chained.is_empty():
 			queue_event(chained)
 
@@ -59,7 +59,7 @@ func resolve_current_event(choice_index):
 	current_event = {}
 
 func trigger_event_by_id(event_id):
-	var event := DataRegistry.find_event(event_id)
+	var event = DataRegistry.find_event(event_id)
 	if not event.is_empty():
 		queue_event(event)
 
@@ -77,7 +77,7 @@ func _remember_recent(event_id):
 		recent_event_ids.pop_front()
 
 func _is_event_eligible(event):
-	var event_id := str(event.get("id", ""))
+	var event_id = str(event.get("id", ""))
 	if event_id.is_empty():
 		return false
 	if event_cooldowns.has(event_id) or recent_event_ids.has(event_id):
@@ -89,8 +89,8 @@ func _is_event_eligible(event):
 func _check_hidden_chance(event):
 	if not _check_conditions(event.get("conditions", {})):
 		return false
-	var rarity := str(event.get("rarity", "rare"))
-	var chance := 0.01
+	var rarity = str(event.get("rarity", "rare"))
+	var chance = 0.01
 	if rarity == "legendary":
 		chance = 0.004
 	elif rarity == "rare":
@@ -148,11 +148,11 @@ func _check_conditions(conditions):
 func _weighted_pick(events):
 	if events.is_empty():
 		return {}
-	var total := 0.0
+	var total = 0.0
 	for event in events:
 		total += _effective_weight(event)
-	var roll := randf() * total
-	var cursor := 0.0
+	var roll = randf() * total
+	var cursor = 0.0
 	for event in events:
 		cursor += _effective_weight(event)
 		if roll <= cursor:
@@ -160,7 +160,7 @@ func _weighted_pick(events):
 	return events.back()
 
 func _effective_weight(event):
-	var weight := float(event.get("weight", 1.0))
+	var weight = float(event.get("weight", 1.0))
 	match str(event.get("rarity", "common")):
 		"common":
 			weight *= 1.0

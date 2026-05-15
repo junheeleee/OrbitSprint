@@ -4,10 +4,10 @@ signal item_purchased(item: Dictionary)
 signal item_used(item: Dictionary)
 
 func purchase_item(item_id):
-	var item := DataRegistry.get_item(item_id)
+	var item = DataRegistry.get_item(item_id)
 	if item.is_empty():
 		return {"success": false, "message": "존재하지 않는 아이템입니다."}
-	var price := float(item.get("price", 0.0))
+	var price = float(item.get("price", 0.0))
 	if GameState.money < price:
 		return {"success": false, "message": "돈이 부족합니다."}
 	GameState.add_money(-price)
@@ -17,7 +17,7 @@ func purchase_item(item_id):
 	return {"success": true, "message": "구매 완료"}
 
 func use_item(item_id):
-	var item := DataRegistry.get_item(item_id)
+	var item = DataRegistry.get_item(item_id)
 	if item.is_empty():
 		return {"success": false, "message": "아이템 오류"}
 	GameState.apply_effects(item.get("effects", {}))
@@ -29,7 +29,7 @@ func use_item(item_id):
 
 func process_monthly_items():
 	for owned in GameState.inventory:
-		var item := DataRegistry.get_item(owned.get("id", ""))
+		var item = DataRegistry.get_item(owned.get("id", ""))
 		GameState.apply_effects(item.get("passive_effects", {}))
 
 func get_shop_items():

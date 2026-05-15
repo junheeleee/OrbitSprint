@@ -4,7 +4,7 @@ signal job_changed(new_job: Dictionary)
 signal promoted(job: Dictionary, bonus: float)
 
 func apply_for_job(job_id):
-	var job := DataRegistry.get_job(job_id)
+	var job = DataRegistry.get_job(job_id)
 	if job.is_empty():
 		return {"success": false, "message": "존재하지 않는 직업입니다."}
 	if not _check_requirements(job.get("requirements", {})):
@@ -35,7 +35,7 @@ func process_monthly_job():
 	if GameState.current_job.is_empty():
 		GameState.modify_hidden_stat("stress", 2)
 		return
-	var job := GameState.current_job
+	var job = GameState.current_job
 	GameState.job_tenure += 1
 	GameState.modify_hidden_stat("stress", int(job.get("stress_per_month", 6)))
 	for stat in job.get("stat_gains", {}):
@@ -48,13 +48,13 @@ func process_monthly_job():
 func get_available_jobs():
 	var rows: Array = []
 	for job in DataRegistry.jobs:
-		var row := job.duplicate(true)
+		var row = job.duplicate(true)
 		row["eligible"] = _check_requirements(job.get("requirements", {}))
 		rows.append(row)
 	return rows
 
 func _promote(job):
-	var bonus := float(job.get("promotion_bonus", 0.0))
+	var bonus = float(job.get("promotion_bonus", 0.0))
 	GameState.monthly_income += bonus
 	GameState.add_money(bonus * 2.0)
 	GameState.modify_hidden_stat("reputation", 6)
