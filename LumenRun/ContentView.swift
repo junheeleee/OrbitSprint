@@ -8,6 +8,7 @@ struct ContentView: View {
     @State private var scene: GameScene?
     @State private var didScheduleLoading = false
     @State private var isRecordsPresented = false
+    @State private var isObjectGuidePresented = false
 
     var body: some View {
         ZStack {
@@ -34,6 +35,8 @@ struct ContentView: View {
                         gameState.startRun()
                     } showRewards: {
                         gameState.showRewards()
+                    } showObjectGuide: {
+                        isObjectGuidePresented = true
                     }
                     .padding(24)
                 }
@@ -69,6 +72,11 @@ struct ContentView: View {
         }
         .sheet(isPresented: $isRecordsPresented) {
             RecordsView()
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
+        }
+        .sheet(isPresented: $isObjectGuidePresented) {
+            ObjectGuideView()
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
         }
@@ -147,6 +155,8 @@ struct ContentView: View {
             if gameState.isUserPaused, gameState.hasSeenTutorial, !gameState.isGameOver {
                 PauseView {
                     gameState.resume()
+                } showObjectGuide: {
+                    isObjectGuidePresented = true
                 }
                 .padding(24)
                 .transition(.scale.combined(with: .opacity))
@@ -358,6 +368,7 @@ private struct HUDView: View {
 private struct PauseView: View {
     @EnvironmentObject private var gameState: GameState
     let resume: () -> Void
+    let showObjectGuide: () -> Void
 
     var body: some View {
         VStack(spacing: 18) {
@@ -373,6 +384,15 @@ private struct PauseView: View {
             }
             .buttonStyle(.borderedProminent)
             .tint(gameState.selectedTheme.accentColor)
+
+            Button(action: showObjectGuide) {
+                Label("objects.title", systemImage: "questionmark.circle.fill")
+                    .font(.headline.weight(.bold))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+            }
+            .buttonStyle(.bordered)
+            .tint(.white)
         }
         .padding(22)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
@@ -407,6 +427,7 @@ private struct StartView: View {
     @EnvironmentObject private var gameState: GameState
     let start: () -> Void
     let showRewards: () -> Void
+    let showObjectGuide: () -> Void
 
     var body: some View {
         VStack(spacing: 18) {
@@ -444,6 +465,15 @@ private struct StartView: View {
 
             Button(action: showRewards) {
                 Label("rewards.title", systemImage: "gift.fill")
+                    .font(.headline.weight(.bold))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+            }
+            .buttonStyle(.bordered)
+            .tint(.white)
+
+            Button(action: showObjectGuide) {
+                Label("objects.title", systemImage: "questionmark.circle.fill")
                     .font(.headline.weight(.bold))
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 12)
@@ -853,6 +883,12 @@ private struct SettingsView: View {
                     Button("settings.showTutorial") {
                         gameState.showTutorialAgain()
                     }
+                    NavigationLink {
+                        ObjectGuideList()
+                            .navigationTitle("objects.title")
+                    } label: {
+                        Label("objects.title", systemImage: "questionmark.circle.fill")
+                    }
                 }
             }
             .navigationTitle("settings.title")
@@ -865,6 +901,118 @@ private struct SettingsView: View {
             }
         }
     }
+}
+
+private struct ObjectGuideView: View {
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            ObjectGuideList()
+                .navigationTitle("objects.title")
+                .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button("settings.done") {
+                            dismiss()
+                        }
+                    }
+                }
+        }
+    }
+}
+
+private struct ObjectGuideList: View {
+    private let items = ObjectGuideItem.all
+
+    var body: some View {
+        List {
+            Section {
+                Text("objects.subtitle")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            Section("objects.title") {
+                ForEach(items) { item in
+                    ObjectGuideRow(item: item)
+                }
+            }
+        }
+    }
+}
+
+private struct ObjectGuideRow: View {
+    let item: ObjectGuideItem
+
+    var body: some View {
+        HStack(alignment: .center, spacing: 14) {
+            ZStack {
+                Circle()
+                    .fill(item.color.opacity(0.16))
+                Image(systemName: item.iconName)
+                    .font(.title2.weight(.black))
+                    .foregroundStyle(item.color)
+            }
+            .frame(width: 46, height: 46)
+
+            VStack(alignment: .leading, spacing: 5) {
+                Text(LocalizedStringKey(item.titleKey))
+                    .font(.headline.weight(.bold))
+                Text(LocalizedStringKey(item.descriptionKey))
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .padding(.vertical, 4)
+    }
+}
+
+private struct ObjectGuideItem: Identifiable {
+    let id: String
+    let titleKey: String
+    let descriptionKey: String
+    let iconName: String
+    let color: Color
+
+    static let all: [ObjectGuideItem] = [
+        ObjectGuideItem(
+            id: "spark",
+            titleKey: "objects.spark.title",
+            descriptionKey: "objects.spark.desc",
+            iconName: "sparkles",
+            color: Color(red: 1.0, green: 0.78, blue: 0.12)
+        ),
+        ObjectGuideItem(
+            id: "surge",
+            titleKey: "objects.surge.title",
+            descriptionKey: "objects.surge.desc",
+            iconName: "hexagon.fill",
+            color: Color(red: 1.0, green: 0.46, blue: 0.12)
+        ),
+        ObjectGuideItem(
+            id: "shield",
+            titleKey: "objects.shield.title",
+            descriptionKey: "objects.shield.desc",
+            iconName: "shield.fill",
+            color: Color(red: 0.1, green: 0.68, blue: 1.0)
+        ),
+        ObjectGuideItem(
+            id: "slow",
+            titleKey: "objects.slow.title",
+            descriptionKey: "objects.slow.desc",
+            iconName: "hourglass",
+            color: Color(red: 0.68, green: 0.32, blue: 1.0)
+        ),
+        ObjectGuideItem(
+            id: "shard",
+            titleKey: "objects.shard.title",
+            descriptionKey: "objects.shard.desc",
+            iconName: "diamond.fill",
+            color: Color(red: 1.0, green: 0.18, blue: 0.48)
+        )
+    ]
 }
 
 private struct AchievementsView: View {

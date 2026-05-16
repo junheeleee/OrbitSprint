@@ -41,6 +41,19 @@
 "pause.title" = "일시정지";
 "pause.resume" = "계속하기";
 
+"objects.title" = "오브젝트 도감";
+"objects.subtitle" = "게임 중에는 설명 대신 색과 모양으로 구분합니다. 헷갈릴 때 여기서 다시 확인하세요.";
+"objects.spark.title" = "금색 루멘 조각";
+"objects.spark.desc" = "기본 점수 아이템입니다. 연속으로 모으면 콤보와 배수가 올라갑니다.";
+"objects.surge.title" = "주황 오버차지 코어";
+"objects.surge.desc" = "큰 점수를 주는 보너스 코어입니다. 보이면 욕심낼 만한 목표입니다.";
+"objects.shield.title" = "파란 방패";
+"objects.shield.desc" = "한 번의 충돌을 막아주는 보호막을 켭니다.";
+"objects.slow.title" = "보라 모래시계";
+"objects.slow.desc" = "잠시 시간이 느려져 빠른 구간을 읽기 쉬워집니다.";
+"objects.shard.title" = "마젠타 글리치 파편";
+"objects.shard.desc" = "위험 장애물입니다. 같은 궤도에서 닿으면 피버나 실드가 없을 때 런이 끝납니다.";
+
 "settings.title" = "설정";
 "settings.play" = "플레이";
 "settings.sound" = "사운드";

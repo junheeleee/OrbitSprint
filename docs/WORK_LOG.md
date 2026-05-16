@@ -1,6 +1,7 @@
 # Lumen Run Work Log
 
 ## 2026-05-17
+- Added an object guide accessible from the start screen, pause screen, and settings help section.
 - Strengthened object readability with fixed gold score sparks, blue shield shapes, violet hourglass slow items, and a new orange surge core for high-value scoring.
 - Reduced Fever-mode stutter risk by throttling full-screen flashes, lowering burst particle counts, capping fever effect nodes, and spacing rapid score sounds.
 - Replaced pattern-name popups with non-text orbit pulse telegraphs so pattern changes feel more integrated into play.

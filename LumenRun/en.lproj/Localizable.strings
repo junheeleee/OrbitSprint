@@ -41,6 +41,19 @@
 "pause.title" = "Paused";
 "pause.resume" = "Resume";
 
+"objects.title" = "Object Guide";
+"objects.subtitle" = "During a run, objects are explained by shape and color instead of popups. Check here whenever one feels unclear.";
+"objects.spark.title" = "Gold Lumen Spark";
+"objects.spark.desc" = "The basic score item. Chain sparks to build combo and multiplier.";
+"objects.surge.title" = "Orange Surge Core";
+"objects.surge.desc" = "A high-value bonus core. Worth chasing when the route is safe enough.";
+"objects.shield.title" = "Blue Shield";
+"objects.shield.desc" = "Activates a guard that blocks one crash.";
+"objects.slow.title" = "Violet Hourglass";
+"objects.slow.desc" = "Slows time briefly so fast patterns are easier to read.";
+"objects.shard.title" = "Magenta Glitch Shard";
+"objects.shard.desc" = "A hazard. Crashing into one on your orbit ends the run unless Fever or shield is active.";
+
 "settings.title" = "Settings";
 "settings.play" = "Play";
 "settings.sound" = "Sound";
