@@ -22,3 +22,4 @@ Notes:
 - Added Game Center code integration for high-score leaderboard submission and leaderboard UI.
 - Verified `xcodebuild -project LumenRun.xcodeproj -scheme LumenRun -destination 'generic/platform=iOS' build` succeeds.
 - Note: enabling the Game Center entitlement before Apple Developer capability setup caused the provisioning profile error `doesn't include the Game Center capability`. Final release setup must enable Game Center for bundle id `com.junpacstudio.lumenrun` and create leaderboard id `com.junpacstudio.lumenrun.highscore`.
+- Device test: Game Center connection succeeded after enabling capability. Leaderboard button opens Game Center but currently only shows the playing status, so the App Store Connect leaderboard still needs to be created/linked.

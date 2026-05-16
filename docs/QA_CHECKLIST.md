@@ -41,6 +41,7 @@ Use this checklist before important commits, TestFlight builds, and App Store re
 - Signing team is selected.
 - Game Center capability is enabled for release builds.
 - Leaderboard id `com.junpacstudio.lumenrun.highscore` exists in App Store Connect.
+- Leaderboard button opens the actual high-score leaderboard, not only the generic Game Center playing status.
 - Privacy manifest exists.
 - App supports required orientation behavior.
 - App icon is present.
