@@ -68,6 +68,7 @@ final class GameState: ObservableObject {
     @Published private(set) var runRecords: [RunRecord]
     @Published private(set) var dailyMissions: [DailyMission]
     @Published private(set) var achievementProgress: [String: Int]
+    @Published var achievementToast: AchievementDefinition?
     @Published var combo = 0
     @Published var multiplier = 1
     @Published var level = 1
@@ -125,6 +126,8 @@ final class GameState: ObservableObject {
     private let feverDuration: TimeInterval = 5
     private let shieldDuration: TimeInterval = 8
     private let shieldExtensionDuration: TimeInterval = 6
+    private var canShowAchievementToast = false
+    private var pendingAchievementToasts: [AchievementDefinition] = []
 
     var isFeverActive: Bool {
         feverRemaining > 0
@@ -181,6 +184,7 @@ final class GameState: ObservableObject {
             selectedTheme = .aurora
         }
         updateMissionRewards()
+        canShowAchievementToast = true
     }
 
     func reset() {
@@ -385,6 +389,14 @@ final class GameState: ObservableObject {
         achievementProgress(for: achievement) >= achievement.target
     }
 
+    func dismissAchievementToast(_ achievement: AchievementDefinition? = nil) {
+        guard achievement == nil || achievementToast?.id == achievement?.id else { return }
+        achievementToast = nil
+        if !pendingAchievementToasts.isEmpty {
+            achievementToast = pendingAchievementToasts.removeFirst()
+        }
+    }
+
     func refreshDailyMissionsIfNeeded() {
         let defaults = UserDefaults.standard
         let today = Self.todayKey()
@@ -478,10 +490,24 @@ final class GameState: ObservableObject {
 
     private func setAchievementProgress(_ id: AchievementID, to value: Int) {
         guard let definition = AchievementDefinition.all.first(where: { $0.id == id }) else { return }
+        let currentValue = achievementProgress[id.rawValue] ?? 0
+        let wasUnlocked = currentValue >= definition.target
         let nextValue = min(value, definition.target)
-        guard nextValue > (achievementProgress[id.rawValue] ?? 0) else { return }
+        guard nextValue > currentValue else { return }
         achievementProgress[id.rawValue] = nextValue
         saveAchievementProgress()
+
+        if !wasUnlocked, nextValue >= definition.target, canShowAchievementToast {
+            showAchievementToast(definition)
+        }
+    }
+
+    private func showAchievementToast(_ achievement: AchievementDefinition) {
+        if achievementToast == nil {
+            achievementToast = achievement
+        } else if achievementToast?.id != achievement.id, !pendingAchievementToasts.contains(where: { $0.id == achievement.id }) {
+            pendingAchievementToasts.append(achievement)
+        }
     }
 
     private func saveAchievementProgress() {

@@ -23,6 +23,8 @@ struct ContentView: View {
 
             gameOverlay
 
+            achievementToastOverlay
+
             if gameState.isLoading {
                 LoadingView()
                     .transition(.opacity)
@@ -66,8 +68,12 @@ struct ContentView: View {
         .onChange(of: scenePhase) { _, newPhase in
             gameState.setSceneActive(newPhase == .active)
         }
+        .onChange(of: gameState.achievementToast?.id) { _, _ in
+            scheduleAchievementToastDismiss()
+        }
         .animation(.spring(response: 0.35, dampingFraction: 0.82), value: gameState.isGameOver)
         .animation(.spring(response: 0.35, dampingFraction: 0.82), value: gameState.isUserPaused)
+        .animation(.spring(response: 0.35, dampingFraction: 0.82), value: gameState.achievementToast?.id)
         .animation(.easeInOut(duration: 0.22), value: gameState.isFeverActive)
     }
 
@@ -126,12 +132,87 @@ struct ContentView: View {
         }
     }
 
+    @ViewBuilder
+    private var achievementToastOverlay: some View {
+        if let achievement = gameState.achievementToast {
+            VStack {
+                AchievementToastView(achievement: achievement)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 64)
+
+                Spacer()
+            }
+            .transition(.move(edge: .top).combined(with: .opacity))
+            .zIndex(8)
+            .allowsHitTesting(false)
+        }
+    }
+
     private func scheduleLoadingFinish() {
         guard !didScheduleLoading else { return }
         didScheduleLoading = true
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.15) {
             gameState.finishLoading()
         }
+    }
+
+    private func scheduleAchievementToastDismiss() {
+        guard let achievement = gameState.achievementToast else { return }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
+            gameState.dismissAchievementToast(achievement)
+        }
+    }
+}
+
+private struct AchievementToastView: View {
+    let achievement: AchievementDefinition
+
+    var body: some View {
+        HStack(spacing: 12) {
+            ZStack {
+                Circle()
+                    .fill(Color(red: 1.0, green: 0.84, blue: 0.28).opacity(0.22))
+
+                Image(systemName: achievement.iconName)
+                    .font(.headline.weight(.black))
+                    .foregroundStyle(Color(red: 1.0, green: 0.86, blue: 0.34))
+            }
+            .frame(width: 42, height: 42)
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text("achievements.toast")
+                    .font(.caption2.weight(.black))
+                    .foregroundStyle(Color(red: 1.0, green: 0.86, blue: 0.34))
+                    .textCase(.uppercase)
+
+                Text(LocalizedStringKey(achievement.titleKey))
+                    .font(.headline.weight(.black))
+                    .foregroundStyle(.white)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.82)
+            }
+
+            Spacer(minLength: 0)
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 12)
+        .frame(maxWidth: 360)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: 8, style: .continuous)
+                .stroke(
+                    LinearGradient(
+                        colors: [
+                            Color(red: 1.0, green: 0.86, blue: 0.34).opacity(0.9),
+                            Color(red: 0.0, green: 0.92, blue: 0.82).opacity(0.55)
+                        ],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    ),
+                    lineWidth: 1
+                )
+        }
+        .shadow(color: Color(red: 1.0, green: 0.78, blue: 0.18).opacity(0.25), radius: 18, x: 0, y: 10)
     }
 }
 

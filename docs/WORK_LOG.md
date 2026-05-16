@@ -1,6 +1,7 @@
 # Lumen Run Work Log
 
 ## 2026-05-16
+- Added non-blocking achievement unlock toast feedback during gameplay.
 - Fixed the post-game results overlay so it scrolls on smaller device screens.
 - Added offline achievements with persistent progress for runs, fever, score milestones, shields, new bests, and daily mission sweep.
 - Strengthened the post-game results screen with new-best feedback, run stats, mission completion, and next-theme unlock progress.

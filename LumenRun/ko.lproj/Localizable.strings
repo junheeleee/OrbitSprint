@@ -68,6 +68,7 @@
 
 "achievements.title" = "업적";
 "achievements.unlocked" = "해금한 업적";
+"achievements.toast" = "업적 달성";
 "achievements.firstRun.title" = "첫 런";
 "achievements.firstRun.desc" = "런을 1회 완료하세요.";
 "achievements.firstFever.title" = "첫 피버 싱크";

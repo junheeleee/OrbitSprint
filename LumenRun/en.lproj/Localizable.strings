@@ -68,6 +68,7 @@
 
 "achievements.title" = "Achievements";
 "achievements.unlocked" = "Unlocked Achievements";
+"achievements.toast" = "Achievement Unlocked";
 "achievements.firstRun.title" = "First Run";
 "achievements.firstRun.desc" = "Complete one run.";
 "achievements.firstFever.title" = "First Fever Sync";
