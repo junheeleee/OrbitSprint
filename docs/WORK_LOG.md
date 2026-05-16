@@ -1,6 +1,7 @@
 # Lumen Run Work Log
 
 ## 2026-05-17
+- Reduced in-run object sizes and updated the object guide to use matching custom silhouettes instead of generic SF Symbol icons.
 - Made in-run object silhouettes more explicit: hazards now use spiked shapes with X marks, surge cores show lightning, shields show checks, and slow items show hourglass sand.
 - Added an object guide accessible from the start screen, pause screen, and settings help section.
 - Strengthened object readability with fixed gold score sparks, blue shield shapes, violet hourglass slow items, and a new orange surge core for high-value scoring.

@@ -458,20 +458,20 @@ final class GameScene: SKScene {
     private func spawnShard(on radius: CGFloat, near spawnAngle: CGFloat, rewardChance: CGFloat, allowParallel: Bool) {
         guard canSpawnThreat(at: spawnAngle, on: radius, allowParallel: allowParallel) else { return }
 
-        let node = SKShapeNode(path: hazardShardPath(radius: 18))
+        let node = SKShapeNode(path: hazardShardPath(radius: 14.5))
         node.name = NodeName.shard
         node.position = point(on: radius, angle: spawnAngle)
         node.zRotation = CGFloat.random(in: 0...(2 * .pi))
         node.fillColor = objectColor(for: NodeName.shard)
         node.strokeColor = objectColor(for: NodeName.shard).withAlphaComponent(0.95)
-        node.lineWidth = 2.5
-        node.glowWidth = 14
+        node.lineWidth = 2
+        node.glowWidth = 9
         node.userData = ["radius": radius, "angle": spawnAngle]
-        addSymbol(to: node, path: dangerMarkPath(size: 20), color: .black.withAlphaComponent(0.62), lineWidth: 3)
+        addSymbol(to: node, path: dangerMarkPath(size: 15.5), color: .black.withAlphaComponent(0.66), lineWidth: 2.4)
         objectLayer.addChild(node)
 
         let spin = SKAction.rotate(byAngle: .pi * 2, duration: TimeInterval(CGFloat.random(in: 0.75...1.15)))
-        let pulse = SKAction.sequence([.scale(to: 1.12, duration: 0.18), .scale(to: 1.0, duration: 0.18)])
+        let pulse = SKAction.sequence([.scale(to: 1.07, duration: 0.18), .scale(to: 1.0, duration: 0.18)])
         node.run(.repeatForever(spin))
         node.run(.repeatForever(pulse), withKey: "dangerPulse")
         node.run(.sequence([.wait(forDuration: 6.0), .fadeOut(withDuration: 0.25), .removeFromParent()]))
@@ -490,17 +490,17 @@ final class GameScene: SKScene {
     private func spawnSpark(on radius: CGFloat, near spawnAngle: CGFloat) {
         guard !hasNearbyObject(at: spawnAngle, clearance: 0.24, names: [NodeName.spark]) else { return }
 
-        let node = SKShapeNode(path: starPath(outerRadius: 12, innerRadius: 5, points: 5))
+        let node = SKShapeNode(path: starPath(outerRadius: 10, innerRadius: 4.2, points: 5))
         node.name = NodeName.spark
         node.position = point(on: radius, angle: spawnAngle)
         node.fillColor = objectColor(for: NodeName.spark)
         node.strokeColor = SKColor(red: 1.0, green: 0.98, blue: 0.46, alpha: 0.95)
-        node.lineWidth = 2
-        node.glowWidth = 12
+        node.lineWidth = 1.6
+        node.glowWidth = 8
         node.userData = ["radius": radius, "angle": spawnAngle]
-        addSymbol(to: node, path: smallCirclePath(radius: 3.5), color: .white.withAlphaComponent(0.76), lineWidth: 1.5)
+        addSymbol(to: node, path: smallCirclePath(radius: 2.8), color: .white.withAlphaComponent(0.76), lineWidth: 1.2)
         objectLayer.addChild(node)
-        let pulse = SKAction.sequence([.scale(to: 1.25, duration: 0.35), .scale(to: 1.0, duration: 0.35)])
+        let pulse = SKAction.sequence([.scale(to: 1.16, duration: 0.35), .scale(to: 1.0, duration: 0.35)])
         node.run(.repeatForever(pulse))
         node.run(.sequence([.wait(forDuration: 5.2), .fadeOut(withDuration: 0.2), .removeFromParent()]))
     }
@@ -516,30 +516,30 @@ final class GameScene: SKScene {
         let node: SKShapeNode
 
         if isSurge {
-            node = SKShapeNode(path: hexPath(radius: 15))
+            node = SKShapeNode(path: hexPath(radius: 12.5))
             node.name = NodeName.surge
             node.fillColor = objectColor(for: NodeName.surge)
-            addSymbol(to: node, path: lightningPath(size: 18), color: .white.withAlphaComponent(0.9), lineWidth: 2.4)
+            addSymbol(to: node, path: lightningPath(size: 14.5), color: .white.withAlphaComponent(0.9), lineWidth: 2)
         } else if isShield {
-            node = SKShapeNode(path: shieldPath(radius: 15))
+            node = SKShapeNode(path: shieldPath(radius: 12.5))
             node.name = NodeName.shield
             node.fillColor = objectColor(for: NodeName.shield)
-            addSymbol(to: node, path: checkPath(size: 17), color: .white.withAlphaComponent(0.92), lineWidth: 2.6)
+            addSymbol(to: node, path: checkPath(size: 14), color: .white.withAlphaComponent(0.92), lineWidth: 2.2)
         } else {
-            node = SKShapeNode(path: hourglassPath(radius: 15))
+            node = SKShapeNode(path: hourglassPath(radius: 12.5))
             node.name = NodeName.slow
             node.fillColor = objectColor(for: NodeName.slow)
-            addHourglassSand(to: node)
+            addHourglassSand(to: node, radius: 12.5)
         }
 
         node.position = point(on: radius, angle: spawnAngle)
         node.strokeColor = node.fillColor.withAlphaComponent(0.98)
-        node.lineWidth = 2
-        node.glowWidth = isSurge ? 12 : 9
+        node.lineWidth = 1.8
+        node.glowWidth = isSurge ? 9 : 7
         node.userData = ["radius": radius, "angle": spawnAngle]
         objectLayer.addChild(node)
 
-        let pulse = SKAction.sequence([.scale(to: 1.2, duration: 0.4), .scale(to: 0.92, duration: 0.4)])
+        let pulse = SKAction.sequence([.scale(to: 1.12, duration: 0.4), .scale(to: 0.96, duration: 0.4)])
         node.run(.repeatForever(pulse))
         node.run(.sequence([.wait(forDuration: 5.8), .fadeOut(withDuration: 0.22), .removeFromParent()]))
     }
@@ -914,15 +914,15 @@ final class GameScene: SKScene {
     private func collisionRadius(for node: SKNode) -> CGFloat {
         switch node.name {
         case NodeName.shard:
-            13
+            11
         case NodeName.spark:
-            10
+            8.5
         case NodeName.shield:
-            14
+            11.5
         case NodeName.slow:
-            13
+            11
         case NodeName.surge:
-            14
+            11.5
         default:
             12
         }
@@ -1171,16 +1171,18 @@ final class GameScene: SKScene {
         node.addChild(symbol)
     }
 
-    private func addHourglassSand(to node: SKShapeNode) {
-        let top = SKShapeNode(path: smallCirclePath(radius: 3.2))
-        top.position = CGPoint(x: 0, y: 6)
+    private func addHourglassSand(to node: SKShapeNode, radius: CGFloat) {
+        let sandRadius = radius * 0.22
+        let offset = radius * 0.4
+        let top = SKShapeNode(path: smallCirclePath(radius: sandRadius))
+        top.position = CGPoint(x: 0, y: offset)
         top.fillColor = .white.withAlphaComponent(0.86)
         top.strokeColor = .clear
         top.zPosition = 1
         node.addChild(top)
 
-        let bottom = SKShapeNode(path: smallCirclePath(radius: 3.2))
-        bottom.position = CGPoint(x: 0, y: -6)
+        let bottom = SKShapeNode(path: smallCirclePath(radius: sandRadius))
+        bottom.position = CGPoint(x: 0, y: -offset)
         bottom.fillColor = .white.withAlphaComponent(0.86)
         bottom.strokeColor = .clear
         bottom.zPosition = 1

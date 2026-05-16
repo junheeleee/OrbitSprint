@@ -950,9 +950,8 @@ private struct ObjectGuideRow: View {
             ZStack {
                 Circle()
                     .fill(item.color.opacity(0.16))
-                Image(systemName: item.iconName)
-                    .font(.title2.weight(.black))
-                    .foregroundStyle(item.color)
+                ObjectGuideIcon(kind: item.kind, color: item.color)
+                    .frame(width: 32, height: 32)
             }
             .frame(width: 46, height: 46)
 
@@ -973,7 +972,7 @@ private struct ObjectGuideItem: Identifiable {
     let id: String
     let titleKey: String
     let descriptionKey: String
-    let iconName: String
+    let kind: ObjectGuideIcon.Kind
     let color: Color
 
     static let all: [ObjectGuideItem] = [
@@ -981,38 +980,238 @@ private struct ObjectGuideItem: Identifiable {
             id: "spark",
             titleKey: "objects.spark.title",
             descriptionKey: "objects.spark.desc",
-            iconName: "sparkles",
+            kind: .spark,
             color: Color(red: 1.0, green: 0.78, blue: 0.12)
         ),
         ObjectGuideItem(
             id: "surge",
             titleKey: "objects.surge.title",
             descriptionKey: "objects.surge.desc",
-            iconName: "hexagon.fill",
+            kind: .surge,
             color: Color(red: 1.0, green: 0.46, blue: 0.12)
         ),
         ObjectGuideItem(
             id: "shield",
             titleKey: "objects.shield.title",
             descriptionKey: "objects.shield.desc",
-            iconName: "shield.fill",
+            kind: .shield,
             color: Color(red: 0.1, green: 0.68, blue: 1.0)
         ),
         ObjectGuideItem(
             id: "slow",
             titleKey: "objects.slow.title",
             descriptionKey: "objects.slow.desc",
-            iconName: "hourglass",
+            kind: .slow,
             color: Color(red: 0.68, green: 0.32, blue: 1.0)
         ),
         ObjectGuideItem(
             id: "shard",
             titleKey: "objects.shard.title",
             descriptionKey: "objects.shard.desc",
-            iconName: "diamond.fill",
+            kind: .shard,
             color: Color(red: 1.0, green: 0.18, blue: 0.48)
         )
     ]
+}
+
+private struct ObjectGuideIcon: View {
+    enum Kind {
+        case spark
+        case surge
+        case shield
+        case slow
+        case shard
+    }
+
+    let kind: Kind
+    let color: Color
+
+    var body: some View {
+        ZStack {
+            baseObject
+
+            switch kind {
+            case .spark:
+                Circle()
+                    .fill(.white.opacity(0.78))
+                    .frame(width: 7, height: 7)
+            case .surge:
+                LightningGuideShape()
+                    .fill(.white.opacity(0.9))
+                    .frame(width: 18, height: 22)
+            case .shield:
+                CheckGuideShape()
+                    .stroke(.white.opacity(0.92), style: StrokeStyle(lineWidth: 2.8, lineCap: .round, lineJoin: .round))
+                    .frame(width: 20, height: 18)
+            case .slow:
+                VStack(spacing: 7) {
+                    Circle().fill(.white.opacity(0.86)).frame(width: 6, height: 6)
+                    Circle().fill(.white.opacity(0.86)).frame(width: 6, height: 6)
+                }
+            case .shard:
+                XGuideShape()
+                    .stroke(.black.opacity(0.66), style: StrokeStyle(lineWidth: 3.2, lineCap: .round))
+                    .frame(width: 21, height: 21)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var baseObject: some View {
+        switch kind {
+        case .spark:
+            StarGuideShape(points: 5, innerRatio: 0.42)
+                .fill(color)
+                .overlay(StarGuideShape(points: 5, innerRatio: 0.42).stroke(color.opacity(0.95), lineWidth: 1.4))
+        case .surge:
+            PolygonGuideShape(sides: 6, rotation: .pi / 6)
+                .fill(color)
+                .overlay(PolygonGuideShape(sides: 6, rotation: .pi / 6).stroke(color.opacity(0.95), lineWidth: 1.4))
+        case .shield:
+            ShieldGuideShape()
+                .fill(color)
+                .overlay(ShieldGuideShape().stroke(color.opacity(0.95), lineWidth: 1.4))
+        case .slow:
+            HourglassGuideShape()
+                .fill(color)
+                .overlay(HourglassGuideShape().stroke(color.opacity(0.95), lineWidth: 1.4))
+        case .shard:
+            StarGuideShape(points: 6, innerRatio: 0.58)
+                .fill(color)
+                .overlay(StarGuideShape(points: 6, innerRatio: 0.58).stroke(color.opacity(0.95), lineWidth: 1.4))
+        }
+    }
+}
+
+private struct StarGuideShape: Shape {
+    let points: Int
+    let innerRatio: CGFloat
+
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        let center = CGPoint(x: rect.midX, y: rect.midY)
+        let outer = min(rect.width, rect.height) * 0.47
+        let inner = outer * innerRatio
+
+        for index in 0..<(points * 2) {
+            let radius = index.isMultiple(of: 2) ? outer : inner
+            let angle = CGFloat(index) / CGFloat(points * 2) * 2 * .pi - .pi / 2
+            let point = CGPoint(x: center.x + cos(angle) * radius, y: center.y + sin(angle) * radius)
+            if index == 0 {
+                path.move(to: point)
+            } else {
+                path.addLine(to: point)
+            }
+        }
+
+        path.closeSubpath()
+        return path
+    }
+}
+
+private struct PolygonGuideShape: Shape {
+    let sides: Int
+    let rotation: CGFloat
+
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        let center = CGPoint(x: rect.midX, y: rect.midY)
+        let radius = min(rect.width, rect.height) * 0.45
+
+        for index in 0..<sides {
+            let angle = CGFloat(index) / CGFloat(sides) * 2 * .pi + rotation
+            let point = CGPoint(x: center.x + cos(angle) * radius, y: center.y + sin(angle) * radius)
+            if index == 0 {
+                path.move(to: point)
+            } else {
+                path.addLine(to: point)
+            }
+        }
+
+        path.closeSubpath()
+        return path
+    }
+}
+
+private struct ShieldGuideShape: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        let center = CGPoint(x: rect.midX, y: rect.midY)
+        let radius = min(rect.width, rect.height) * 0.42
+        let top = center.y - radius * 0.75
+        let shoulder = center.y - radius * 0.1
+        let tip = center.y + radius * 1.15
+
+        path.move(to: CGPoint(x: center.x - radius, y: top))
+        path.addLine(to: CGPoint(x: center.x + radius, y: top))
+        path.addLine(to: CGPoint(x: center.x + radius, y: shoulder))
+        path.addQuadCurve(
+            to: CGPoint(x: center.x, y: tip),
+            control: CGPoint(x: center.x + radius * 0.72, y: center.y + radius * 0.64)
+        )
+        path.addQuadCurve(
+            to: CGPoint(x: center.x - radius, y: shoulder),
+            control: CGPoint(x: center.x - radius * 0.72, y: center.y + radius * 0.64)
+        )
+        path.closeSubpath()
+        return path
+    }
+}
+
+private struct HourglassGuideShape: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        let center = CGPoint(x: rect.midX, y: rect.midY)
+        let radius = min(rect.width, rect.height) * 0.43
+        let width = radius * 0.78
+        let waist = radius * 0.18
+
+        path.move(to: CGPoint(x: center.x - width, y: center.y - radius))
+        path.addLine(to: CGPoint(x: center.x + width, y: center.y - radius))
+        path.addLine(to: CGPoint(x: center.x + waist, y: center.y))
+        path.addLine(to: CGPoint(x: center.x + width, y: center.y + radius))
+        path.addLine(to: CGPoint(x: center.x - width, y: center.y + radius))
+        path.addLine(to: CGPoint(x: center.x - waist, y: center.y))
+        path.closeSubpath()
+        return path
+    }
+}
+
+private struct LightningGuideShape: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        let size = min(rect.width, rect.height)
+        let center = CGPoint(x: rect.midX, y: rect.midY)
+        path.move(to: CGPoint(x: center.x + size * 0.08, y: center.y - size * 0.5))
+        path.addLine(to: CGPoint(x: center.x - size * 0.36, y: center.y - size * 0.05))
+        path.addLine(to: CGPoint(x: center.x - size * 0.04, y: center.y - size * 0.05))
+        path.addLine(to: CGPoint(x: center.x - size * 0.18, y: center.y + size * 0.5))
+        path.addLine(to: CGPoint(x: center.x + size * 0.36, y: center.y - size * 0.08))
+        path.addLine(to: CGPoint(x: center.x + size * 0.04, y: center.y - size * 0.08))
+        path.closeSubpath()
+        return path
+    }
+}
+
+private struct CheckGuideShape: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: CGPoint(x: rect.minX + rect.width * 0.08, y: rect.midY))
+        path.addLine(to: CGPoint(x: rect.minX + rect.width * 0.38, y: rect.minY + rect.height * 0.8))
+        path.addLine(to: CGPoint(x: rect.minX + rect.width * 0.92, y: rect.minY + rect.height * 0.2))
+        return path
+    }
+}
+
+private struct XGuideShape: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: CGPoint(x: rect.minX, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
+        path.move(to: CGPoint(x: rect.maxX, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY))
+        return path
+    }
 }
 
 private struct AchievementsView: View {
