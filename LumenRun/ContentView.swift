@@ -429,6 +429,8 @@ private struct StartView: View {
 
             DailyMissionsPanel()
 
+            RewardShowcasePanel(isCompact: true)
+
             Button(action: start) {
                 Label("start.play", systemImage: "play.fill")
                     .font(.headline.weight(.bold))
@@ -623,6 +625,8 @@ private struct GameOverView: View {
             }
 
             DailyMissionsPanel(isCompact: true)
+
+            RewardShowcasePanel(isCompact: true)
 
             Button(action: showRecords) {
                 Label("records.title", systemImage: "chart.bar.fill")
@@ -1029,6 +1033,120 @@ private struct CoreSkinUnlockRow: View {
             return "checkmark.circle.fill"
         }
         return gameState.isCoreSkinUnlocked(skin) ? "circle" : "lock.fill"
+    }
+}
+
+private struct RewardShowcasePanel: View {
+    @EnvironmentObject private var gameState: GameState
+    var isCompact = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Label("rewards.previewTitle", systemImage: "sparkles")
+                    .font(.caption.weight(.black))
+                    .foregroundStyle(Color(red: 1.0, green: 0.82, blue: 0.28))
+                Spacer()
+                Text("\(gameState.completedMissionCount)")
+                    .font(.caption.weight(.black))
+                    .foregroundStyle(.white.opacity(0.72))
+                    .monospacedDigit()
+            }
+
+            Text("rewards.previewSubtitle")
+                .font(.caption2.weight(.semibold))
+                .foregroundStyle(.white.opacity(0.58))
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 10) {
+                    ForEach(GameTheme.allCases) { theme in
+                        RewardPreviewCard(
+                            title: theme.titleKey,
+                            subtitle: rewardSubtitle(required: theme.unlockRequirement, isUnlocked: gameState.isThemeUnlocked(theme)),
+                            isUnlocked: gameState.isThemeUnlocked(theme),
+                            isSelected: gameState.selectedTheme == theme
+                        ) {
+                            LinearGradient(
+                                colors: theme.feverColors,
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        }
+                    }
+
+                    ForEach(CoreSkin.allCases) { skin in
+                        RewardPreviewCard(
+                            title: skin.titleKey,
+                            subtitle: rewardSubtitle(required: skin.unlockRequirement, isUnlocked: gameState.isCoreSkinUnlocked(skin)),
+                            isUnlocked: gameState.isCoreSkinUnlocked(skin),
+                            isSelected: gameState.selectedCoreSkin == skin
+                        ) {
+                            ZStack {
+                                Circle()
+                                    .fill(gameState.selectedTheme.accentColor.opacity(0.22))
+                                Image(systemName: skin.iconName)
+                                    .font(.system(size: 28, weight: .black))
+                                    .foregroundStyle(gameState.selectedTheme.accentColor)
+                            }
+                        }
+                    }
+                }
+                .padding(.vertical, 2)
+            }
+        }
+        .padding(12)
+        .background(.black.opacity(0.16), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+    }
+
+    private func rewardSubtitle(required: Int, isUnlocked: Bool) -> String {
+        if isUnlocked {
+            return NSLocalizedString("rewards.unlocked", comment: "")
+        }
+        let remaining = max(0, required - gameState.completedMissionCount)
+        return String(format: NSLocalizedString("rewards.remaining", comment: ""), remaining)
+    }
+}
+
+private struct RewardPreviewCard<Preview: View>: View {
+    let title: LocalizedStringKey
+    let subtitle: String
+    let isUnlocked: Bool
+    let isSelected: Bool
+    @ViewBuilder let preview: () -> Preview
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            ZStack(alignment: .topTrailing) {
+                preview()
+                    .frame(width: 94, height: 46)
+                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                    .opacity(isUnlocked ? 1 : 0.52)
+
+                Image(systemName: isUnlocked ? (isSelected ? "checkmark.circle.fill" : "lock.open.fill") : "lock.fill")
+                    .font(.caption.weight(.black))
+                    .foregroundStyle(isUnlocked ? Color(red: 0.52, green: 1.0, blue: 0.72) : .white.opacity(0.78))
+                    .padding(5)
+            }
+
+            Text(title)
+                .font(.caption.weight(.black))
+                .foregroundStyle(.white)
+                .lineLimit(1)
+                .minimumScaleFactor(0.72)
+
+            Text(subtitle)
+                .font(.caption2.weight(.bold))
+                .foregroundStyle(isUnlocked ? Color(red: 0.52, green: 1.0, blue: 0.72) : Color(red: 1.0, green: 0.82, blue: 0.28))
+                .lineLimit(1)
+                .minimumScaleFactor(0.72)
+        }
+        .padding(9)
+        .frame(width: 112, height: 118, alignment: .topLeading)
+        .background(.white.opacity(isSelected ? 0.18 : 0.08), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: 8, style: .continuous)
+                .stroke(isSelected ? Color(red: 0.52, green: 1.0, blue: 0.72).opacity(0.7) : .white.opacity(0.12), lineWidth: 1)
+        }
     }
 }
 

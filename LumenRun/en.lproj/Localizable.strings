@@ -94,6 +94,9 @@
 "rewards.completedMissions" = "Completed Missions";
 "rewards.unlocked" = "Unlocked";
 "rewards.unlockAt" = "Unlock after %d missions";
+"rewards.previewTitle" = "Reward Preview";
+"rewards.previewSubtitle" = "Complete missions to unlock themes and core skins.";
+"rewards.remaining" = "%d missions left";
 
 "theme.aurora" = "Neon Tide";
 "theme.solar" = "Solar Rift";

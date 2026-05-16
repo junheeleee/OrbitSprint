@@ -94,6 +94,9 @@
 "rewards.completedMissions" = "완료한 미션";
 "rewards.unlocked" = "해금됨";
 "rewards.unlockAt" = "미션 %d개 완료 시 해금";
+"rewards.previewTitle" = "리워드 미리보기";
+"rewards.previewSubtitle" = "미션을 완료해서 테마와 코어 스킨을 해금하세요.";
+"rewards.remaining" = "미션 %d개 남음";
 
 "theme.aurora" = "네온 타이드";
 "theme.solar" = "솔라 리프트";
