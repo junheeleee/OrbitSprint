@@ -1,8 +1,16 @@
 import Foundation
 
+struct RunRecord: Codable, Identifiable, Equatable {
+    let id: UUID
+    let score: Int
+    let level: Int
+    let date: Date
+}
+
 final class GameState: ObservableObject {
     @Published var score = 0
     @Published var bestScore: Int
+    @Published private(set) var runRecords: [RunRecord]
     @Published var combo = 0
     @Published var multiplier = 1
     @Published var level = 1
@@ -39,6 +47,7 @@ final class GameState: ObservableObject {
     }
 
     private let bestScoreKey = "bestScore"
+    private let runRecordsKey = "runRecords"
     private let tutorialKey = "hasSeenTutorial"
     private let soundEnabledKey = "soundEnabled"
     private let hapticsEnabledKey = "hapticsEnabled"
@@ -52,9 +61,18 @@ final class GameState: ObservableObject {
         feverRemaining > 0
     }
 
+    var topRunRecords: [RunRecord] {
+        Array(runRecords.sorted { $0.score > $1.score }.prefix(5))
+    }
+
+    var recentRunRecords: [RunRecord] {
+        Array(runRecords.sorted { $0.date > $1.date }.prefix(5))
+    }
+
     init() {
         let defaults = UserDefaults.standard
         bestScore = defaults.integer(forKey: bestScoreKey)
+        runRecords = Self.loadRunRecords(from: defaults, key: runRecordsKey)
         hasSeenTutorial = defaults.bool(forKey: tutorialKey)
         isPaused = true
         isSoundEnabled = defaults.object(forKey: soundEnabledKey) as? Bool ?? true
@@ -173,9 +191,11 @@ final class GameState: ObservableObject {
     }
 
     func endGame() {
+        guard !isGameOver else { return }
         isGameOver = true
         let finalScore = score
         feverRemaining = 0
+        recordRun(score: finalScore, level: level)
         updatePauseState()
         SoundPlayer.crash(enabled: isSoundEnabled)
         SoundPlayer.setFeverActive(false, enabled: isSoundEnabled)
@@ -228,11 +248,40 @@ final class GameState: ObservableObject {
         UserDefaults.standard.set(0, forKey: bestScoreKey)
     }
 
+    func resetRunRecords() {
+        runRecords = []
+        UserDefaults.standard.removeObject(forKey: runRecordsKey)
+    }
+
+    private func recordRun(score: Int, level: Int) {
+        guard score > 0 else { return }
+        let record = RunRecord(id: UUID(), score: score, level: level, date: Date())
+        runRecords.insert(record, at: 0)
+        runRecords = Array(runRecords.prefix(30))
+        saveRunRecords()
+    }
+
     private func updateBestScore() {
         if score > bestScore {
             bestScore = score
             UserDefaults.standard.set(bestScore, forKey: bestScoreKey)
         }
+    }
+
+    private func saveRunRecords() {
+        guard let data = try? JSONEncoder().encode(runRecords) else { return }
+        UserDefaults.standard.set(data, forKey: runRecordsKey)
+    }
+
+    private static func loadRunRecords(from defaults: UserDefaults, key: String) -> [RunRecord] {
+        guard
+            let data = defaults.data(forKey: key),
+            let records = try? JSONDecoder().decode([RunRecord].self, from: data)
+        else {
+            return []
+        }
+
+        return Array(records.prefix(30))
     }
 
     private func updatePauseState() {

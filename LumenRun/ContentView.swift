@@ -7,6 +7,7 @@ struct ContentView: View {
     @Environment(\.scenePhase) private var scenePhase
     @State private var scene: GameScene?
     @State private var didScheduleLoading = false
+    @State private var isRecordsPresented = false
 
     var body: some View {
         ZStack {
@@ -48,6 +49,11 @@ struct ContentView: View {
         .sheet(isPresented: $gameCenter.isShowingLeaderboard) {
             GameCenterLeaderboardView()
                 .ignoresSafeArea()
+        }
+        .sheet(isPresented: $isRecordsPresented) {
+            RecordsView()
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
         }
         .onAppear {
             if scene == nil {
@@ -99,6 +105,8 @@ struct ContentView: View {
                 GameOverView {
                     gameState.reset()
                     scene = makeScene()
+                } showRecords: {
+                    isRecordsPresented = true
                 }
                 .padding(24)
                 .transition(.scale.combined(with: .opacity))
@@ -414,6 +422,7 @@ private struct GameOverView: View {
     @EnvironmentObject private var gameState: GameState
     @EnvironmentObject private var gameCenter: GameCenterManager
     let restart: () -> Void
+    let showRecords: () -> Void
 
     var body: some View {
         VStack(spacing: 18) {
@@ -442,6 +451,15 @@ private struct GameOverView: View {
                         .foregroundStyle(Color(red: 1.0, green: 0.76, blue: 0.32))
                 }
             }
+
+            Button(action: showRecords) {
+                Label("records.title", systemImage: "chart.bar.fill")
+                    .font(.headline.weight(.bold))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+            }
+            .buttonStyle(.bordered)
+            .tint(.white)
 
             Button {
                 gameCenter.showLeaderboard()
@@ -500,6 +518,9 @@ private struct SettingsView: View {
                     Button("settings.resetBest", role: .destructive) {
                         gameState.resetBestScore()
                     }
+                    Button("records.reset", role: .destructive) {
+                        gameState.resetRunRecords()
+                    }
                 }
 
                 Section("gamecenter.title") {
@@ -536,5 +557,76 @@ private struct SettingsView: View {
                 }
             }
         }
+    }
+}
+
+private struct RecordsView: View {
+    @EnvironmentObject private var gameState: GameState
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            List {
+                Section("records.top") {
+                    if gameState.topRunRecords.isEmpty {
+                        Text("records.empty")
+                            .foregroundStyle(.secondary)
+                    } else {
+                        ForEach(Array(gameState.topRunRecords.enumerated()), id: \.element.id) { index, record in
+                            RunRecordRow(rank: index + 1, record: record)
+                        }
+                    }
+                }
+
+                Section("records.recent") {
+                    if gameState.recentRunRecords.isEmpty {
+                        Text("records.empty")
+                            .foregroundStyle(.secondary)
+                    } else {
+                        ForEach(Array(gameState.recentRunRecords.enumerated()), id: \.element.id) { index, record in
+                            RunRecordRow(rank: index + 1, record: record)
+                        }
+                    }
+                }
+            }
+            .navigationTitle("records.title")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("settings.done") {
+                        dismiss()
+                    }
+                }
+            }
+        }
+    }
+}
+
+private struct RunRecordRow: View {
+    let rank: Int
+    let record: RunRecord
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Text("#\(rank)")
+                .font(.headline.weight(.black))
+                .foregroundStyle(.secondary)
+                .frame(width: 42, alignment: .leading)
+
+            VStack(alignment: .leading, spacing: 3) {
+                Text(String(format: NSLocalizedString("records.score", comment: ""), record.score))
+                    .font(.headline.weight(.bold))
+                    .monospacedDigit()
+                Text(String(format: NSLocalizedString("gameover.level", comment: ""), record.level))
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.secondary)
+            }
+
+            Spacer()
+
+            Text(record.date, style: .date)
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.secondary)
+        }
+        .padding(.vertical, 4)
     }
 }

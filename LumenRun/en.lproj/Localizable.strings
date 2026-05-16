@@ -44,6 +44,13 @@
 "settings.showTutorial" = "Show Tutorial Again";
 "settings.done" = "Done";
 
+"records.title" = "Local Records";
+"records.top" = "Top Runs";
+"records.recent" = "Recent Runs";
+"records.score" = "%d pts";
+"records.empty" = "No runs recorded yet.";
+"records.reset" = "Reset Run History";
+
 "theme.aurora" = "Neon Tide";
 "theme.solar" = "Solar Rift";
 "theme.mono" = "Ghost Signal";

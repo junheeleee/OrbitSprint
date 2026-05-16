@@ -23,6 +23,7 @@
 
 ## Progression And Retention
 - Keep the local best score for offline play.
+- Keep a free/offline local records board with recent runs and top runs while App Store Connect/Game Center setup is unavailable.
 - Add Game Center leaderboards so players can compare scores with friends and global players.
 - Use `com.junpacstudio.lumenrun.highscore` as the initial high-score leaderboard ID.
 - Add achievements for first run milestones, fever mastery, shield saves, score thresholds, and daily play streaks.

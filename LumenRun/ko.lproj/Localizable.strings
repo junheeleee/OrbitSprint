@@ -44,6 +44,13 @@
 "settings.showTutorial" = "튜토리얼 다시 보기";
 "settings.done" = "완료";
 
+"records.title" = "로컬 기록판";
+"records.top" = "상위 기록";
+"records.recent" = "최근 런";
+"records.score" = "%d점";
+"records.empty" = "아직 기록된 런이 없습니다.";
+"records.reset" = "런 기록 초기화";
+
 "theme.aurora" = "네온 타이드";
 "theme.solar" = "솔라 리프트";
 "theme.mono" = "고스트 시그널";
