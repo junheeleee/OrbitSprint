@@ -89,6 +89,9 @@ final class GameState: ObservableObject {
     @Published var isSettingsPresented = false {
         didSet { updatePauseState() }
     }
+    @Published var isAchievementsPresented = false {
+        didSet { updatePauseState() }
+    }
     @Published var hasSeenTutorial: Bool
     @Published var isSoundEnabled: Bool {
         didSet {
@@ -342,6 +345,14 @@ final class GameState: ObservableObject {
         isSettingsPresented = false
     }
 
+    func showAchievements() {
+        isAchievementsPresented = true
+    }
+
+    func closeAchievements() {
+        isAchievementsPresented = false
+    }
+
     func togglePause() {
         guard hasSeenTutorial, !isGameOver else { return }
         isUserPaused.toggle()
@@ -593,6 +604,6 @@ final class GameState: ObservableObject {
     }
 
     private func updatePauseState() {
-        isPaused = isLoading || isStartScreenPresented || !hasSeenTutorial || isGameOver || isSettingsPresented || isUserPaused || !isSceneActive
+        isPaused = isLoading || isStartScreenPresented || !hasSeenTutorial || isGameOver || isSettingsPresented || isAchievementsPresented || isUserPaused || !isSceneActive
     }
 }

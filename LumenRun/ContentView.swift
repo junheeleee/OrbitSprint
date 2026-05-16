@@ -8,7 +8,6 @@ struct ContentView: View {
     @State private var scene: GameScene?
     @State private var didScheduleLoading = false
     @State private var isRecordsPresented = false
-    @State private var isAchievementsPresented = false
 
     var body: some View {
         ZStack {
@@ -49,7 +48,7 @@ struct ContentView: View {
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
         }
-        .sheet(isPresented: $isAchievementsPresented) {
+        .sheet(isPresented: $gameState.isAchievementsPresented) {
             AchievementsView()
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
@@ -97,7 +96,7 @@ struct ContentView: View {
                         gameState.pauseForSettings()
                     },
                     openAchievements: {
-                        isAchievementsPresented = true
+                        gameState.showAchievements()
                     },
                     togglePause: {
                         gameState.togglePause()
@@ -125,7 +124,7 @@ struct ContentView: View {
                     } showRecords: {
                         isRecordsPresented = true
                     } showAchievements: {
-                        isAchievementsPresented = true
+                        gameState.showAchievements()
                     }
                     .padding(24)
                 }
@@ -253,7 +252,7 @@ private struct HUDView: View {
 
             Spacer()
 
-            HStack(spacing: 14) {
+            HStack(spacing: 9) {
                 VStack(alignment: .trailing, spacing: 4) {
                     if gameState.combo > 0 {
                         VStack(alignment: .trailing, spacing: 3) {
@@ -305,33 +304,39 @@ private struct HUDView: View {
 
                 Button(action: togglePause) {
                     Image(systemName: gameState.isUserPaused ? "play.fill" : "pause.fill")
-                        .font(.title3.weight(.bold))
-                        .frame(width: 42, height: 42)
+                        .font(.headline.weight(.bold))
+                        .frame(width: 40, height: 40)
+                        .contentShape(Circle())
                 }
                 .buttonStyle(.plain)
                 .foregroundStyle(.white)
                 .background(.white.opacity(0.12), in: Circle())
+                .contentShape(Circle())
                 .disabled(!gameState.hasSeenTutorial || gameState.isGameOver)
                 .accessibilityLabel(Text(gameState.isUserPaused ? "pause.resume" : "pause.title"))
 
                 Button(action: openAchievements) {
                     Image(systemName: "trophy.fill")
-                        .font(.title3.weight(.bold))
-                        .frame(width: 42, height: 42)
+                        .font(.headline.weight(.bold))
+                        .frame(width: 40, height: 40)
+                        .contentShape(Circle())
                 }
                 .buttonStyle(.plain)
                 .foregroundStyle(Color(red: 1.0, green: 0.82, blue: 0.28))
                 .background(.white.opacity(0.12), in: Circle())
+                .contentShape(Circle())
                 .accessibilityLabel(Text("achievements.title"))
 
                 Button(action: openSettings) {
                     Image(systemName: "gearshape.fill")
-                        .font(.title3.weight(.bold))
-                        .frame(width: 42, height: 42)
+                        .font(.headline.weight(.bold))
+                        .frame(width: 40, height: 40)
+                        .contentShape(Circle())
                 }
                 .buttonStyle(.plain)
                 .foregroundStyle(.white)
                 .background(.white.opacity(0.12), in: Circle())
+                .contentShape(Circle())
                 .accessibilityLabel(Text("settings.title"))
             }
         }
@@ -824,7 +829,6 @@ private struct SettingsView: View {
 
 private struct AchievementsView: View {
     @EnvironmentObject private var gameState: GameState
-    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         NavigationStack {
@@ -849,7 +853,7 @@ private struct AchievementsView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("settings.done") {
-                        dismiss()
+                        gameState.closeAchievements()
                     }
                 }
             }
