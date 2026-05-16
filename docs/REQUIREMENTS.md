@@ -13,6 +13,7 @@
 - Pattern changes should be communicated through spawn layout, orbit pulses, color, and item placement instead of intrusive text banners.
 - Collectibles and hazards must be visually distinct by both shape and color, not only by color.
 - Object identities: gold sparks build combo, orange surge cores give high-value score, blue shields protect, violet hourglasses slow time, magenta shards are hazards.
+- Hazard objects should use aggressive shapes and danger marks, such as spikes and X marks, so they read as avoidable threats without relying on color.
 - Provide an object guide from non-gameplay surfaces such as start, pause, and settings; avoid interrupting active runs with explanatory popups.
 
 ## Controls

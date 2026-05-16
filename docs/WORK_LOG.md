@@ -1,6 +1,7 @@
 # Lumen Run Work Log
 
 ## 2026-05-17
+- Made in-run object silhouettes more explicit: hazards now use spiked shapes with X marks, surge cores show lightning, shields show checks, and slow items show hourglass sand.
 - Added an object guide accessible from the start screen, pause screen, and settings help section.
 - Strengthened object readability with fixed gold score sparks, blue shield shapes, violet hourglass slow items, and a new orange surge core for high-value scoring.
 - Reduced Fever-mode stutter risk by throttling full-screen flashes, lowering burst particle counts, capping fever effect nodes, and spacing rapid score sounds.
