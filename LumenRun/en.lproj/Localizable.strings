@@ -21,6 +21,14 @@
 "gameover.title" = "SYNC LOST";
 "gameover.score" = "Score %d  |  Best %d";
 "gameover.level" = "Reached Level %d";
+"gameover.level.short" = "Level";
+"gameover.missions.short" = "Missions";
+"gameover.newBest" = "New Best";
+"gameover.newBest.subtitle" = "Personal record synced";
+"gameover.tiedBest" = "Matched your best";
+"gameover.bestDelta" = "%d pts from best";
+"gameover.nextTheme" = "Complete %d more missions to unlock %@";
+"gameover.allThemesUnlocked" = "All themes unlocked";
 "gameover.restart" = "Run Again";
 
 "gamecenter.title" = "Game Center";

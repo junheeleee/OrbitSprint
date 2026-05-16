@@ -21,6 +21,14 @@
 "gameover.title" = "싱크 끊김";
 "gameover.score" = "점수 %d  |  최고 %d";
 "gameover.level" = "도달 레벨 %d";
+"gameover.level.short" = "레벨";
+"gameover.missions.short" = "미션";
+"gameover.newBest" = "신기록";
+"gameover.newBest.subtitle" = "최고 기록 갱신";
+"gameover.tiedBest" = "최고 기록과 동률";
+"gameover.bestDelta" = "최고 기록까지 %d점";
+"gameover.nextTheme" = "%d개 미션을 더 완료하면 %@ 해금";
+"gameover.allThemesUnlocked" = "모든 테마가 해금되었습니다";
 "gameover.restart" = "다시 달리기";
 
 "gamecenter.title" = "게임 센터";

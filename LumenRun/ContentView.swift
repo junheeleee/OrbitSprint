@@ -428,31 +428,79 @@ private struct GameOverView: View {
     let showRecords: () -> Void
 
     var body: some View {
-        VStack(spacing: 18) {
-            VStack(spacing: 6) {
+        VStack(spacing: 16) {
+            VStack(spacing: 8) {
+                if gameState.didSetNewBestThisRun {
+                    Label("gameover.newBest", systemImage: "crown.fill")
+                        .font(.caption.weight(.black))
+                        .foregroundStyle(.black)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 5)
+                        .background(
+                            LinearGradient(
+                                colors: [Color(red: 1.0, green: 0.86, blue: 0.24), Color(red: 1.0, green: 0.52, blue: 0.15)],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            ),
+                            in: Capsule()
+                        )
+                }
+
                 Text("gameover.title")
                     .font(.system(size: 34, weight: .black, design: .rounded))
                     .foregroundStyle(.white)
 
-                Text(String(format: NSLocalizedString("gameover.score", comment: ""), gameState.score, gameState.bestScore))
-                    .font(.headline.weight(.semibold))
-                    .foregroundStyle(.white.opacity(0.72))
+                Text("\(gameState.score)")
+                    .font(.system(size: 58, weight: .black, design: .rounded))
+                    .foregroundStyle(.white)
                     .monospacedDigit()
 
-                Text(String(format: NSLocalizedString("gameover.level", comment: ""), gameState.level))
-                    .font(.subheadline.weight(.bold))
-                    .foregroundStyle(.white.opacity(0.58))
+                Text(resultSubtitle)
+                    .font(.subheadline.weight(.black))
+                    .foregroundStyle(gameState.didSetNewBestThisRun ? Color(red: 1.0, green: 0.82, blue: 0.28) : .white.opacity(0.66))
                     .monospacedDigit()
+            }
 
-                if gameCenter.lastSubmissionSucceeded {
-                    Label("gamecenter.submitted", systemImage: "checkmark.circle.fill")
-                        .font(.caption.weight(.bold))
-                        .foregroundStyle(Color(red: 0.52, green: 1.0, blue: 0.72))
-                } else if gameCenter.lastSubmissionError != nil {
-                    Label("gamecenter.submitFailed", systemImage: "exclamationmark.triangle.fill")
-                        .font(.caption.weight(.bold))
-                        .foregroundStyle(Color(red: 1.0, green: 0.76, blue: 0.32))
+            VStack(spacing: 8) {
+                HStack(spacing: 8) {
+                    ResultStatCard(title: "hud.best", value: "\(gameState.bestScore)", icon: "trophy.fill")
+                    ResultStatCard(
+                        title: "gameover.level.short",
+                        value: "\(gameState.level)",
+                        icon: "speedometer"
+                    )
                 }
+                HStack(spacing: 8) {
+                    ResultStatCard(
+                        title: "gameover.missions.short",
+                        value: "\(gameState.completedDailyMissionTotal)/\(gameState.dailyMissions.count)",
+                        icon: "target"
+                    )
+                    ResultStatCard(
+                        title: "rewards.completedMissions",
+                        value: "\(gameState.completedMissionCount)",
+                        icon: "checkmark.seal.fill"
+                    )
+                }
+            }
+
+            if let unlockText {
+                Label(unlockText, systemImage: "lock.open.fill")
+                    .font(.caption.weight(.black))
+                    .foregroundStyle(.white.opacity(0.82))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(10)
+                    .background(.white.opacity(0.1), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+            }
+
+            if gameCenter.lastSubmissionSucceeded {
+                Label("gamecenter.submitted", systemImage: "checkmark.circle.fill")
+                    .font(.caption.weight(.bold))
+                    .foregroundStyle(Color(red: 0.52, green: 1.0, blue: 0.72))
+            } else if gameCenter.lastSubmissionError != nil {
+                Label("gamecenter.submitFailed", systemImage: "exclamationmark.triangle.fill")
+                    .font(.caption.weight(.bold))
+                    .foregroundStyle(Color(red: 1.0, green: 0.76, blue: 0.32))
             }
 
             DailyMissionsPanel(isCompact: true)
@@ -488,6 +536,58 @@ private struct GameOverView: View {
         }
         .padding(22)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+    }
+
+    private var resultSubtitle: String {
+        if gameState.didSetNewBestThisRun {
+            return NSLocalizedString("gameover.newBest.subtitle", comment: "")
+        }
+        if gameState.bestScoreDelta >= 0 {
+            return NSLocalizedString("gameover.tiedBest", comment: "")
+        }
+        return String(format: NSLocalizedString("gameover.bestDelta", comment: ""), abs(gameState.bestScoreDelta))
+    }
+
+    private var unlockText: String? {
+        guard let nextTheme = gameState.nextLockedTheme, let remaining = gameState.missionsUntilNextTheme else {
+            return NSLocalizedString("gameover.allThemesUnlocked", comment: "")
+        }
+        return String(
+            format: NSLocalizedString("gameover.nextTheme", comment: ""),
+            remaining,
+            NSLocalizedString(nextTheme.titleLocalizationKey, comment: "")
+        )
+    }
+}
+
+private struct ResultStatCard: View {
+    let title: LocalizedStringKey
+    let value: String
+    let icon: String
+
+    var body: some View {
+        HStack(spacing: 9) {
+            Image(systemName: icon)
+                .font(.caption.weight(.black))
+                .foregroundStyle(Color(red: 0.0, green: 0.92, blue: 0.82))
+                .frame(width: 18)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.caption2.weight(.black))
+                    .foregroundStyle(.white.opacity(0.55))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.75)
+                Text(value)
+                    .font(.headline.weight(.black))
+                    .foregroundStyle(.white)
+                    .monospacedDigit()
+            }
+            Spacer(minLength: 0)
+        }
+        .padding(10)
+        .frame(maxWidth: .infinity)
+        .background(.black.opacity(0.16), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
     }
 }
 

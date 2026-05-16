@@ -9,10 +9,17 @@ enum GameTheme: String, CaseIterable, Identifiable {
     var id: String { rawValue }
 
     var titleKey: LocalizedStringKey {
+        LocalizedStringKey(titleLocalizationKey)
+    }
+
+    var titleLocalizationKey: String {
         switch self {
-        case .aurora: "theme.aurora"
-        case .solar: "theme.solar"
-        case .mono: "theme.mono"
+        case .aurora:
+            return "theme.aurora"
+        case .solar:
+            return "theme.solar"
+        case .mono:
+            return "theme.mono"
         }
     }
 

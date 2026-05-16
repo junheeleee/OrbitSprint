@@ -1,6 +1,7 @@
 # Lumen Run Work Log
 
 ## 2026-05-16
+- Strengthened the post-game results screen with new-best feedback, run stats, mission completion, and next-theme unlock progress.
 - Added offline mission rewards that unlock additional themes after cumulative daily mission completions.
 - Added offline daily missions with local progress persistence and Korean/English UI.
 - Reduced first-tap stutter risk by prewarming and reusing haptic feedback generators.

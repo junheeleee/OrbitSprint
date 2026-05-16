@@ -32,6 +32,7 @@ struct DailyMission: Codable, Identifiable, Equatable {
 final class GameState: ObservableObject {
     @Published var score = 0
     @Published var bestScore: Int
+    @Published private(set) var previousBestScore: Int
     @Published private(set) var runRecords: [RunRecord]
     @Published private(set) var dailyMissions: [DailyMission]
     @Published var combo = 0
@@ -103,9 +104,32 @@ final class GameState: ObservableObject {
         Array(runRecords.sorted { $0.date > $1.date }.prefix(5))
     }
 
+    var didSetNewBestThisRun: Bool {
+        isGameOver && score > previousBestScore
+    }
+
+    var bestScoreDelta: Int {
+        score - previousBestScore
+    }
+
+    var completedDailyMissionTotal: Int {
+        dailyMissions.filter(\.isCompleted).count
+    }
+
+    var nextLockedTheme: GameTheme? {
+        GameTheme.allCases.first { !isThemeUnlocked($0) }
+    }
+
+    var missionsUntilNextTheme: Int? {
+        guard let nextLockedTheme else { return nil }
+        return max(0, nextLockedTheme.unlockRequirement - completedMissionCount)
+    }
+
     init() {
         let defaults = UserDefaults.standard
-        bestScore = defaults.integer(forKey: bestScoreKey)
+        let loadedBestScore = defaults.integer(forKey: bestScoreKey)
+        bestScore = loadedBestScore
+        previousBestScore = loadedBestScore
         runRecords = Self.loadRunRecords(from: defaults, key: runRecordsKey)
         dailyMissions = Self.loadDailyMissions(from: defaults, missionsKey: dailyMissionsKey, dateKey: dailyMissionsDateKey)
         hasSeenTutorial = defaults.bool(forKey: tutorialKey)
@@ -121,6 +145,7 @@ final class GameState: ObservableObject {
     }
 
     func reset() {
+        previousBestScore = bestScore
         score = 0
         combo = 0
         multiplier = 1
