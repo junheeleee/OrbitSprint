@@ -12,9 +12,9 @@
 "tutorial.title" = "런 프로토콜";
 "tutorial.body" = "레인을 읽고, 조각을 모으고, 빨라지는 런에 버티세요.";
 "tutorial.step.tap" = "탭하면 궤도가 1-2-3-2-1 순서로 바뀝니다.";
-"tutorial.step.collect" = "빛나는 루멘 조각을 모으면 콤보와 배수가 올라갑니다.";
+"tutorial.step.collect" = "금색 루멘 조각은 콤보, 주황 코어는 큰 점수를 줍니다.";
 "tutorial.step.avoid" = "마젠타 글리치 파편은 같은 궤도일 때만 위험합니다.";
-"tutorial.step.powerups" = "파란 실드는 보호막, 보라 코어는 시간을 느리게 합니다.";
+"tutorial.step.powerups" = "파란 방패는 보호막, 보라 모래시계는 시간을 느리게 합니다.";
 "tutorial.step.fever" = "12콤보 피버 중에는 무적이며 충돌도 점수가 됩니다.";
 "tutorial.start" = "런 시작";
 

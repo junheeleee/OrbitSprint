@@ -12,9 +12,9 @@
 "tutorial.title" = "Run Protocol";
 "tutorial.body" = "Read lanes, gather sparks, and survive the accelerating run.";
 "tutorial.step.tap" = "Tap to shift orbit depth in a 1-2-3-2-1 rhythm.";
-"tutorial.step.collect" = "Collect glowing lumen sparks to raise combo and multiplier.";
+"tutorial.step.collect" = "Gold sparks build combo. Orange cores score big.";
 "tutorial.step.avoid" = "Magenta glitch shards are dangerous only on your orbit.";
-"tutorial.step.powerups" = "Blue shields guard you. Violet cores slow time.";
+"tutorial.step.powerups" = "Blue shields guard you. Violet hourglasses slow time.";
 "tutorial.step.fever" = "At 12 combo, Fever makes every collision score.";
 "tutorial.start" = "Start Run";
 

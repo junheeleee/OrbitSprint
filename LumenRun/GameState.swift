@@ -270,6 +270,19 @@ final class GameState: ObservableObject {
         updateBestScore()
     }
 
+    func collectSurge() {
+        if !isFeverActive {
+            combo += 2
+        }
+        multiplier = min(isFeverActive ? 8 : 5, 1 + combo / 5)
+        score += max(8, multiplier * 3)
+        level = max(1, score / 15 + 1)
+        SoundPlayer.lumen(enabled: isSoundEnabled)
+        updateScoreMission()
+        updateScoreAchievements()
+        updateBestScore()
+    }
+
     func breakCombo() {
         combo = 0
         multiplier = 1

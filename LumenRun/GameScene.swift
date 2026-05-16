@@ -15,6 +15,7 @@ final class GameScene: SKScene {
         static let spark = "spark"
         static let shield = "shield"
         static let slow = "slow"
+        static let surge = "surge"
         static let star = "star"
         static let feverPulse = "feverPulse"
     }
@@ -241,13 +242,15 @@ final class GameScene: SKScene {
         for node in objectLayer.children {
             guard let shape = node as? SKShapeNode else { continue }
             if shape.name == NodeName.spark {
-                shape.fillColor = state.selectedTheme.sparkColor
+                shape.fillColor = objectColor(for: NodeName.spark)
             } else if shape.name == NodeName.shard {
-                shape.fillColor = state.selectedTheme.shardColor
+                shape.fillColor = objectColor(for: NodeName.shard)
             } else if shape.name == NodeName.shield {
-                shape.fillColor = state.selectedTheme.shieldColor
+                shape.fillColor = objectColor(for: NodeName.shield)
             } else if shape.name == NodeName.slow {
-                shape.fillColor = state.selectedTheme.timeCoreColor
+                shape.fillColor = objectColor(for: NodeName.slow)
+            } else if shape.name == NodeName.surge {
+                shape.fillColor = objectColor(for: NodeName.surge)
             }
         }
     }
@@ -459,10 +462,10 @@ final class GameScene: SKScene {
         node.name = NodeName.shard
         node.position = point(on: radius, angle: spawnAngle)
         node.zRotation = CGFloat.random(in: 0...(2 * .pi))
-        node.fillColor = state.selectedTheme.shardColor
-        node.strokeColor = .white.withAlphaComponent(0.5)
+        node.fillColor = objectColor(for: NodeName.shard)
+        node.strokeColor = objectColor(for: NodeName.shard).withAlphaComponent(0.95)
         node.lineWidth = 2
-        node.glowWidth = 8
+        node.glowWidth = 10
         node.userData = ["radius": radius, "angle": spawnAngle]
         objectLayer.addChild(node)
 
@@ -487,10 +490,10 @@ final class GameScene: SKScene {
         let node = SKShapeNode(path: starPath(outerRadius: 12, innerRadius: 5, points: 5))
         node.name = NodeName.spark
         node.position = point(on: radius, angle: spawnAngle)
-        node.fillColor = state.selectedTheme.sparkColor
-        node.strokeColor = .white
+        node.fillColor = objectColor(for: NodeName.spark)
+        node.strokeColor = SKColor(red: 1.0, green: 0.98, blue: 0.46, alpha: 0.95)
         node.lineWidth = 2
-        node.glowWidth = 10
+        node.glowWidth = 12
         node.userData = ["radius": radius, "angle": spawnAngle]
         objectLayer.addChild(node)
         let pulse = SKAction.sequence([.scale(to: 1.25, duration: 0.35), .scale(to: 1.0, duration: 0.35)])
@@ -501,25 +504,31 @@ final class GameScene: SKScene {
     private func spawnPowerUp() {
         let radius = randomOrbitRadius()
         let spawnAngle = nextPlayableSpawnAngle(minLead: 1.05, maxLead: 2.4)
-        guard !hasNearbyObject(at: spawnAngle, clearance: 0.34, names: [NodeName.shard, NodeName.shield, NodeName.slow]) else { return }
+        guard !hasNearbyObject(at: spawnAngle, clearance: 0.34, names: [NodeName.shard, NodeName.shield, NodeName.slow, NodeName.surge]) else { return }
 
-        let isShield = state.shieldCharges == 0 || Bool.random()
+        let roll = CGFloat.random(in: 0...1)
+        let isSurge = state.level >= 3 && roll < 0.24
+        let isShield = !isSurge && (state.shieldCharges == 0 || roll < 0.62)
         let node: SKShapeNode
 
-        if isShield {
+        if isSurge {
+            node = SKShapeNode(path: hexPath(radius: 15))
+            node.name = NodeName.surge
+            node.fillColor = objectColor(for: NodeName.surge)
+        } else if isShield {
             node = SKShapeNode(path: shieldPath(radius: 15))
             node.name = NodeName.shield
-            node.fillColor = state.selectedTheme.shieldColor
+            node.fillColor = objectColor(for: NodeName.shield)
         } else {
-            node = SKShapeNode(path: corePath(radius: 13))
+            node = SKShapeNode(path: hourglassPath(radius: 15))
             node.name = NodeName.slow
-            node.fillColor = state.selectedTheme.timeCoreColor
+            node.fillColor = objectColor(for: NodeName.slow)
         }
 
         node.position = point(on: radius, angle: spawnAngle)
-        node.strokeColor = .white
+        node.strokeColor = node.fillColor.withAlphaComponent(0.98)
         node.lineWidth = 2
-        node.glowWidth = 9
+        node.glowWidth = isSurge ? 12 : 9
         node.userData = ["radius": radius, "angle": spawnAngle]
         objectLayer.addChild(node)
 
@@ -570,6 +579,17 @@ final class GameScene: SKScene {
                 Haptics.collect(enabled: state.isHapticsEnabled)
                 emitBurst(at: hitPoint, color: state.selectedTheme.timeCoreColor, count: 14)
                 flash(color: state.selectedTheme.timeCoreColor.withAlphaComponent(0.18))
+            } else if node.name == NodeName.surge {
+                let hitPoint = node.position
+                node.removeFromParent()
+                comboTimer = 0
+                state.collectSurge()
+                if state.isFeverActive {
+                    state.collectFeverHit()
+                }
+                Haptics.collect(enabled: state.isHapticsEnabled)
+                emitBurst(at: hitPoint, color: objectColor(for: NodeName.surge), count: state.isFeverActive ? 10 : 18)
+                flash(color: objectColor(for: NodeName.surge).withAlphaComponent(0.2))
             } else if node.name == NodeName.shard {
                 if state.isFeverActive {
                     let hitPoint = node.position
@@ -894,6 +914,8 @@ final class GameScene: SKScene {
             14
         case NodeName.slow:
             13
+        case NodeName.surge:
+            14
         default:
             12
         }
@@ -1057,6 +1079,44 @@ final class GameScene: SKScene {
         path.move(to: CGPoint(x: 0, y: -radius * 1.2))
         path.addLine(to: CGPoint(x: 0, y: radius * 1.2))
         return path
+    }
+
+    private func hourglassPath(radius: CGFloat) -> CGPath {
+        let path = CGMutablePath()
+        let width = radius * 0.78
+        let top = radius
+        let waist = radius * 0.18
+        let bottom = -radius
+
+        path.move(to: CGPoint(x: -width, y: top))
+        path.addLine(to: CGPoint(x: width, y: top))
+        path.addLine(to: CGPoint(x: waist, y: 0))
+        path.addLine(to: CGPoint(x: width, y: bottom))
+        path.addLine(to: CGPoint(x: -width, y: bottom))
+        path.addLine(to: CGPoint(x: -waist, y: 0))
+        path.closeSubpath()
+        return path
+    }
+
+    private func hexPath(radius: CGFloat) -> CGPath {
+        polygonPath(radius: radius, sides: 6)
+    }
+
+    private func objectColor(for name: String) -> SKColor {
+        switch name {
+        case NodeName.spark:
+            return SKColor(red: 1.0, green: 0.84, blue: 0.10, alpha: 1)
+        case NodeName.shard:
+            return state.selectedTheme.shardColor
+        case NodeName.shield:
+            return state.selectedTheme.shieldColor
+        case NodeName.slow:
+            return SKColor(red: 0.68, green: 0.32, blue: 1.0, alpha: 1)
+        case NodeName.surge:
+            return SKColor(red: 1.0, green: 0.46, blue: 0.12, alpha: 1)
+        default:
+            return .white
+        }
     }
 
     private func playerPath(for skin: CoreSkin) -> CGPath {

@@ -11,6 +11,8 @@
 - Add strategic decisions inside runs, such as choosing risky score routes, safer survival routes, and timed item pickups.
 - First pattern set should include readable phases: normal flow, gate waves, switchback pressure, lumen rush, and overdrive.
 - Pattern changes should be communicated through spawn layout, orbit pulses, color, and item placement instead of intrusive text banners.
+- Collectibles and hazards must be visually distinct by both shape and color, not only by color.
+- Object identities: gold sparks build combo, orange surge cores give high-value score, blue shields protect, violet hourglasses slow time, magenta shards are hazards.
 
 ## Controls
 - Current preferred control direction: one-button orbit movement.
