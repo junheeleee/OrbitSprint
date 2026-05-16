@@ -30,6 +30,7 @@
 		1A2B3C4D5E6F7000000000B5 /* Sounds/fever.wav in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7000000000C5 /* Sounds/fever.wav */; };
 		1A2B3C4D5E6F7000000000B6 /* Sounds/feverloop.wav in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7000000000C6 /* Sounds/feverloop.wav */; };
 		1A2B3C4D5E6F7000000000B7 /* GameCenterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7000000000C7 /* GameCenterManager.swift */; };
+		1A2B3C4D5E6F7000000000D0 /* LumenObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7000000000D1 /* LumenObject.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +61,7 @@
 		1A2B3C4D5E6F7000000000C5 /* Sounds/fever.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Sounds/fever.wav; sourceTree = "<group>"; };
 		1A2B3C4D5E6F7000000000C6 /* Sounds/feverloop.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Sounds/feverloop.wav; sourceTree = "<group>"; };
 		1A2B3C4D5E6F7000000000C7 /* GameCenterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCenterManager.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F7000000000D1 /* LumenObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LumenObject.swift; sourceTree = "<group>"; };
 		92A4C8CC2FB82FDD00F14687 /* LumenRun.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LumenRun.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -91,6 +93,7 @@
 				1A2B3C4D5E6F700000000013 /* GameScene.swift */,
 				1A2B3C4D5E6F700000000014 /* GameState.swift */,
 				1A2B3C4D5E6F700000000018 /* GameTheme.swift */,
+				1A2B3C4D5E6F7000000000D1 /* LumenObject.swift */,
 				1A2B3C4D5E6F7000000000C7 /* GameCenterManager.swift */,
 				1A2B3C4D5E6F700000000015 /* Haptics.swift */,
 				1A2B3C4D5E6F700000000019 /* SoundPlayer.swift */,
@@ -211,6 +214,7 @@
 				1A2B3C4D5E6F700000000003 /* GameScene.swift in Sources */,
 				1A2B3C4D5E6F700000000004 /* GameState.swift in Sources */,
 				1A2B3C4D5E6F700000000007 /* GameTheme.swift in Sources */,
+				1A2B3C4D5E6F7000000000D0 /* LumenObject.swift in Sources */,
 				1A2B3C4D5E6F7000000000B7 /* GameCenterManager.swift in Sources */,
 				1A2B3C4D5E6F700000000005 /* Haptics.swift in Sources */,
 				1A2B3C4D5E6F700000000008 /* SoundPlayer.swift in Sources */,

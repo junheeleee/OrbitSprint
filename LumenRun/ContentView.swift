@@ -922,7 +922,7 @@ private struct ObjectGuideView: View {
 }
 
 private struct ObjectGuideList: View {
-    private let items = ObjectGuideItem.all
+    private let items = LumenObjectKind.allCases
 
     var body: some View {
         List {
@@ -943,14 +943,14 @@ private struct ObjectGuideList: View {
 }
 
 private struct ObjectGuideRow: View {
-    let item: ObjectGuideItem
+    let item: LumenObjectKind
 
     var body: some View {
         HStack(alignment: .center, spacing: 14) {
             ZStack {
                 Circle()
-                    .fill(item.color.opacity(0.16))
-                ObjectGuideIcon(kind: item.kind, color: item.color)
+                    .fill(item.guideColor.opacity(0.16))
+                ObjectGuideIcon(kind: item, color: item.guideColor)
                     .frame(width: 32, height: 32)
             }
             .frame(width: 46, height: 46)
@@ -968,62 +968,8 @@ private struct ObjectGuideRow: View {
     }
 }
 
-private struct ObjectGuideItem: Identifiable {
-    let id: String
-    let titleKey: String
-    let descriptionKey: String
-    let kind: ObjectGuideIcon.Kind
-    let color: Color
-
-    static let all: [ObjectGuideItem] = [
-        ObjectGuideItem(
-            id: "spark",
-            titleKey: "objects.spark.title",
-            descriptionKey: "objects.spark.desc",
-            kind: .spark,
-            color: Color(red: 1.0, green: 0.78, blue: 0.12)
-        ),
-        ObjectGuideItem(
-            id: "surge",
-            titleKey: "objects.surge.title",
-            descriptionKey: "objects.surge.desc",
-            kind: .surge,
-            color: Color(red: 1.0, green: 0.46, blue: 0.12)
-        ),
-        ObjectGuideItem(
-            id: "shield",
-            titleKey: "objects.shield.title",
-            descriptionKey: "objects.shield.desc",
-            kind: .shield,
-            color: Color(red: 0.1, green: 0.68, blue: 1.0)
-        ),
-        ObjectGuideItem(
-            id: "slow",
-            titleKey: "objects.slow.title",
-            descriptionKey: "objects.slow.desc",
-            kind: .slow,
-            color: Color(red: 0.68, green: 0.32, blue: 1.0)
-        ),
-        ObjectGuideItem(
-            id: "shard",
-            titleKey: "objects.shard.title",
-            descriptionKey: "objects.shard.desc",
-            kind: .shard,
-            color: Color(red: 1.0, green: 0.18, blue: 0.48)
-        )
-    ]
-}
-
 private struct ObjectGuideIcon: View {
-    enum Kind {
-        case spark
-        case surge
-        case shield
-        case slow
-        case shard
-    }
-
-    let kind: Kind
+    let kind: LumenObjectKind
     let color: Color
 
     var body: some View {

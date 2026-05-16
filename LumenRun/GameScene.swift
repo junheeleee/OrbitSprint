@@ -11,11 +11,6 @@ final class GameScene: SKScene {
 
     private enum NodeName {
         static let player = "player"
-        static let shard = "shard"
-        static let spark = "spark"
-        static let shield = "shield"
-        static let slow = "slow"
-        static let surge = "surge"
         static let star = "star"
         static let feverPulse = "feverPulse"
     }
@@ -24,6 +19,12 @@ final class GameScene: SKScene {
     private let playerRadius: CGFloat = 14
     private let orbitRadii: [CGFloat] = [76, 112, 148]
     private let collisionRadiusTolerance: CGFloat = 9
+    private let powerUpBlockerNames = Set([
+        LumenObjectKind.shard.nodeName,
+        LumenObjectKind.shield.nodeName,
+        LumenObjectKind.slow.nodeName,
+        LumenObjectKind.surge.nodeName
+    ])
     private let orbitTransitionDuration: TimeInterval = 0.16
     private var currentRadius: CGFloat = 76
     private var targetRadius: CGFloat = 76
@@ -241,17 +242,9 @@ final class GameScene: SKScene {
         drawOrbits()
         for node in objectLayer.children {
             guard let shape = node as? SKShapeNode else { continue }
-            if shape.name == NodeName.spark {
-                shape.fillColor = objectColor(for: NodeName.spark)
-            } else if shape.name == NodeName.shard {
-                shape.fillColor = objectColor(for: NodeName.shard)
-            } else if shape.name == NodeName.shield {
-                shape.fillColor = objectColor(for: NodeName.shield)
-            } else if shape.name == NodeName.slow {
-                shape.fillColor = objectColor(for: NodeName.slow)
-            } else if shape.name == NodeName.surge {
-                shape.fillColor = objectColor(for: NodeName.surge)
-            }
+            guard let kind = shape.lumenObjectKind else { continue }
+            shape.fillColor = objectColor(for: kind)
+            shape.strokeColor = kind.sceneStrokeColor(for: state.selectedTheme)
         }
     }
 
@@ -458,16 +451,17 @@ final class GameScene: SKScene {
     private func spawnShard(on radius: CGFloat, near spawnAngle: CGFloat, rewardChance: CGFloat, allowParallel: Bool) {
         guard canSpawnThreat(at: spawnAngle, on: radius, allowParallel: allowParallel) else { return }
 
-        let node = SKShapeNode(path: hazardShardPath(radius: 14.5))
-        node.name = NodeName.shard
+        let kind = LumenObjectKind.shard
+        let node = SKShapeNode(path: hazardShardPath(radius: kind.baseRadius))
+        node.name = kind.nodeName
         node.position = point(on: radius, angle: spawnAngle)
         node.zRotation = CGFloat.random(in: 0...(2 * .pi))
-        node.fillColor = objectColor(for: NodeName.shard)
-        node.strokeColor = objectColor(for: NodeName.shard).withAlphaComponent(0.95)
-        node.lineWidth = 2
-        node.glowWidth = 9
+        node.fillColor = objectColor(for: kind)
+        node.strokeColor = kind.sceneStrokeColor(for: state.selectedTheme)
+        node.lineWidth = kind.lineWidth
+        node.glowWidth = kind.glowWidth
         node.userData = ["radius": radius, "angle": spawnAngle]
-        addSymbol(to: node, path: dangerMarkPath(size: 15.5), color: .black.withAlphaComponent(0.66), lineWidth: 2.4)
+        addSymbol(to: node, path: dangerMarkPath(size: kind.baseRadius * 1.07), color: .black.withAlphaComponent(0.66), lineWidth: 2.4)
         objectLayer.addChild(node)
 
         let spin = SKAction.rotate(byAngle: .pi * 2, duration: TimeInterval(CGFloat.random(in: 0.75...1.15)))
@@ -488,17 +482,18 @@ final class GameScene: SKScene {
     }
 
     private func spawnSpark(on radius: CGFloat, near spawnAngle: CGFloat) {
-        guard !hasNearbyObject(at: spawnAngle, clearance: 0.24, names: [NodeName.spark]) else { return }
+        let kind = LumenObjectKind.spark
+        guard !hasNearbyObject(at: spawnAngle, clearance: 0.24, names: [kind.nodeName]) else { return }
 
-        let node = SKShapeNode(path: starPath(outerRadius: 10, innerRadius: 4.2, points: 5))
-        node.name = NodeName.spark
+        let node = SKShapeNode(path: starPath(outerRadius: kind.baseRadius, innerRadius: kind.baseRadius * 0.42, points: 5))
+        node.name = kind.nodeName
         node.position = point(on: radius, angle: spawnAngle)
-        node.fillColor = objectColor(for: NodeName.spark)
-        node.strokeColor = SKColor(red: 1.0, green: 0.98, blue: 0.46, alpha: 0.95)
-        node.lineWidth = 1.6
-        node.glowWidth = 8
+        node.fillColor = objectColor(for: kind)
+        node.strokeColor = kind.sceneStrokeColor(for: state.selectedTheme)
+        node.lineWidth = kind.lineWidth
+        node.glowWidth = kind.glowWidth
         node.userData = ["radius": radius, "angle": spawnAngle]
-        addSymbol(to: node, path: smallCirclePath(radius: 2.8), color: .white.withAlphaComponent(0.76), lineWidth: 1.2)
+        addSymbol(to: node, path: smallCirclePath(radius: kind.baseRadius * 0.28), color: .white.withAlphaComponent(0.76), lineWidth: 1.2)
         objectLayer.addChild(node)
         let pulse = SKAction.sequence([.scale(to: 1.16, duration: 0.35), .scale(to: 1.0, duration: 0.35)])
         node.run(.repeatForever(pulse))
@@ -508,34 +503,34 @@ final class GameScene: SKScene {
     private func spawnPowerUp() {
         let radius = randomOrbitRadius()
         let spawnAngle = nextPlayableSpawnAngle(minLead: 1.05, maxLead: 2.4)
-        guard !hasNearbyObject(at: spawnAngle, clearance: 0.34, names: [NodeName.shard, NodeName.shield, NodeName.slow, NodeName.surge]) else { return }
+        guard !hasNearbyObject(at: spawnAngle, clearance: 0.34, names: powerUpBlockerNames) else { return }
 
         let roll = CGFloat.random(in: 0...1)
         let isSurge = state.level >= 3 && roll < 0.24
         let isShield = !isSurge && (state.shieldCharges == 0 || roll < 0.62)
+        let kind: LumenObjectKind
         let node: SKShapeNode
 
         if isSurge {
-            node = SKShapeNode(path: hexPath(radius: 12.5))
-            node.name = NodeName.surge
-            node.fillColor = objectColor(for: NodeName.surge)
-            addSymbol(to: node, path: lightningPath(size: 14.5), color: .white.withAlphaComponent(0.9), lineWidth: 2)
+            kind = .surge
+            node = SKShapeNode(path: hexPath(radius: kind.baseRadius))
+            addSymbol(to: node, path: lightningPath(size: kind.baseRadius * 1.16), color: .white.withAlphaComponent(0.9), lineWidth: 2)
         } else if isShield {
-            node = SKShapeNode(path: shieldPath(radius: 12.5))
-            node.name = NodeName.shield
-            node.fillColor = objectColor(for: NodeName.shield)
-            addSymbol(to: node, path: checkPath(size: 14), color: .white.withAlphaComponent(0.92), lineWidth: 2.2)
+            kind = .shield
+            node = SKShapeNode(path: shieldPath(radius: kind.baseRadius))
+            addSymbol(to: node, path: checkPath(size: kind.baseRadius * 1.12), color: .white.withAlphaComponent(0.92), lineWidth: 2.2)
         } else {
-            node = SKShapeNode(path: hourglassPath(radius: 12.5))
-            node.name = NodeName.slow
-            node.fillColor = objectColor(for: NodeName.slow)
-            addHourglassSand(to: node, radius: 12.5)
+            kind = .slow
+            node = SKShapeNode(path: hourglassPath(radius: kind.baseRadius))
+            addHourglassSand(to: node, radius: kind.baseRadius)
         }
 
+        node.name = kind.nodeName
+        node.fillColor = objectColor(for: kind)
         node.position = point(on: radius, angle: spawnAngle)
-        node.strokeColor = node.fillColor.withAlphaComponent(0.98)
-        node.lineWidth = 1.8
-        node.glowWidth = isSurge ? 9 : 7
+        node.strokeColor = kind.sceneStrokeColor(for: state.selectedTheme)
+        node.lineWidth = kind.lineWidth
+        node.glowWidth = kind.glowWidth
         node.userData = ["radius": radius, "angle": spawnAngle]
         objectLayer.addChild(node)
 
@@ -548,8 +543,9 @@ final class GameScene: SKScene {
         for node in objectLayer.children {
             guard isOnCollidingRadius(with: node) else { continue }
             guard isTouchingPlayer(node) else { continue }
+            guard let kind = node.lumenObjectKind else { continue }
 
-            if node.name == NodeName.spark {
+            if kind == .spark {
                 let hitPoint = node.position
                 node.removeFromParent()
                 comboTimer = 0
@@ -564,7 +560,7 @@ final class GameScene: SKScene {
                 } else {
                     flash(color: state.selectedTheme.sparkColor.withAlphaComponent(0.16))
                 }
-            } else if node.name == NodeName.shield {
+            } else if kind == .shield {
                 let hitPoint = node.position
                 node.removeFromParent()
                 comboTimer = 0
@@ -575,7 +571,7 @@ final class GameScene: SKScene {
                 Haptics.collect(enabled: state.isHapticsEnabled)
                 emitBurst(at: hitPoint, color: state.selectedTheme.shieldColor, count: 14)
                 flash(color: state.selectedTheme.shieldColor.withAlphaComponent(0.18))
-            } else if node.name == NodeName.slow {
+            } else if kind == .slow {
                 let hitPoint = node.position
                 node.removeFromParent()
                 comboTimer = 0
@@ -586,7 +582,7 @@ final class GameScene: SKScene {
                 Haptics.collect(enabled: state.isHapticsEnabled)
                 emitBurst(at: hitPoint, color: state.selectedTheme.timeCoreColor, count: 14)
                 flash(color: state.selectedTheme.timeCoreColor.withAlphaComponent(0.18))
-            } else if node.name == NodeName.surge {
+            } else if kind == .surge {
                 let hitPoint = node.position
                 node.removeFromParent()
                 comboTimer = 0
@@ -595,9 +591,9 @@ final class GameScene: SKScene {
                     state.collectFeverHit()
                 }
                 Haptics.collect(enabled: state.isHapticsEnabled)
-                emitBurst(at: hitPoint, color: objectColor(for: NodeName.surge), count: state.isFeverActive ? 10 : 18)
-                flash(color: objectColor(for: NodeName.surge).withAlphaComponent(0.2))
-            } else if node.name == NodeName.shard {
+                emitBurst(at: hitPoint, color: objectColor(for: .surge), count: state.isFeverActive ? 10 : 18)
+                flash(color: objectColor(for: .surge).withAlphaComponent(0.2))
+            } else if kind == .shard {
                 if state.isFeverActive {
                     let hitPoint = node.position
                     node.removeFromParent()
@@ -671,7 +667,7 @@ final class GameScene: SKScene {
     private func safestRecoveryAngle() -> CGFloat {
         let candidates = (0..<16).map { normalizedAngle(CGFloat($0) * .pi / 8) }
         let shardAngles = objectLayer.children.compactMap { node -> CGFloat? in
-            guard node.name == NodeName.shard else { return nil }
+            guard node.lumenObjectKind == .shard else { return nil }
             return storedAngle(for: node)
         }
 
@@ -692,7 +688,7 @@ final class GameScene: SKScene {
 
     private func shardRisk(on radius: CGFloat, near recoveryAngle: CGFloat) -> CGFloat {
         objectLayer.children.reduce(CGFloat.zero) { total, node in
-            guard node.name == NodeName.shard else { return total }
+            guard node.lumenObjectKind == .shard else { return total }
             guard let objectAngle = storedAngle(for: node) else { return total }
             guard let objectRadius = storedRadius(for: node) else { return total }
             let lanePenalty: CGFloat = objectRadius == radius ? 1 : 0.34
@@ -702,7 +698,7 @@ final class GameScene: SKScene {
 
     private func removeNearbyShards(clearance: CGFloat) {
         objectLayer.children.forEach { node in
-            guard node.name == NodeName.shard else { return }
+            guard node.lumenObjectKind == .shard else { return }
             guard let objectAngle = storedAngle(for: node) else { return }
             if angularDistance(objectAngle, angle) < clearance {
                 node.removeFromParent()
@@ -912,20 +908,7 @@ final class GameScene: SKScene {
     }
 
     private func collisionRadius(for node: SKNode) -> CGFloat {
-        switch node.name {
-        case NodeName.shard:
-            11
-        case NodeName.spark:
-            8.5
-        case NodeName.shield:
-            11.5
-        case NodeName.slow:
-            11
-        case NodeName.surge:
-            11.5
-        default:
-            12
-        }
+        node.lumenObjectKind?.collisionRadius ?? 12
     }
 
     private func nextThreatSpawnAngle(on radius: CGFloat, minLead: CGFloat, maxLead: CGFloat) -> CGFloat {
@@ -953,7 +936,7 @@ final class GameScene: SKScene {
 
         let clearance = state.level < 6 ? 0.58 : 0.46
         return !objectLayer.children.contains { node in
-            guard node.name == NodeName.shard else { return false }
+            guard node.lumenObjectKind == .shard else { return false }
             guard let objectAngle = storedAngle(for: node) else { return false }
             guard angularDistance(objectAngle, spawnAngle) < clearance else { return false }
             if allowParallel, let objectRadius = storedRadius(for: node), abs(objectRadius - radius) > collisionRadiusTolerance {
@@ -1189,21 +1172,8 @@ final class GameScene: SKScene {
         node.addChild(bottom)
     }
 
-    private func objectColor(for name: String) -> SKColor {
-        switch name {
-        case NodeName.spark:
-            return SKColor(red: 1.0, green: 0.84, blue: 0.10, alpha: 1)
-        case NodeName.shard:
-            return state.selectedTheme.shardColor
-        case NodeName.shield:
-            return state.selectedTheme.shieldColor
-        case NodeName.slow:
-            return SKColor(red: 0.68, green: 0.32, blue: 1.0, alpha: 1)
-        case NodeName.surge:
-            return SKColor(red: 1.0, green: 0.46, blue: 0.12, alpha: 1)
-        default:
-            return .white
-        }
+    private func objectColor(for kind: LumenObjectKind) -> SKColor {
+        kind.sceneColor(for: state.selectedTheme)
     }
 
     private func playerPath(for skin: CoreSkin) -> CGPath {

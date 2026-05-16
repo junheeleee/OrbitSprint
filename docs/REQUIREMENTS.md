@@ -15,6 +15,7 @@
 - Object identities: gold sparks build combo, orange surge cores give high-value score, blue shields protect, violet hourglasses slow time, magenta shards are hazards.
 - Hazard objects should use aggressive shapes and danger marks, such as spikes and X marks, so they read as avoidable threats without relying on color.
 - Object guide icons should mirror the in-run silhouettes and markings, not generic system icons, so players build one consistent visual memory.
+- Object identity, localization keys, guide colors, gameplay size, glow, line width, and collision radius should be managed from a shared object catalog.
 - Provide an object guide from non-gameplay surfaces such as start, pause, and settings; avoid interrupting active runs with explanatory popups.
 
 ## Controls
