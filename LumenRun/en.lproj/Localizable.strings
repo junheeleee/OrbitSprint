@@ -66,6 +66,27 @@
 "missions.fever" = "Trigger Fever %d times";
 "missions.shields" = "Pick up %d shields";
 
+"achievements.title" = "Achievements";
+"achievements.unlocked" = "Unlocked Achievements";
+"achievements.firstRun.title" = "First Run";
+"achievements.firstRun.desc" = "Complete one run.";
+"achievements.firstFever.title" = "First Fever Sync";
+"achievements.firstFever.desc" = "Trigger Fever for the first time.";
+"achievements.score50.title" = "Break 50";
+"achievements.score50.desc" = "Reach 50 points in one run.";
+"achievements.score100.title" = "100-Point Runner";
+"achievements.score100.desc" = "Reach 100 points in one run.";
+"achievements.score200.title" = "Neon Overload";
+"achievements.score200.desc" = "Reach 200 points in one run.";
+"achievements.shields5.title" = "Shield Collector";
+"achievements.shields5.desc" = "Pick up 5 shields total.";
+"achievements.runs10.title" = "Core Keeps Running";
+"achievements.runs10.desc" = "Complete 10 runs total.";
+"achievements.newBest5.title" = "Record Breaker";
+"achievements.newBest5.desc" = "Set a new best 5 times.";
+"achievements.dailySweep.title" = "Daily Sync Complete";
+"achievements.dailySweep.desc" = "Complete all 3 daily missions.";
+
 "rewards.completedMissions" = "Completed Missions";
 "rewards.unlocked" = "Unlocked";
 "rewards.unlockAt" = "Unlock after %d missions";

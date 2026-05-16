@@ -482,6 +482,13 @@ private struct GameOverView: View {
                         icon: "checkmark.seal.fill"
                     )
                 }
+                HStack(spacing: 8) {
+                    ResultStatCard(
+                        title: "achievements.title",
+                        value: "\(gameState.completedAchievementCount)/\(AchievementDefinition.all.count)",
+                        icon: "medal.fill"
+                    )
+                }
             }
 
             if let unlockText {
@@ -649,6 +656,19 @@ private struct SettingsView: View {
                     }
                 }
 
+                Section("achievements.title") {
+                    HStack {
+                        Text("achievements.unlocked")
+                        Spacer()
+                        Text("\(gameState.completedAchievementCount)/\(AchievementDefinition.all.count)")
+                            .fontWeight(.bold)
+                            .monospacedDigit()
+                    }
+                    ForEach(AchievementDefinition.all) { achievement in
+                        AchievementRow(achievement: achievement)
+                    }
+                }
+
                 Section("gamecenter.title") {
                     HStack {
                         Text("gamecenter.status")
@@ -683,6 +703,43 @@ private struct SettingsView: View {
                 }
             }
         }
+    }
+}
+
+private struct AchievementRow: View {
+    @EnvironmentObject private var gameState: GameState
+    let achievement: AchievementDefinition
+
+    var body: some View {
+        let progress = gameState.achievementProgress(for: achievement)
+        let isUnlocked = gameState.isAchievementUnlocked(achievement)
+
+        HStack(spacing: 12) {
+            Image(systemName: isUnlocked ? "checkmark.seal.fill" : achievement.iconName)
+                .font(.headline.weight(.bold))
+                .foregroundStyle(isUnlocked ? Color(red: 0.52, green: 1.0, blue: 0.72) : .secondary)
+                .frame(width: 28)
+
+            VStack(alignment: .leading, spacing: 5) {
+                HStack {
+                    Text(LocalizedStringKey(achievement.titleKey))
+                        .font(.headline.weight(.bold))
+                    Spacer()
+                    Text("\(progress)/\(achievement.target)")
+                        .font(.caption.weight(.black))
+                        .foregroundStyle(.secondary)
+                        .monospacedDigit()
+                }
+
+                Text(LocalizedStringKey(achievement.descriptionKey))
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.secondary)
+
+                ProgressView(value: Double(progress), total: Double(achievement.target))
+                    .tint(isUnlocked ? Color(red: 0.52, green: 1.0, blue: 0.72) : Color(red: 0.0, green: 0.92, blue: 0.82))
+            }
+        }
+        .padding(.vertical, 3)
     }
 }
 

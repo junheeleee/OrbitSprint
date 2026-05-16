@@ -29,12 +29,45 @@ struct DailyMission: Codable, Identifiable, Equatable {
     }
 }
 
+enum AchievementID: String, CaseIterable, Codable {
+    case firstRun
+    case firstFever
+    case score50
+    case score100
+    case score200
+    case shields5
+    case runs10
+    case newBest5
+    case dailySweep
+}
+
+struct AchievementDefinition: Identifiable, Equatable {
+    let id: AchievementID
+    let titleKey: String
+    let descriptionKey: String
+    let iconName: String
+    let target: Int
+
+    static let all: [AchievementDefinition] = [
+        AchievementDefinition(id: .firstRun, titleKey: "achievements.firstRun.title", descriptionKey: "achievements.firstRun.desc", iconName: "play.fill", target: 1),
+        AchievementDefinition(id: .firstFever, titleKey: "achievements.firstFever.title", descriptionKey: "achievements.firstFever.desc", iconName: "flame.fill", target: 1),
+        AchievementDefinition(id: .score50, titleKey: "achievements.score50.title", descriptionKey: "achievements.score50.desc", iconName: "50.circle.fill", target: 50),
+        AchievementDefinition(id: .score100, titleKey: "achievements.score100.title", descriptionKey: "achievements.score100.desc", iconName: "100.circle.fill", target: 100),
+        AchievementDefinition(id: .score200, titleKey: "achievements.score200.title", descriptionKey: "achievements.score200.desc", iconName: "bolt.circle.fill", target: 200),
+        AchievementDefinition(id: .shields5, titleKey: "achievements.shields5.title", descriptionKey: "achievements.shields5.desc", iconName: "shield.fill", target: 5),
+        AchievementDefinition(id: .runs10, titleKey: "achievements.runs10.title", descriptionKey: "achievements.runs10.desc", iconName: "repeat.circle.fill", target: 10),
+        AchievementDefinition(id: .newBest5, titleKey: "achievements.newBest5.title", descriptionKey: "achievements.newBest5.desc", iconName: "crown.fill", target: 5),
+        AchievementDefinition(id: .dailySweep, titleKey: "achievements.dailySweep.title", descriptionKey: "achievements.dailySweep.desc", iconName: "checkmark.seal.fill", target: 1)
+    ]
+}
+
 final class GameState: ObservableObject {
     @Published var score = 0
     @Published var bestScore: Int
     @Published private(set) var previousBestScore: Int
     @Published private(set) var runRecords: [RunRecord]
     @Published private(set) var dailyMissions: [DailyMission]
+    @Published private(set) var achievementProgress: [String: Int]
     @Published var combo = 0
     @Published var multiplier = 1
     @Published var level = 1
@@ -83,6 +116,7 @@ final class GameState: ObservableObject {
     private let dailyMissionsDateKey = "dailyMissionsDate"
     private let completedMissionCountKey = "completedMissionCount"
     private let rewardedMissionIDsKey = "rewardedMissionIDs"
+    private let achievementProgressKey = "achievementProgress"
     private let tutorialKey = "hasSeenTutorial"
     private let soundEnabledKey = "soundEnabled"
     private let hapticsEnabledKey = "hapticsEnabled"
@@ -116,6 +150,10 @@ final class GameState: ObservableObject {
         dailyMissions.filter(\.isCompleted).count
     }
 
+    var completedAchievementCount: Int {
+        AchievementDefinition.all.filter { isAchievementUnlocked($0) }.count
+    }
+
     var nextLockedTheme: GameTheme? {
         GameTheme.allCases.first { !isThemeUnlocked($0) }
     }
@@ -132,6 +170,7 @@ final class GameState: ObservableObject {
         previousBestScore = loadedBestScore
         runRecords = Self.loadRunRecords(from: defaults, key: runRecordsKey)
         dailyMissions = Self.loadDailyMissions(from: defaults, missionsKey: dailyMissionsKey, dateKey: dailyMissionsDateKey)
+        achievementProgress = Self.loadAchievementProgress(from: defaults, key: achievementProgressKey)
         hasSeenTutorial = defaults.bool(forKey: tutorialKey)
         isPaused = true
         isSoundEnabled = defaults.object(forKey: soundEnabledKey) as? Bool ?? true
@@ -181,6 +220,7 @@ final class GameState: ObservableObject {
                 combo = 0
                 feverRemaining = feverDuration
                 advanceMission(.fever, by: 1)
+                setAchievementProgress(.firstFever, to: 1)
                 SoundPlayer.feverStart(enabled: isSoundEnabled)
                 SoundPlayer.setFeverActive(true, enabled: isSoundEnabled)
             }
@@ -192,6 +232,7 @@ final class GameState: ObservableObject {
         SoundPlayer.lumen(enabled: isSoundEnabled)
         advanceMission(.sparks, by: 1)
         updateScoreMission()
+        updateScoreAchievements()
         updateBestScore()
     }
 
@@ -201,6 +242,7 @@ final class GameState: ObservableObject {
         level = max(1, score / 15 + 1)
         SoundPlayer.lumen(enabled: isSoundEnabled)
         updateScoreMission()
+        updateScoreAchievements()
         updateBestScore()
     }
 
@@ -224,6 +266,7 @@ final class GameState: ObservableObject {
         }
         SoundPlayer.shield(enabled: isSoundEnabled)
         advanceMission(.shields, by: 1)
+        incrementAchievement(.shields5, by: 1)
     }
 
     func consumeShield() -> Bool {
@@ -264,9 +307,15 @@ final class GameState: ObservableObject {
         guard !isGameOver else { return }
         isGameOver = true
         let finalScore = score
+        let didBeatPreviousBest = finalScore > previousBestScore
         feverRemaining = 0
         updateScoreMission()
         recordRun(score: finalScore, level: level)
+        incrementAchievement(.firstRun, by: 1)
+        incrementAchievement(.runs10, by: 1)
+        if didBeatPreviousBest {
+            incrementAchievement(.newBest5, by: 1)
+        }
         updatePauseState()
         SoundPlayer.crash(enabled: isSoundEnabled)
         SoundPlayer.setFeverActive(false, enabled: isSoundEnabled)
@@ -326,6 +375,14 @@ final class GameState: ObservableObject {
 
     func isThemeUnlocked(_ theme: GameTheme) -> Bool {
         completedMissionCount >= theme.unlockRequirement
+    }
+
+    func achievementProgress(for achievement: AchievementDefinition) -> Int {
+        min(achievementProgress[achievement.id.rawValue] ?? 0, achievement.target)
+    }
+
+    func isAchievementUnlocked(_ achievement: AchievementDefinition) -> Bool {
+        achievementProgress(for: achievement) >= achievement.target
     }
 
     func refreshDailyMissionsIfNeeded() {
@@ -403,6 +460,33 @@ final class GameState: ObservableObject {
         completedMissionCount += newlyCompletedCount
         defaults.set(completedMissionCount, forKey: completedMissionCountKey)
         defaults.set(Array(rewardedIDs), forKey: rewardedMissionIDsKey)
+        if completedDailyMissionTotal >= dailyMissions.count {
+            setAchievementProgress(.dailySweep, to: 1)
+        }
+    }
+
+    private func updateScoreAchievements() {
+        setAchievementProgress(.score50, to: score)
+        setAchievementProgress(.score100, to: score)
+        setAchievementProgress(.score200, to: score)
+    }
+
+    private func incrementAchievement(_ id: AchievementID, by amount: Int) {
+        let nextValue = (achievementProgress[id.rawValue] ?? 0) + amount
+        setAchievementProgress(id, to: nextValue)
+    }
+
+    private func setAchievementProgress(_ id: AchievementID, to value: Int) {
+        guard let definition = AchievementDefinition.all.first(where: { $0.id == id }) else { return }
+        let nextValue = min(value, definition.target)
+        guard nextValue > (achievementProgress[id.rawValue] ?? 0) else { return }
+        achievementProgress[id.rawValue] = nextValue
+        saveAchievementProgress()
+    }
+
+    private func saveAchievementProgress() {
+        guard let data = try? JSONEncoder().encode(achievementProgress) else { return }
+        UserDefaults.standard.set(data, forKey: achievementProgressKey)
     }
 
     private func saveDailyMissions() {
@@ -420,6 +504,17 @@ final class GameState: ObservableObject {
         }
 
         return Array(records.prefix(30))
+    }
+
+    private static func loadAchievementProgress(from defaults: UserDefaults, key: String) -> [String: Int] {
+        guard
+            let data = defaults.data(forKey: key),
+            let progress = try? JSONDecoder().decode([String: Int].self, from: data)
+        else {
+            return [:]
+        }
+
+        return progress
     }
 
     private static func loadDailyMissions(from defaults: UserDefaults, missionsKey: String, dateKey: String) -> [DailyMission] {

@@ -27,6 +27,7 @@
 - Add Game Center leaderboards so players can compare scores with friends and global players.
 - Use `com.junpacstudio.lumenrun.highscore` as the initial high-score leaderboard ID.
 - Add achievements for first run milestones, fever mastery, shield saves, score thresholds, and daily play streaks.
+- Offline achievements should track local progress first, with IDs that can later map to Game Center achievements.
 - Add a clear post-game results screen that shows score, best score, rank/percentile when available, earned achievements, and a strong retry call-to-action.
 - Post-game results should highlight new records, mission completion, and progress toward the next unlock.
 - Add daily or weekly challenge goals to create reasons to return.

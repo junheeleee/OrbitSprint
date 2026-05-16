@@ -66,6 +66,27 @@
 "missions.fever" = "피버 %d회 발동";
 "missions.shields" = "실드 %d개 획득";
 
+"achievements.title" = "업적";
+"achievements.unlocked" = "해금한 업적";
+"achievements.firstRun.title" = "첫 런";
+"achievements.firstRun.desc" = "런을 1회 완료하세요.";
+"achievements.firstFever.title" = "첫 피버 싱크";
+"achievements.firstFever.desc" = "피버를 처음 발동하세요.";
+"achievements.score50.title" = "50점 돌파";
+"achievements.score50.desc" = "한 런에서 50점에 도달하세요.";
+"achievements.score100.title" = "100점 러너";
+"achievements.score100.desc" = "한 런에서 100점에 도달하세요.";
+"achievements.score200.title" = "네온 과부하";
+"achievements.score200.desc" = "한 런에서 200점에 도달하세요.";
+"achievements.shields5.title" = "실드 수집가";
+"achievements.shields5.desc" = "누적 실드 5개를 획득하세요.";
+"achievements.runs10.title" = "다시 달리는 코어";
+"achievements.runs10.desc" = "런을 누적 10회 완료하세요.";
+"achievements.newBest5.title" = "기록 갱신자";
+"achievements.newBest5.desc" = "신기록을 누적 5회 세우세요.";
+"achievements.dailySweep.title" = "오늘의 싱크 완료";
+"achievements.dailySweep.desc" = "오늘의 미션 3개를 모두 완료하세요.";
+
 "rewards.completedMissions" = "완료한 미션";
 "rewards.unlocked" = "해금됨";
 "rewards.unlockAt" = "미션 %d개 완료 시 해금";
