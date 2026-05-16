@@ -13,6 +13,8 @@
 - Shield item feedback
 - Start/loading screens
 - Improved post-game results flow
+- Pattern-based stage pacing so runs stop feeling identical
+- Distinct obstacle waves, safe-lane windows, and risk/reward item routes
 
 ## Polish Beta
 - Stronger sci-fi identity
@@ -24,6 +26,7 @@
 - Achievement set
 - Unlockable cosmetic rewards
 - Daily/weekly challenge structure
+- Dedicated rewards screen, with store mechanics considered only after an in-game currency exists
 
 ## Release Candidate
 - App icon and screenshots

@@ -199,12 +199,17 @@ final class GameScene: SKScene {
         renderedShieldCharges = -1
         renderedFeverActive = state.isFeverActive
 
-        player.removeAllActions()
-        player.setScale(1)
-        player.alpha = 1
+        resetPlayerVisuals(alpha: 1)
         shieldAura.removeAllActions()
         shieldAura.setScale(1)
         shieldAura.alpha = 0
+    }
+
+    private func resetPlayerVisuals(alpha: CGFloat) {
+        player.removeAllActions()
+        player.setScale(1)
+        player.alpha = alpha
+        player.isHidden = false
     }
 
     private func applyTheme() {
@@ -427,7 +432,19 @@ final class GameScene: SKScene {
                 node.removeFromParent()
                 removeNearbyShards(clearance: 0.9)
                 state.endGame()
-                player.run(.sequence([.scale(to: 1.45, duration: 0.08), .scale(to: 0.1, duration: 0.16)]))
+                player.run(
+                    .sequence([
+                        .scale(to: 1.45, duration: 0.08),
+                        .group([
+                            .scale(to: 0.1, duration: 0.16),
+                            .fadeAlpha(to: 0.35, duration: 0.16)
+                        ]),
+                        .run { [weak self] in
+                            self?.resetPlayerVisuals(alpha: 0.35)
+                        }
+                    ]),
+                    withKey: "deathPulse"
+                )
                 flash(color: state.selectedTheme.shardColor.withAlphaComponent(0.24))
                 return
             }

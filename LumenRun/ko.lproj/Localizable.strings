@@ -6,16 +6,16 @@
 
 "loading.title" = "루멘런 점화 중";
 "start.eyebrow" = "네온 코어 러너";
-"start.subtitle" = "루멘 코어를 네온 레인 위로 달리게 하세요. 빛을 잇고, 피버 싱크로 돌파하고, 글리치를 앞질러 보세요.";
+"start.subtitle" = "네온 궤도를 달리며 루멘 조각을 잇고 글리치를 피하세요.";
 "start.play" = "런 시작";
 
 "tutorial.title" = "런 프로토콜";
-"tutorial.body" = "레인을 읽고 루멘을 모으며, 점점 빨라지는 런 속에서 코어의 싱크를 유지하세요.";
-"tutorial.step.tap" = "화면 아무 곳이나 탭해서 1-2-3-2-1 순서로 궤도를 오르내립니다.";
-"tutorial.step.collect" = "황금 루멘을 이어 모으면 싱크 배수가 올라갑니다.";
-"tutorial.step.avoid" = "마젠타 글리치 파편을 피하세요. 피버가 아닐 때 직접 충돌하면 끝입니다.";
-"tutorial.step.powerups" = "파란 실드는 코어 주변에 보호막을 만들고, 보라 타임 코어는 런을 느리게 합니다.";
-"tutorial.step.fever" = "루멘 12개를 연속으로 모으면 무적 질주 상태가 되어 부딪히는 모든 것이 점수가 됩니다.";
+"tutorial.body" = "레인을 읽고, 조각을 모으고, 빨라지는 런에 버티세요.";
+"tutorial.step.tap" = "탭하면 궤도가 1-2-3-2-1 순서로 바뀝니다.";
+"tutorial.step.collect" = "빛나는 루멘 조각을 모으면 콤보와 배수가 올라갑니다.";
+"tutorial.step.avoid" = "마젠타 글리치 파편은 같은 궤도일 때만 위험합니다.";
+"tutorial.step.powerups" = "파란 실드는 보호막, 보라 코어는 시간을 느리게 합니다.";
+"tutorial.step.fever" = "12콤보 피버 중에는 무적이며 충돌도 점수가 됩니다.";
 "tutorial.start" = "런 시작";
 
 "gameover.title" = "싱크 끊김";
@@ -92,6 +92,7 @@
 "achievements.dailySweep.desc" = "오늘의 미션 3개를 모두 완료하세요.";
 
 "rewards.completedMissions" = "완료한 미션";
+"rewards.title" = "리워드";
 "rewards.unlocked" = "해금됨";
 "rewards.unlockAt" = "미션 %d개 완료 시 해금";
 "rewards.previewTitle" = "리워드 미리보기";

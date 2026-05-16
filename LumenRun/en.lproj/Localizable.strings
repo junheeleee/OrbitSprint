@@ -6,16 +6,16 @@
 
 "loading.title" = "Igniting the Run";
 "start.eyebrow" = "NEON CORE RUNNER";
-"start.subtitle" = "Run a Lumen Core through neon lanes. Chain light, smash through Fever Sync, and outrun the glitch.";
+"start.subtitle" = "Run neon orbits, chain lumen sparks, and dodge the glitch.";
 "start.play" = "Start Run";
 
 "tutorial.title" = "Run Protocol";
-"tutorial.body" = "Read the lanes, gather lumen sparks, and keep the core synced as the run accelerates.";
-"tutorial.step.tap" = "Tap anywhere to move 1-2-3-2-1 through the orbit depths.";
-"tutorial.step.collect" = "Collect golden lumen sparks to raise your sync multiplier.";
-"tutorial.step.avoid" = "Avoid magenta glitch shards. One direct crash ends the run unless Fever is active.";
-"tutorial.step.powerups" = "Blue shields form a visible guard around the core. Violet time cores slow the run.";
-"tutorial.step.fever" = "Chain 12 sparks to trigger Fever Sync: go invincible, go fast, and score from every hit.";
+"tutorial.body" = "Read lanes, gather sparks, and survive the accelerating run.";
+"tutorial.step.tap" = "Tap to shift orbit depth in a 1-2-3-2-1 rhythm.";
+"tutorial.step.collect" = "Collect glowing lumen sparks to raise combo and multiplier.";
+"tutorial.step.avoid" = "Magenta glitch shards are dangerous only on your orbit.";
+"tutorial.step.powerups" = "Blue shields guard you. Violet cores slow time.";
+"tutorial.step.fever" = "At 12 combo, Fever makes every collision score.";
 "tutorial.start" = "Start Run";
 
 "gameover.title" = "SYNC LOST";
@@ -92,6 +92,7 @@
 "achievements.dailySweep.desc" = "Complete all 3 daily missions.";
 
 "rewards.completedMissions" = "Completed Missions";
+"rewards.title" = "Rewards";
 "rewards.unlocked" = "Unlocked";
 "rewards.unlockAt" = "Unlock after %d missions";
 "rewards.previewTitle" = "Reward Preview";

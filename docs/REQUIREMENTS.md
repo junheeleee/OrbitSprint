@@ -6,6 +6,9 @@
 - Collision should only occur with obstacles on the player's current orbit layer.
 - Obstacles should spawn in ways that preserve player agency.
 - Fever mode should make the player invincible, faster, flashier, and able to convert collisions into score.
+- Gameplay depth is the current highest product priority before more cosmetic polish.
+- Add stage-like pacing with recognizable obstacle patterns, escalation beats, and short relief windows.
+- Add strategic decisions inside runs, such as choosing risky score routes, safer survival routes, and timed item pickups.
 
 ## Controls
 - Current preferred control direction: one-button orbit movement.
@@ -20,6 +23,8 @@
 - Include a loading screen and start screen.
 - Korean and English should be supported.
 - Korean App Store users should see Korean by default when device language is Korean.
+- Start and post-game screens must remain scrollable on smaller devices.
+- The start screen should stay short and focused on starting a run; reward browsing belongs in a separate rewards screen.
 
 ## Progression And Retention
 - Keep the local best score for offline play.
@@ -39,8 +44,9 @@
 - Theme unlocks should be driven by total completed daily missions and remain available offline.
 - Core skin unlocks should be driven by total completed daily missions and change the in-run player shape.
 - Locked rewards should be previewable before unlock so players can see future goals and feel motivated to chase them.
-- Unlocked rewards should be equipable directly from the start-screen reward preview without visiting settings.
+- Unlocked rewards should be equipable directly from the dedicated rewards screen without visiting settings.
 - Reward previews should be visually grouped by reward type, such as themes and core skins, so players understand multiple cosmetic slots.
+- Do not introduce a store until the game has a meaningful earned currency or purchase loop; use rewards for mission-based unlocks first.
 
 ## Release Quality
 - Maintain App Store readiness: signing, bundle id, privacy manifest, localization, and stable device testing.

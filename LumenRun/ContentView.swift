@@ -29,10 +29,15 @@ struct ContentView: View {
                 LoadingView()
                     .transition(.opacity)
             } else if gameState.isStartScreenPresented {
-                StartView {
-                    gameState.startRun()
+                ScrollView(.vertical, showsIndicators: true) {
+                    StartView {
+                        gameState.startRun()
+                    } showRewards: {
+                        gameState.showRewards()
+                    }
+                    .padding(24)
                 }
-                .padding(24)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .transition(.scale.combined(with: .opacity))
             }
         }
@@ -50,6 +55,11 @@ struct ContentView: View {
         }
         .sheet(isPresented: $gameState.isAchievementsPresented) {
             AchievementsView()
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
+        }
+        .sheet(isPresented: $gameState.isRewardsPresented) {
+            RewardsView()
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
         }
@@ -125,6 +135,8 @@ struct ContentView: View {
                         isRecordsPresented = true
                     } showAchievements: {
                         gameState.showAchievements()
+                    } showRewards: {
+                        gameState.showRewards()
                     }
                     .padding(24)
                 }
@@ -394,9 +406,10 @@ private struct LoadingView: View {
 private struct StartView: View {
     @EnvironmentObject private var gameState: GameState
     let start: () -> Void
+    let showRewards: () -> Void
 
     var body: some View {
-        VStack(spacing: 22) {
+        VStack(spacing: 18) {
             VStack(spacing: 8) {
                 Text("start.eyebrow")
                     .font(.caption.weight(.black))
@@ -429,7 +442,14 @@ private struct StartView: View {
 
             DailyMissionsPanel()
 
-            RewardShowcasePanel(isCompact: true)
+            Button(action: showRewards) {
+                Label("rewards.title", systemImage: "gift.fill")
+                    .font(.headline.weight(.bold))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+            }
+            .buttonStyle(.bordered)
+            .tint(.white)
 
             Button(action: start) {
                 Label("start.play", systemImage: "play.fill")
@@ -522,7 +542,7 @@ private struct TutorialRow: View {
     let text: LocalizedStringKey
 
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(alignment: .top, spacing: 12) {
             Image(systemName: icon)
                 .font(.headline)
                 .frame(width: 26)
@@ -530,6 +550,8 @@ private struct TutorialRow: View {
             Text(text)
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(.white.opacity(0.84))
+                .lineLimit(nil)
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 }
@@ -540,6 +562,7 @@ private struct GameOverView: View {
     let restart: () -> Void
     let showRecords: () -> Void
     let showAchievements: () -> Void
+    let showRewards: () -> Void
 
     var body: some View {
         VStack(spacing: 16) {
@@ -626,8 +649,6 @@ private struct GameOverView: View {
 
             DailyMissionsPanel(isCompact: true)
 
-            RewardShowcasePanel(isCompact: true)
-
             Button(action: showRecords) {
                 Label("records.title", systemImage: "chart.bar.fill")
                     .font(.headline.weight(.bold))
@@ -639,6 +660,15 @@ private struct GameOverView: View {
 
             Button(action: showAchievements) {
                 Label("achievements.title", systemImage: "trophy.fill")
+                    .font(.headline.weight(.bold))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+            }
+            .buttonStyle(.bordered)
+            .tint(.white)
+
+            Button(action: showRewards) {
+                Label("rewards.title", systemImage: "gift.fill")
                     .font(.headline.weight(.bold))
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 12)
@@ -1033,6 +1063,27 @@ private struct CoreSkinUnlockRow: View {
             return "checkmark.circle.fill"
         }
         return gameState.isCoreSkinUnlocked(skin) ? "circle" : "lock.fill"
+    }
+}
+
+private struct RewardsView: View {
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            ScrollView(.vertical, showsIndicators: true) {
+                RewardShowcasePanel()
+                    .padding(20)
+            }
+            .navigationTitle(Text("rewards.title"))
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("settings.done") {
+                        dismiss()
+                    }
+                }
+            }
+        }
     }
 }
 

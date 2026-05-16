@@ -1,5 +1,12 @@
 # Lumen Run Work Log
 
+## 2026-05-17
+- Reprioritized the roadmap around gameplay depth: stage-like pacing, readable obstacle patterns, and strategic risk/reward routes come before additional cosmetic polish.
+- Separated reward browsing from the start and post-game screens into a dedicated rewards screen so the main flow stays shorter.
+- Restored start-screen scrolling and shortened tutorial/start copy to avoid truncated text.
+- Clarified "golden lumen" as glowing lumen sparks in tutorial copy so it still fits alternate themes.
+- Hardened the death animation reset so restarting after a crash does not leave the player core as a tiny dot.
+
 ## 2026-05-16
 - Grouped reward preview cards by reward type so themes and core skins are visually distinct.
 - Made unlocked reward preview cards tappable so players can equip themes and core skins directly from the start/post-game screens.
