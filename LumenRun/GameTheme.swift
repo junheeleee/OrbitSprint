@@ -16,6 +16,14 @@ enum GameTheme: String, CaseIterable, Identifiable {
         }
     }
 
+    var unlockRequirement: Int {
+        switch self {
+        case .aurora: 0
+        case .solar: 3
+        case .mono: 9
+        }
+    }
+
     var backgroundColors: [Color] {
         switch self {
         case .aurora:

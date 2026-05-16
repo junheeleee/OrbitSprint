@@ -38,6 +38,7 @@
 "settings.sound" = "사운드";
 "settings.haptics" = "햅틱";
 "settings.theme" = "테마";
+"settings.theme.quick" = "빠른 선택";
 "settings.record" = "기록";
 "settings.resetBest" = "최고 기록 초기화";
 "settings.help" = "도움말";
@@ -56,6 +57,10 @@
 "missions.sparks" = "루멘 %d개 수집";
 "missions.fever" = "피버 %d회 발동";
 "missions.shields" = "실드 %d개 획득";
+
+"rewards.completedMissions" = "완료한 미션";
+"rewards.unlocked" = "해금됨";
+"rewards.unlockAt" = "미션 %d개 완료 시 해금";
 
 "theme.aurora" = "네온 타이드";
 "theme.solar" = "솔라 리프트";

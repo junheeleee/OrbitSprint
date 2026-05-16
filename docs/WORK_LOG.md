@@ -1,6 +1,7 @@
 # Lumen Run Work Log
 
 ## 2026-05-16
+- Added offline mission rewards that unlock additional themes after cumulative daily mission completions.
 - Added offline daily missions with local progress persistence and Korean/English UI.
 - Reduced first-tap stutter risk by prewarming and reusing haptic feedback generators.
 - Added a free/offline local records board for top runs and recent runs so progression works before paid App Store Connect/Game Center setup.

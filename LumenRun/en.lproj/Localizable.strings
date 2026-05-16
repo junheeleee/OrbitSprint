@@ -38,6 +38,7 @@
 "settings.sound" = "Sound";
 "settings.haptics" = "Haptics";
 "settings.theme" = "Theme";
+"settings.theme.quick" = "Quick Select";
 "settings.record" = "Record";
 "settings.resetBest" = "Reset Best Score";
 "settings.help" = "Help";
@@ -56,6 +57,10 @@
 "missions.sparks" = "Collect %d sparks";
 "missions.fever" = "Trigger Fever %d times";
 "missions.shields" = "Pick up %d shields";
+
+"rewards.completedMissions" = "Completed Missions";
+"rewards.unlocked" = "Unlocked";
+"rewards.unlockAt" = "Unlock after %d missions";
 
 "theme.aurora" = "Neon Tide";
 "theme.solar" = "Solar Rift";

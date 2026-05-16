@@ -504,9 +504,24 @@ private struct SettingsView: View {
                 }
 
                 Section("settings.theme") {
+                    ForEach(GameTheme.allCases) { theme in
+                        ThemeUnlockRow(theme: theme)
+                    }
+                    HStack {
+                        Text("rewards.completedMissions")
+                        Spacer()
+                        Text("\(gameState.completedMissionCount)")
+                            .fontWeight(.bold)
+                            .monospacedDigit()
+                    }
+                }
+
+                Section("settings.theme.quick") {
                     Picker("settings.theme", selection: $gameState.selectedTheme) {
                         ForEach(GameTheme.allCases) { theme in
-                            Text(theme.titleKey).tag(theme)
+                            Text(theme.titleKey)
+                                .tag(theme)
+                                .disabled(!gameState.isThemeUnlocked(theme))
                         }
                     }
                     .pickerStyle(.segmented)
@@ -568,6 +583,61 @@ private struct SettingsView: View {
                 }
             }
         }
+    }
+}
+
+private struct ThemeUnlockRow: View {
+    @EnvironmentObject private var gameState: GameState
+    let theme: GameTheme
+
+    var body: some View {
+        Button {
+            guard gameState.isThemeUnlocked(theme) else { return }
+            gameState.selectedTheme = theme
+        } label: {
+            HStack(spacing: 12) {
+                LinearGradient(
+                    colors: theme.feverColors,
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .frame(width: 34, height: 34)
+                .clipShape(Circle())
+                .overlay {
+                    Circle().stroke(.white.opacity(0.24), lineWidth: 1)
+                }
+
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(theme.titleKey)
+                        .font(.headline.weight(.bold))
+                    Text(subtitle)
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+
+                Image(systemName: trailingIcon)
+                    .font(.headline.weight(.bold))
+                    .foregroundStyle(gameState.selectedTheme == theme ? gameState.selectedTheme.accentColor : .secondary)
+            }
+        }
+        .buttonStyle(.plain)
+        .disabled(!gameState.isThemeUnlocked(theme))
+    }
+
+    private var subtitle: String {
+        if gameState.isThemeUnlocked(theme) {
+            return NSLocalizedString("rewards.unlocked", comment: "")
+        }
+        return String(format: NSLocalizedString("rewards.unlockAt", comment: ""), theme.unlockRequirement)
+    }
+
+    private var trailingIcon: String {
+        if gameState.selectedTheme == theme {
+            return "checkmark.circle.fill"
+        }
+        return gameState.isThemeUnlocked(theme) ? "circle" : "lock.fill"
     }
 }
 

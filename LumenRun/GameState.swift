@@ -65,14 +65,23 @@ final class GameState: ObservableObject {
     @Published var isHapticsEnabled: Bool {
         didSet { UserDefaults.standard.set(isHapticsEnabled, forKey: hapticsEnabledKey) }
     }
+    @Published private(set) var completedMissionCount: Int
     @Published var selectedTheme: GameTheme {
-        didSet { UserDefaults.standard.set(selectedTheme.rawValue, forKey: selectedThemeKey) }
+        didSet {
+            if !isThemeUnlocked(selectedTheme) {
+                selectedTheme = .aurora
+                return
+            }
+            UserDefaults.standard.set(selectedTheme.rawValue, forKey: selectedThemeKey)
+        }
     }
 
     private let bestScoreKey = "bestScore"
     private let runRecordsKey = "runRecords"
     private let dailyMissionsKey = "dailyMissions"
     private let dailyMissionsDateKey = "dailyMissionsDate"
+    private let completedMissionCountKey = "completedMissionCount"
+    private let rewardedMissionIDsKey = "rewardedMissionIDs"
     private let tutorialKey = "hasSeenTutorial"
     private let soundEnabledKey = "soundEnabled"
     private let hapticsEnabledKey = "hapticsEnabled"
@@ -103,7 +112,12 @@ final class GameState: ObservableObject {
         isPaused = true
         isSoundEnabled = defaults.object(forKey: soundEnabledKey) as? Bool ?? true
         isHapticsEnabled = defaults.object(forKey: hapticsEnabledKey) as? Bool ?? true
+        completedMissionCount = defaults.integer(forKey: completedMissionCountKey)
         selectedTheme = GameTheme(rawValue: defaults.string(forKey: selectedThemeKey) ?? "") ?? .aurora
+        if selectedTheme.unlockRequirement > completedMissionCount {
+            selectedTheme = .aurora
+        }
+        updateMissionRewards()
     }
 
     func reset() {
@@ -285,6 +299,10 @@ final class GameState: ObservableObject {
         UserDefaults.standard.removeObject(forKey: runRecordsKey)
     }
 
+    func isThemeUnlocked(_ theme: GameTheme) -> Bool {
+        completedMissionCount >= theme.unlockRequirement
+    }
+
     func refreshDailyMissionsIfNeeded() {
         let defaults = UserDefaults.standard
         let today = Self.todayKey()
@@ -326,6 +344,7 @@ final class GameState: ObservableObject {
         }
         if didChange {
             saveDailyMissions()
+            updateMissionRewards()
         }
     }
 
@@ -341,7 +360,24 @@ final class GameState: ObservableObject {
         }
         if didChange {
             saveDailyMissions()
+            updateMissionRewards()
         }
+    }
+
+    private func updateMissionRewards() {
+        let defaults = UserDefaults.standard
+        var rewardedIDs = Set(defaults.stringArray(forKey: rewardedMissionIDsKey) ?? [])
+        var newlyCompletedCount = 0
+
+        for mission in dailyMissions where mission.isCompleted && !rewardedIDs.contains(mission.id) {
+            rewardedIDs.insert(mission.id)
+            newlyCompletedCount += 1
+        }
+
+        guard newlyCompletedCount > 0 else { return }
+        completedMissionCount += newlyCompletedCount
+        defaults.set(completedMissionCount, forKey: completedMissionCountKey)
+        defaults.set(Array(rewardedIDs), forKey: rewardedMissionIDsKey)
     }
 
     private func saveDailyMissions() {

@@ -31,6 +31,7 @@
 - Add daily or weekly challenge goals to create reasons to return.
 - Daily missions should work offline and rotate by local calendar day.
 - Add lightweight unlocks such as themes, player core skins, trail effects, or title badges.
+- Theme unlocks should be driven by total completed daily missions and remain available offline.
 
 ## Release Quality
 - Maintain App Store readiness: signing, bundle id, privacy manifest, localization, and stable device testing.
