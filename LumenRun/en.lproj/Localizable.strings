@@ -51,6 +51,12 @@
 "records.empty" = "No runs recorded yet.";
 "records.reset" = "Reset Run History";
 
+"missions.title" = "Daily Missions";
+"missions.score" = "Reach %d points";
+"missions.sparks" = "Collect %d sparks";
+"missions.fever" = "Trigger Fever %d times";
+"missions.shields" = "Pick up %d shields";
+
 "theme.aurora" = "Neon Tide";
 "theme.solar" = "Solar Rift";
 "theme.mono" = "Ghost Signal";

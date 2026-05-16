@@ -29,6 +29,7 @@
 - Add achievements for first run milestones, fever mastery, shield saves, score thresholds, and daily play streaks.
 - Add a clear post-game results screen that shows score, best score, rank/percentile when available, earned achievements, and a strong retry call-to-action.
 - Add daily or weekly challenge goals to create reasons to return.
+- Daily missions should work offline and rotate by local calendar day.
 - Add lightweight unlocks such as themes, player core skins, trail effects, or title badges.
 
 ## Release Quality

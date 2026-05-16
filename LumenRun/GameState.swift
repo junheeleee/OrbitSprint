@@ -7,10 +7,33 @@ struct RunRecord: Codable, Identifiable, Equatable {
     let date: Date
 }
 
+enum MissionKind: String, Codable, CaseIterable {
+    case score
+    case sparks
+    case fever
+    case shields
+}
+
+struct DailyMission: Codable, Identifiable, Equatable {
+    let id: String
+    let kind: MissionKind
+    let target: Int
+    var progress: Int
+
+    var isCompleted: Bool {
+        progress >= target
+    }
+
+    var clampedProgress: Int {
+        min(progress, target)
+    }
+}
+
 final class GameState: ObservableObject {
     @Published var score = 0
     @Published var bestScore: Int
     @Published private(set) var runRecords: [RunRecord]
+    @Published private(set) var dailyMissions: [DailyMission]
     @Published var combo = 0
     @Published var multiplier = 1
     @Published var level = 1
@@ -48,6 +71,8 @@ final class GameState: ObservableObject {
 
     private let bestScoreKey = "bestScore"
     private let runRecordsKey = "runRecords"
+    private let dailyMissionsKey = "dailyMissions"
+    private let dailyMissionsDateKey = "dailyMissionsDate"
     private let tutorialKey = "hasSeenTutorial"
     private let soundEnabledKey = "soundEnabled"
     private let hapticsEnabledKey = "hapticsEnabled"
@@ -73,6 +98,7 @@ final class GameState: ObservableObject {
         let defaults = UserDefaults.standard
         bestScore = defaults.integer(forKey: bestScoreKey)
         runRecords = Self.loadRunRecords(from: defaults, key: runRecordsKey)
+        dailyMissions = Self.loadDailyMissions(from: defaults, missionsKey: dailyMissionsKey, dateKey: dailyMissionsDateKey)
         hasSeenTutorial = defaults.bool(forKey: tutorialKey)
         isPaused = true
         isSoundEnabled = defaults.object(forKey: soundEnabledKey) as? Bool ?? true
@@ -115,6 +141,7 @@ final class GameState: ObservableObject {
             if combo >= feverComboThreshold {
                 combo = 0
                 feverRemaining = feverDuration
+                advanceMission(.fever, by: 1)
                 SoundPlayer.feverStart(enabled: isSoundEnabled)
                 SoundPlayer.setFeverActive(true, enabled: isSoundEnabled)
             }
@@ -124,6 +151,8 @@ final class GameState: ObservableObject {
         score += multiplier + (isFeverActive ? 1 : 0)
         level = max(1, score / 15 + 1)
         SoundPlayer.lumen(enabled: isSoundEnabled)
+        advanceMission(.sparks, by: 1)
+        updateScoreMission()
         updateBestScore()
     }
 
@@ -132,6 +161,7 @@ final class GameState: ObservableObject {
         score += max(3, multiplier + 2)
         level = max(1, score / 15 + 1)
         SoundPlayer.lumen(enabled: isSoundEnabled)
+        updateScoreMission()
         updateBestScore()
     }
 
@@ -154,6 +184,7 @@ final class GameState: ObservableObject {
             shieldTimeRemaining = shieldDuration
         }
         SoundPlayer.shield(enabled: isSoundEnabled)
+        advanceMission(.shields, by: 1)
     }
 
     func consumeShield() -> Bool {
@@ -195,6 +226,7 @@ final class GameState: ObservableObject {
         isGameOver = true
         let finalScore = score
         feverRemaining = 0
+        updateScoreMission()
         recordRun(score: finalScore, level: level)
         updatePauseState()
         SoundPlayer.crash(enabled: isSoundEnabled)
@@ -253,6 +285,15 @@ final class GameState: ObservableObject {
         UserDefaults.standard.removeObject(forKey: runRecordsKey)
     }
 
+    func refreshDailyMissionsIfNeeded() {
+        let defaults = UserDefaults.standard
+        let today = Self.todayKey()
+        if defaults.string(forKey: dailyMissionsDateKey) != today {
+            dailyMissions = Self.generateDailyMissions(for: today)
+            saveDailyMissions()
+        }
+    }
+
     private func recordRun(score: Int, level: Int) {
         guard score > 0 else { return }
         let record = RunRecord(id: UUID(), score: score, level: level, date: Date())
@@ -273,6 +314,42 @@ final class GameState: ObservableObject {
         UserDefaults.standard.set(data, forKey: runRecordsKey)
     }
 
+    private func advanceMission(_ kind: MissionKind, by amount: Int) {
+        refreshDailyMissionsIfNeeded()
+        var didChange = false
+        for index in dailyMissions.indices where dailyMissions[index].kind == kind {
+            let nextProgress = min(dailyMissions[index].target, dailyMissions[index].progress + amount)
+            if nextProgress != dailyMissions[index].progress {
+                dailyMissions[index].progress = nextProgress
+                didChange = true
+            }
+        }
+        if didChange {
+            saveDailyMissions()
+        }
+    }
+
+    private func updateScoreMission() {
+        refreshDailyMissionsIfNeeded()
+        var didChange = false
+        for index in dailyMissions.indices where dailyMissions[index].kind == .score {
+            let nextProgress = min(dailyMissions[index].target, max(dailyMissions[index].progress, score))
+            if nextProgress != dailyMissions[index].progress {
+                dailyMissions[index].progress = nextProgress
+                didChange = true
+            }
+        }
+        if didChange {
+            saveDailyMissions()
+        }
+    }
+
+    private func saveDailyMissions() {
+        guard let data = try? JSONEncoder().encode(dailyMissions) else { return }
+        UserDefaults.standard.set(data, forKey: dailyMissionsKey)
+        UserDefaults.standard.set(Self.todayKey(), forKey: dailyMissionsDateKey)
+    }
+
     private static func loadRunRecords(from defaults: UserDefaults, key: String) -> [RunRecord] {
         guard
             let data = defaults.data(forKey: key),
@@ -282,6 +359,55 @@ final class GameState: ObservableObject {
         }
 
         return Array(records.prefix(30))
+    }
+
+    private static func loadDailyMissions(from defaults: UserDefaults, missionsKey: String, dateKey: String) -> [DailyMission] {
+        let today = todayKey()
+        guard
+            defaults.string(forKey: dateKey) == today,
+            let data = defaults.data(forKey: missionsKey),
+            let missions = try? JSONDecoder().decode([DailyMission].self, from: data),
+            !missions.isEmpty
+        else {
+            let generated = generateDailyMissions(for: today)
+            if let data = try? JSONEncoder().encode(generated) {
+                defaults.set(data, forKey: missionsKey)
+                defaults.set(today, forKey: dateKey)
+            }
+            return generated
+        }
+
+        return missions
+    }
+
+    private static func generateDailyMissions(for dayKey: String) -> [DailyMission] {
+        let seed = abs(dayKey.unicodeScalars.reduce(0) { ($0 * 31 + Int($1.value)) % 10_000 })
+        let scoreTarget = [40, 60, 80, 100][seed % 4]
+        let sparkTarget = [18, 24, 30, 36][seed % 4]
+        let feverTarget = [1, 2, 2, 3][seed % 4]
+        let shieldTarget = [1, 2, 3, 3][seed % 4]
+        let pool: [(MissionKind, Int)] = [
+            (.score, scoreTarget),
+            (.sparks, sparkTarget),
+            (.fever, feverTarget),
+            (.shields, shieldTarget)
+        ]
+
+        let startIndex = seed % pool.count
+        return (0..<3).map { offset in
+            let item = pool[(startIndex + offset) % pool.count]
+            return DailyMission(
+                id: "\(dayKey)-\(item.0.rawValue)",
+                kind: item.0,
+                target: item.1,
+                progress: 0
+            )
+        }
+    }
+
+    private static func todayKey() -> String {
+        let components = Calendar.current.dateComponents([.year, .month, .day], from: Date())
+        return "\(components.year ?? 0)-\(components.month ?? 0)-\(components.day ?? 0)"
     }
 
     private func updatePauseState() {

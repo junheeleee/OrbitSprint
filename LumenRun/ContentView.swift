@@ -59,6 +59,7 @@ struct ContentView: View {
             if scene == nil {
                 scene = makeScene()
             }
+            gameState.refreshDailyMissionsIfNeeded()
             SoundPlayer.setMusicEnabled(gameState.isSoundEnabled)
             scheduleLoadingFinish()
         }
@@ -315,6 +316,8 @@ private struct StartView: View {
                 TutorialRow(icon: "flame.fill", text: "tutorial.step.fever")
             }
 
+            DailyMissionsPanel()
+
             Button(action: start) {
                 Label("start.play", systemImage: "play.fill")
                     .font(.headline.weight(.bold))
@@ -452,6 +455,8 @@ private struct GameOverView: View {
                 }
             }
 
+            DailyMissionsPanel(isCompact: true)
+
             Button(action: showRecords) {
                 Label("records.title", systemImage: "chart.bar.fill")
                     .font(.headline.weight(.bold))
@@ -523,6 +528,12 @@ private struct SettingsView: View {
                     }
                 }
 
+                Section("missions.title") {
+                    ForEach(gameState.dailyMissions) { mission in
+                        MissionRow(mission: mission)
+                    }
+                }
+
                 Section("gamecenter.title") {
                     HStack {
                         Text("gamecenter.status")
@@ -556,6 +567,84 @@ private struct SettingsView: View {
                     }
                 }
             }
+        }
+    }
+}
+
+private struct DailyMissionsPanel: View {
+    @EnvironmentObject private var gameState: GameState
+    var isCompact = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Label("missions.title", systemImage: "target")
+                .font(.caption.weight(.black))
+                .foregroundStyle(Color(red: 0.0, green: 0.92, blue: 0.82))
+
+            VStack(spacing: isCompact ? 7 : 9) {
+                ForEach(gameState.dailyMissions) { mission in
+                    MissionRow(mission: mission)
+                }
+            }
+        }
+        .padding(12)
+        .background(.black.opacity(0.16), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+    }
+}
+
+private struct MissionRow: View {
+    let mission: DailyMission
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 5) {
+            HStack(spacing: 8) {
+                Image(systemName: mission.isCompleted ? "checkmark.seal.fill" : iconName)
+                    .foregroundStyle(mission.isCompleted ? Color(red: 0.52, green: 1.0, blue: 0.72) : Color(red: 1.0, green: 0.82, blue: 0.28))
+                    .frame(width: 18)
+
+                Text(title)
+                    .font(.caption.weight(.bold))
+                    .foregroundStyle(.white.opacity(0.86))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.78)
+
+                Spacer(minLength: 8)
+
+                Text("\(mission.clampedProgress)/\(mission.target)")
+                    .font(.caption2.weight(.black))
+                    .foregroundStyle(.white.opacity(0.7))
+                    .monospacedDigit()
+            }
+
+            ProgressView(value: Double(mission.clampedProgress), total: Double(mission.target))
+                .tint(mission.isCompleted ? Color(red: 0.52, green: 1.0, blue: 0.72) : Color(red: 0.0, green: 0.92, blue: 0.82))
+                .scaleEffect(x: 1, y: 0.7, anchor: .center)
+        }
+    }
+
+    private var title: String {
+        switch mission.kind {
+        case .score:
+            return String(format: NSLocalizedString("missions.score", comment: ""), mission.target)
+        case .sparks:
+            return String(format: NSLocalizedString("missions.sparks", comment: ""), mission.target)
+        case .fever:
+            return String(format: NSLocalizedString("missions.fever", comment: ""), mission.target)
+        case .shields:
+            return String(format: NSLocalizedString("missions.shields", comment: ""), mission.target)
+        }
+    }
+
+    private var iconName: String {
+        switch mission.kind {
+        case .score:
+            return "flag.checkered"
+        case .sparks:
+            return "sparkles"
+        case .fever:
+            return "flame.fill"
+        case .shields:
+            return "shield.fill"
         }
     }
 }

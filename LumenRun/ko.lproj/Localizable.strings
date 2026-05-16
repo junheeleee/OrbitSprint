@@ -51,6 +51,12 @@
 "records.empty" = "아직 기록된 런이 없습니다.";
 "records.reset" = "런 기록 초기화";
 
+"missions.title" = "오늘의 미션";
+"missions.score" = "%d점 도달";
+"missions.sparks" = "루멘 %d개 수집";
+"missions.fever" = "피버 %d회 발동";
+"missions.shields" = "실드 %d개 획득";
+
 "theme.aurora" = "네온 타이드";
 "theme.solar" = "솔라 리프트";
 "theme.mono" = "고스트 시그널";
