@@ -1057,55 +1057,54 @@ private struct RewardShowcasePanel: View {
                 .font(.caption2.weight(.semibold))
                 .foregroundStyle(.white.opacity(0.58))
 
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 10) {
-                    ForEach(GameTheme.allCases) { theme in
-                        let isUnlocked = gameState.isThemeUnlocked(theme)
-                        let isSelected = gameState.selectedTheme == theme
-                        RewardPreviewCard(
-                            title: theme.titleKey,
-                            subtitle: rewardSubtitle(required: theme.unlockRequirement, isUnlocked: isUnlocked, isSelected: isSelected),
-                            isUnlocked: isUnlocked,
-                            isSelected: isSelected,
-                            onSelect: {
-                                if isUnlocked {
-                                    gameState.selectedTheme = theme
-                                }
+            RewardCategoryRow(title: "settings.theme", icon: "paintpalette.fill") {
+                ForEach(GameTheme.allCases) { theme in
+                    let isUnlocked = gameState.isThemeUnlocked(theme)
+                    let isSelected = gameState.selectedTheme == theme
+                    RewardPreviewCard(
+                        title: theme.titleKey,
+                        subtitle: rewardSubtitle(required: theme.unlockRequirement, isUnlocked: isUnlocked, isSelected: isSelected),
+                        isUnlocked: isUnlocked,
+                        isSelected: isSelected,
+                        onSelect: {
+                            if isUnlocked {
+                                gameState.selectedTheme = theme
                             }
-                        ) {
-                            LinearGradient(
-                                colors: theme.feverColors,
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
                         }
+                    ) {
+                        LinearGradient(
+                            colors: theme.feverColors,
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
                     }
+                }
+            }
 
-                    ForEach(CoreSkin.allCases) { skin in
-                        let isUnlocked = gameState.isCoreSkinUnlocked(skin)
-                        let isSelected = gameState.selectedCoreSkin == skin
-                        RewardPreviewCard(
-                            title: skin.titleKey,
-                            subtitle: rewardSubtitle(required: skin.unlockRequirement, isUnlocked: isUnlocked, isSelected: isSelected),
-                            isUnlocked: isUnlocked,
-                            isSelected: isSelected,
-                            onSelect: {
-                                if isUnlocked {
-                                    gameState.selectedCoreSkin = skin
-                                }
+            RewardCategoryRow(title: "settings.skin", icon: "circle.hexagongrid.fill") {
+                ForEach(CoreSkin.allCases) { skin in
+                    let isUnlocked = gameState.isCoreSkinUnlocked(skin)
+                    let isSelected = gameState.selectedCoreSkin == skin
+                    RewardPreviewCard(
+                        title: skin.titleKey,
+                        subtitle: rewardSubtitle(required: skin.unlockRequirement, isUnlocked: isUnlocked, isSelected: isSelected),
+                        isUnlocked: isUnlocked,
+                        isSelected: isSelected,
+                        onSelect: {
+                            if isUnlocked {
+                                gameState.selectedCoreSkin = skin
                             }
-                        ) {
-                            ZStack {
-                                Circle()
-                                    .fill(gameState.selectedTheme.accentColor.opacity(0.22))
-                                Image(systemName: skin.iconName)
-                                    .font(.system(size: 28, weight: .black))
-                                    .foregroundStyle(gameState.selectedTheme.accentColor)
-                            }
+                        }
+                    ) {
+                        ZStack {
+                            Circle()
+                                .fill(gameState.selectedTheme.accentColor.opacity(0.22))
+                            Image(systemName: skin.iconName)
+                                .font(.system(size: 28, weight: .black))
+                                .foregroundStyle(gameState.selectedTheme.accentColor)
                         }
                     }
                 }
-                .padding(.vertical, 2)
             }
         }
         .padding(12)
@@ -1121,6 +1120,27 @@ private struct RewardShowcasePanel: View {
         }
         let remaining = max(0, required - gameState.completedMissionCount)
         return String(format: NSLocalizedString("rewards.remaining", comment: ""), remaining)
+    }
+}
+
+private struct RewardCategoryRow<Content: View>: View {
+    let title: LocalizedStringKey
+    let icon: String
+    @ViewBuilder let content: () -> Content
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 7) {
+            Label(title, systemImage: icon)
+                .font(.caption2.weight(.black))
+                .foregroundStyle(.white.opacity(0.76))
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 10) {
+                    content()
+                }
+                .padding(.vertical, 2)
+            }
+        }
     }
 }
 

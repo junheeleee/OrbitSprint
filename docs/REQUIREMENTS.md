@@ -40,6 +40,7 @@
 - Core skin unlocks should be driven by total completed daily missions and change the in-run player shape.
 - Locked rewards should be previewable before unlock so players can see future goals and feel motivated to chase them.
 - Unlocked rewards should be equipable directly from the start-screen reward preview without visiting settings.
+- Reward previews should be visually grouped by reward type, such as themes and core skins, so players understand multiple cosmetic slots.
 
 ## Release Quality
 - Maintain App Store readiness: signing, bundle id, privacy manifest, localization, and stable device testing.

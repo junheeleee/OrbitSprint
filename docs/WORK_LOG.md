@@ -1,6 +1,7 @@
 # Lumen Run Work Log
 
 ## 2026-05-16
+- Grouped reward preview cards by reward type so themes and core skins are visually distinct.
 - Made unlocked reward preview cards tappable so players can equip themes and core skins directly from the start/post-game screens.
 - Added a reward preview showcase on start and post-game screens for locked and unlocked themes/core skins.
 - Added unlockable player core skins tied to cumulative daily mission completions.
