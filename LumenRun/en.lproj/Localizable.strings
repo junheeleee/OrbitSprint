@@ -67,7 +67,9 @@
 "missions.shields" = "Pick up %d shields";
 
 "achievements.title" = "Achievements";
+"achievements.all" = "All Achievements";
 "achievements.unlocked" = "Unlocked Achievements";
+"achievements.locked" = "Locked";
 "achievements.toast" = "Achievement Unlocked";
 "achievements.firstRun.title" = "First Run";
 "achievements.firstRun.desc" = "Complete one run.";

@@ -1,6 +1,7 @@
 # Lumen Run Work Log
 
 ## 2026-05-16
+- Clarified the achievements list as an all-achievements view with locked/unlocked status badges.
 - Added non-blocking achievement unlock toast feedback during gameplay.
 - Fixed the post-game results overlay so it scrolls on smaller device screens.
 - Added offline achievements with persistent progress for runs, fever, score milestones, shields, new bests, and daily mission sweep.

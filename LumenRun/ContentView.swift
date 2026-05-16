@@ -742,7 +742,7 @@ private struct SettingsView: View {
 
                 Section("achievements.title") {
                     HStack {
-                        Text("achievements.unlocked")
+                        Text("achievements.all")
                         Spacer()
                         Text("\(gameState.completedAchievementCount)/\(AchievementDefinition.all.count)")
                             .fontWeight(.bold)
@@ -808,11 +808,9 @@ private struct AchievementRow: View {
                 HStack {
                     Text(LocalizedStringKey(achievement.titleKey))
                         .font(.headline.weight(.bold))
+                        .foregroundStyle(isUnlocked ? .primary : .secondary)
                     Spacer()
-                    Text("\(progress)/\(achievement.target)")
-                        .font(.caption.weight(.black))
-                        .foregroundStyle(.secondary)
-                        .monospacedDigit()
+                    AchievementStatusBadge(isUnlocked: isUnlocked)
                 }
 
                 Text(LocalizedStringKey(achievement.descriptionKey))
@@ -821,9 +819,34 @@ private struct AchievementRow: View {
 
                 ProgressView(value: Double(progress), total: Double(achievement.target))
                     .tint(isUnlocked ? Color(red: 0.52, green: 1.0, blue: 0.72) : Color(red: 0.0, green: 0.92, blue: 0.82))
+
+                Text("\(progress)/\(achievement.target)")
+                    .font(.caption2.weight(.black))
+                    .foregroundStyle(.secondary)
+                    .monospacedDigit()
             }
         }
         .padding(.vertical, 3)
+    }
+}
+
+private struct AchievementStatusBadge: View {
+    let isUnlocked: Bool
+
+    var body: some View {
+        Label(
+            isUnlocked ? "rewards.unlocked" : "achievements.locked",
+            systemImage: isUnlocked ? "checkmark.seal.fill" : "lock.fill"
+        )
+        .font(.caption2.weight(.black))
+        .labelStyle(.titleAndIcon)
+        .foregroundStyle(isUnlocked ? Color(red: 0.52, green: 1.0, blue: 0.72) : .secondary)
+        .padding(.horizontal, 8)
+        .padding(.vertical, 4)
+        .background(
+            Capsule()
+                .fill(isUnlocked ? Color(red: 0.52, green: 1.0, blue: 0.72).opacity(0.12) : Color.secondary.opacity(0.12))
+        )
     }
 }
 
