@@ -1,6 +1,7 @@
 # Lumen Run Work Log
 
 ## 2026-05-17
+- Reduced Fever-mode stutter risk by throttling full-screen flashes, lowering burst particle counts, capping fever effect nodes, and spacing rapid score sounds.
 - Replaced pattern-name popups with non-text orbit pulse telegraphs so pattern changes feel more integrated into play.
 - Added the first pattern-based run pacing system with Sync Flow, Gate Wave, Switchback, Lumen Rush, and Overdrive phases.
 - Reprioritized the roadmap around gameplay depth: stage-like pacing, readable obstacle patterns, and strategic risk/reward routes come before additional cosmetic polish.

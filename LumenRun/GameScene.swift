@@ -46,6 +46,7 @@ final class GameScene: SKScene {
     private var patternIndex = 0
     private var patternStep = 0
     private var currentPattern: RunPattern = .flow
+    private var lastFeverFlashTime: TimeInterval = -10
     private var difficulty: CGFloat = 1
     private var renderedTheme: GameTheme?
     private var renderedCoreSkin: CoreSkin?
@@ -210,6 +211,7 @@ final class GameScene: SKScene {
         patternIndex = 0
         patternStep = 0
         currentPattern = .flow
+        lastFeverFlashTime = -10
         difficulty = 1
         renderedShieldCharges = -1
         renderedFeverActive = state.isFeverActive
@@ -540,8 +542,12 @@ final class GameScene: SKScene {
                     state.collectFeverHit()
                 }
                 Haptics.collect(enabled: state.isHapticsEnabled)
-                emitBurst(at: hitPoint, color: state.isFeverActive ? state.selectedTheme.feverColor : state.selectedTheme.sparkColor, count: state.isFeverActive ? 18 : 9)
-                flash(color: (state.isFeverActive ? state.selectedTheme.feverColor : state.selectedTheme.sparkColor).withAlphaComponent(state.isFeverActive ? 0.28 : 0.16))
+                emitBurst(at: hitPoint, color: state.isFeverActive ? state.selectedTheme.feverColor : state.selectedTheme.sparkColor, count: state.isFeverActive ? 8 : 9)
+                if state.isFeverActive {
+                    throttledFeverFlash(color: state.selectedTheme.feverColor.withAlphaComponent(0.18))
+                } else {
+                    flash(color: state.selectedTheme.sparkColor.withAlphaComponent(0.16))
+                }
             } else if node.name == NodeName.shield {
                 let hitPoint = node.position
                 node.removeFromParent()
@@ -571,8 +577,8 @@ final class GameScene: SKScene {
                     comboTimer = 0
                     state.collectFeverHit()
                     Haptics.collect(enabled: state.isHapticsEnabled)
-                    emitBurst(at: hitPoint, color: state.selectedTheme.feverColor, count: 24)
-                    flash(color: state.selectedTheme.feverColor.withAlphaComponent(0.24))
+                    emitBurst(at: hitPoint, color: state.selectedTheme.feverColor, count: 10)
+                    throttledFeverFlash(color: state.selectedTheme.feverColor.withAlphaComponent(0.18))
                     continue
                 }
                 guard elapsedTime > safeUntil else {
@@ -727,20 +733,30 @@ final class GameScene: SKScene {
         node.run(.sequence([.fadeOut(withDuration: 0.16), .removeFromParent()]))
     }
 
+    private func throttledFeverFlash(color: SKColor) {
+        guard elapsedTime - lastFeverFlashTime > 0.18 else { return }
+        lastFeverFlashTime = elapsedTime
+        flash(color: color)
+    }
+
     private func emitBurst(at position: CGPoint, color: SKColor, count: Int) {
+        if state.isFeverActive, effectLayer.children.count > 70 {
+            return
+        }
+
         for index in 0..<count {
             let mote = SKShapeNode(circleOfRadius: CGFloat.random(in: 2.0...4.2))
             mote.position = position
             mote.fillColor = color.withAlphaComponent(0.9)
             mote.strokeColor = .white.withAlphaComponent(0.35)
             mote.lineWidth = 1
-            mote.glowWidth = state.isFeverActive ? 8 : 4
+            mote.glowWidth = state.isFeverActive ? 4 : 4
             mote.zPosition = 12
             effectLayer.addChild(mote)
 
             let angle = CGFloat(index) / CGFloat(max(count, 1)) * 2 * .pi + CGFloat.random(in: -0.22...0.22)
-            let distance = CGFloat.random(in: state.isFeverActive ? 42...86 : 24...54)
-            let duration = TimeInterval(CGFloat.random(in: 0.28...0.48))
+            let distance = CGFloat.random(in: state.isFeverActive ? 32...64 : 24...54)
+            let duration = TimeInterval(CGFloat.random(in: state.isFeverActive ? 0.2...0.34 : 0.28...0.48))
             mote.run(.sequence([
                 .group([
                     .moveBy(x: cos(angle) * distance, y: sin(angle) * distance, duration: duration),

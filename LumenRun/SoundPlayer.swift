@@ -5,6 +5,7 @@ enum SoundPlayer {
     private static var musicPlayer: AVAudioPlayer?
     private static var feverMusicPlayer: AVAudioPlayer?
     private static var isFeverActive = false
+    private static var lastPlayTimes: [String: TimeInterval] = [:]
 
     static func configure() {
         try? AVAudioSession.sharedInstance().setCategory(.ambient, mode: .default, options: [])
@@ -112,7 +113,25 @@ enum SoundPlayer {
     private static func play(_ name: String, enabled: Bool) {
         guard enabled else { return }
         guard let player = players[name] else { return }
+        guard canPlay(name) else { return }
+        lastPlayTimes[name] = ProcessInfo.processInfo.systemUptime
         player.currentTime = 0
         player.play()
+    }
+
+    private static func canPlay(_ name: String) -> Bool {
+        let now = ProcessInfo.processInfo.systemUptime
+        let minimumInterval: TimeInterval
+        switch name {
+        case "lumen":
+            minimumInterval = isFeverActive ? 0.07 : 0.035
+        case "tap":
+            minimumInterval = 0.035
+        default:
+            minimumInterval = 0
+        }
+
+        guard minimumInterval > 0 else { return true }
+        return now - (lastPlayTimes[name] ?? -10) >= minimumInterval
     }
 }
