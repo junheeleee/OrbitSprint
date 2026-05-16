@@ -103,13 +103,16 @@ struct ContentView: View {
             }
 
             if gameState.isGameOver {
-                GameOverView {
-                    gameState.reset()
-                    scene = makeScene()
-                } showRecords: {
-                    isRecordsPresented = true
+                ScrollView(.vertical, showsIndicators: true) {
+                    GameOverView {
+                        gameState.reset()
+                        scene = makeScene()
+                    } showRecords: {
+                        isRecordsPresented = true
+                    }
+                    .padding(24)
                 }
-                .padding(24)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .transition(.scale.combined(with: .opacity))
             }
 
