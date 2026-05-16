@@ -1,6 +1,29 @@
 import SpriteKit
 
 final class GameScene: SKScene {
+    private enum RunPattern: CaseIterable {
+        case flow
+        case gate
+        case switchback
+        case harvest
+        case overdrive
+
+        var titleKey: String {
+            switch self {
+            case .flow:
+                return "pattern.flow"
+            case .gate:
+                return "pattern.gate"
+            case .switchback:
+                return "pattern.switchback"
+            case .harvest:
+                return "pattern.harvest"
+            case .overdrive:
+                return "pattern.overdrive"
+            }
+        }
+    }
+
     private enum NodeName {
         static let player = "player"
         static let shard = "shard"
@@ -32,6 +55,12 @@ final class GameScene: SKScene {
     private var sparkTimer: TimeInterval = 0
     private var powerUpTimer: TimeInterval = 0
     private var comboTimer: TimeInterval = 0
+    private var patternTimer: TimeInterval = 0
+    private var patternWaveTimer: TimeInterval = 0
+    private var patternDuration: TimeInterval = 8.5
+    private var patternIndex = 0
+    private var patternStep = 0
+    private var currentPattern: RunPattern = .flow
     private var difficulty: CGFloat = 1
     private var renderedTheme: GameTheme?
     private var renderedCoreSkin: CoreSkin?
@@ -131,21 +160,16 @@ final class GameScene: SKScene {
         sparkTimer += delta
         powerUpTimer += delta
         comboTimer += delta
+        patternTimer += delta
+        patternWaveTimer += delta
         state.tick(delta: delta)
 
         if comboTimer > max(1.45, 2.4 - Double(state.level) * 0.08) {
             state.breakCombo()
         }
 
-        if elapsedTime > safeUntil, spawnTimer > max(0.62, 1.42 - Double(state.level) * 0.052) {
-            spawnShard()
-            spawnTimer = 0
-        }
-
-        if elapsedTime > 0.45, sparkTimer > max(0.58, 0.92 - Double(state.level) * 0.018) {
-            spawnSpark()
-            sparkTimer = 0
-        }
+        updateRunPattern()
+        updatePatternSpawns()
 
         if powerUpTimer > max(4.2, 8.2 - Double(state.level) * 0.24) {
             spawnPowerUp()
@@ -195,6 +219,12 @@ final class GameScene: SKScene {
         sparkTimer = 0
         powerUpTimer = 0
         comboTimer = 0
+        patternTimer = 0
+        patternWaveTimer = 0
+        patternDuration = 8.5
+        patternIndex = 0
+        patternStep = 0
+        currentPattern = .flow
         difficulty = 1
         renderedShieldCharges = -1
         renderedFeverActive = state.isFeverActive
@@ -285,10 +315,148 @@ final class GameScene: SKScene {
         }
     }
 
+    private func updateRunPattern() {
+        guard elapsedTime > safeUntil + 2 else { return }
+        guard patternTimer >= patternDuration else { return }
+
+        patternIndex += 1
+        let sequence = availablePatternSequence()
+        currentPattern = sequence[patternIndex % sequence.count]
+        patternTimer = 0
+        patternWaveTimer = 0
+        patternStep = 0
+        patternDuration = max(6.8, 10.5 - Double(state.level) * 0.18)
+        showPatternBanner(currentPattern)
+    }
+
+    private func availablePatternSequence() -> [RunPattern] {
+        if state.level < 3 {
+            return [.flow, .harvest, .gate]
+        }
+        if state.level < 7 {
+            return [.flow, .gate, .harvest, .switchback]
+        }
+        return [.gate, .switchback, .harvest, .overdrive]
+    }
+
+    private func updatePatternSpawns() {
+        guard elapsedTime > safeUntil else { return }
+
+        switch currentPattern {
+        case .flow:
+            if spawnTimer > max(0.62, 1.42 - Double(state.level) * 0.052) {
+                spawnShard()
+                spawnTimer = 0
+            }
+            if elapsedTime > 0.45, sparkTimer > max(0.58, 0.92 - Double(state.level) * 0.018) {
+                spawnSpark()
+                sparkTimer = 0
+            }
+        case .gate:
+            if spawnTimer > max(1.05, 1.72 - Double(state.level) * 0.045) {
+                spawnGateWave()
+                spawnTimer = 0
+            }
+            if sparkTimer > max(0.72, 1.15 - Double(state.level) * 0.02) {
+                spawnSpark()
+                sparkTimer = 0
+            }
+        case .switchback:
+            if patternWaveTimer > max(0.62, 0.95 - Double(state.level) * 0.022) {
+                spawnSwitchbackStep()
+                patternWaveTimer = 0
+            }
+            if sparkTimer > max(0.72, 1.05 - Double(state.level) * 0.018) {
+                spawnSpark()
+                sparkTimer = 0
+            }
+        case .harvest:
+            if sparkTimer > max(0.34, 0.58 - Double(state.level) * 0.01) {
+                spawnSparkTrail()
+                sparkTimer = 0
+            }
+            if spawnTimer > max(1.45, 2.15 - Double(state.level) * 0.04) {
+                spawnShard()
+                spawnTimer = 0
+            }
+        case .overdrive:
+            if spawnTimer > max(0.5, 0.95 - Double(state.level) * 0.025) {
+                spawnShard()
+                spawnTimer = 0
+            }
+            if sparkTimer > max(0.48, 0.78 - Double(state.level) * 0.014) {
+                spawnSpark()
+                sparkTimer = 0
+            }
+        }
+    }
+
+    private func spawnGateWave() {
+        let safeIndex = reachableSafeLaneIndex()
+        let waveAngle = nextPlayableSpawnAngle(minLead: 1.06, maxLead: 1.62)
+        for index in orbitRadii.indices where index != safeIndex {
+            spawnShard(on: orbitRadii[index], near: waveAngle + CGFloat.random(in: -0.04...0.04), rewardChance: 0, allowParallel: true)
+        }
+        spawnSpark(on: orbitRadii[safeIndex], near: waveAngle + CGFloat.random(in: -0.08...0.08))
+    }
+
+    private func spawnSwitchbackStep() {
+        let laneSequence = [0, 1, 2, 1]
+        let laneIndex = laneSequence[patternStep % laneSequence.count]
+        let radius = orbitRadii[laneIndex]
+        let spawnAngle = nextThreatSpawnAngle(on: radius, minLead: 0.82, maxLead: 1.42)
+        spawnShard(on: radius, near: spawnAngle, rewardChance: patternStep.isMultiple(of: 2) ? 0.45 : 0.18, allowParallel: false)
+        patternStep += 1
+    }
+
+    private func spawnSparkTrail() {
+        let baseAngle = nextPlayableSpawnAngle(minLead: 0.66, maxLead: 1.9)
+        let startIndex = Int.random(in: orbitRadii.indices)
+        let direction = Bool.random() ? 1 : -1
+        for offset in 0..<3 {
+            let rawIndex = startIndex + offset * direction + orbitRadii.count
+            let index = rawIndex % orbitRadii.count
+            spawnSpark(on: orbitRadii[index], near: baseAngle + CGFloat(offset) * 0.18)
+        }
+    }
+
+    private func reachableSafeLaneIndex() -> Int {
+        min(max(currentOrbitIndex + orbitStepDirection, orbitRadii.startIndex), orbitRadii.index(before: orbitRadii.endIndex))
+    }
+
+    private func showPatternBanner(_ pattern: RunPattern) {
+        let label = SKLabelNode(text: NSLocalizedString(pattern.titleKey, comment: ""))
+        label.fontName = "AvenirNext-Heavy"
+        label.fontSize = 24
+        label.fontColor = state.selectedTheme.sparkColor
+        label.position = CGPoint(x: center.x, y: center.y + (orbitRadii.last ?? 148) + 46)
+        label.zPosition = 32
+        label.alpha = 0
+        label.setScale(0.8)
+        addChild(label)
+
+        label.run(.sequence([
+            .group([
+                .fadeIn(withDuration: 0.12),
+                .scale(to: 1.0, duration: 0.18)
+            ]),
+            .wait(forDuration: 0.82),
+            .group([
+                .fadeOut(withDuration: 0.28),
+                .moveBy(x: 0, y: 12, duration: 0.28)
+            ]),
+            .removeFromParent()
+        ]))
+    }
+
     private func spawnShard() {
         let radius = chooseThreatRadius()
         let spawnAngle = nextThreatSpawnAngle(on: radius, minLead: 0.95, maxLead: 1.78)
-        guard canSpawnThreat(at: spawnAngle) else { return }
+        spawnShard(on: radius, near: spawnAngle, rewardChance: 0.58, allowParallel: false)
+    }
+
+    private func spawnShard(on radius: CGFloat, near spawnAngle: CGFloat, rewardChance: CGFloat, allowParallel: Bool) {
+        guard canSpawnThreat(at: spawnAngle, on: radius, allowParallel: allowParallel) else { return }
 
         let node = SKShapeNode(path: diamondPath(radius: 17))
         node.name = NodeName.shard
@@ -305,7 +473,7 @@ final class GameScene: SKScene {
         node.run(.repeatForever(spin))
         node.run(.sequence([.wait(forDuration: 6.0), .fadeOut(withDuration: 0.25), .removeFromParent()]))
 
-        if CGFloat.random(in: 0...1) < 0.58 {
+        if CGFloat.random(in: 0...1) < rewardChance {
             spawnSpark(on: rewardRadius(awayFrom: radius), near: spawnAngle + CGFloat.random(in: -0.18...0.18))
         }
     }
@@ -738,16 +906,21 @@ final class GameScene: SKScene {
         return normalizedAngle(angle - direction * CGFloat.random(in: minLead...maxLead))
     }
 
-    private func canSpawnThreat(at spawnAngle: CGFloat) -> Bool {
+    private func canSpawnThreat(at spawnAngle: CGFloat, on radius: CGFloat, allowParallel: Bool) -> Bool {
         if angularDistance(angle, spawnAngle) < 0.82 {
             return false
         }
 
-        return !hasNearbyObject(
-            at: spawnAngle,
-            clearance: state.level < 6 ? 0.58 : 0.46,
-            names: [NodeName.shard]
-        )
+        let clearance = state.level < 6 ? 0.58 : 0.46
+        return !objectLayer.children.contains { node in
+            guard node.name == NodeName.shard else { return false }
+            guard let objectAngle = storedAngle(for: node) else { return false }
+            guard angularDistance(objectAngle, spawnAngle) < clearance else { return false }
+            if allowParallel, let objectRadius = storedRadius(for: node), abs(objectRadius - radius) > collisionRadiusTolerance {
+                return false
+            }
+            return true
+        }
     }
 
     private func hasNearbyObject(at spawnAngle: CGFloat, clearance: CGFloat, names: Set<String>) -> Bool {

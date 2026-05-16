@@ -4,6 +4,12 @@
 "hud.combo" = "%d COMBO";
 "hud.fever" = "FEVER SYNC";
 
+"pattern.flow" = "SYNC FLOW";
+"pattern.gate" = "GATE WAVE";
+"pattern.switchback" = "SWITCHBACK";
+"pattern.harvest" = "LUMEN RUSH";
+"pattern.overdrive" = "OVERDRIVE";
+
 "loading.title" = "Igniting the Run";
 "start.eyebrow" = "NEON CORE RUNNER";
 "start.subtitle" = "Run neon orbits, chain lumen sparks, and dodge the glitch.";

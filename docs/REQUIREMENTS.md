@@ -9,6 +9,7 @@
 - Gameplay depth is the current highest product priority before more cosmetic polish.
 - Add stage-like pacing with recognizable obstacle patterns, escalation beats, and short relief windows.
 - Add strategic decisions inside runs, such as choosing risky score routes, safer survival routes, and timed item pickups.
+- First pattern set should include readable phases: normal flow, gate waves, switchback pressure, lumen rush, and overdrive.
 
 ## Controls
 - Current preferred control direction: one-button orbit movement.
