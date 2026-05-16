@@ -29,6 +29,7 @@
 - Add achievements for first run milestones, fever mastery, shield saves, score thresholds, and daily play streaks.
 - Offline achievements should track local progress first, with IDs that can later map to Game Center achievements.
 - The achievements list should show both unlocked and locked achievements with clear status and progress.
+- Players should be able to open the full achievements list directly from the HUD and post-game screen.
 - Achievement unlocks should provide immediate in-run feedback through a short, non-blocking toast.
 - Add a clear post-game results screen that shows score, best score, rank/percentile when available, earned achievements, and a strong retry call-to-action.
 - Post-game results should highlight new records, mission completion, and progress toward the next unlock.

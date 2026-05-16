@@ -8,6 +8,7 @@ struct ContentView: View {
     @State private var scene: GameScene?
     @State private var didScheduleLoading = false
     @State private var isRecordsPresented = false
+    @State private var isAchievementsPresented = false
 
     var body: some View {
         ZStack {
@@ -45,7 +46,12 @@ struct ContentView: View {
         )
         .sheet(isPresented: $gameState.isSettingsPresented) {
             SettingsView()
-                .presentationDetents([.medium])
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
+        }
+        .sheet(isPresented: $isAchievementsPresented) {
+            AchievementsView()
+                .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
         }
         .sheet(isPresented: $gameCenter.isShowingLeaderboard) {
@@ -88,7 +94,10 @@ struct ContentView: View {
             if !gameState.isLoading, !gameState.isStartScreenPresented {
                 HUDView(
                     openSettings: {
-                    gameState.pauseForSettings()
+                        gameState.pauseForSettings()
+                    },
+                    openAchievements: {
+                        isAchievementsPresented = true
                     },
                     togglePause: {
                         gameState.togglePause()
@@ -115,6 +124,8 @@ struct ContentView: View {
                         scene = makeScene()
                     } showRecords: {
                         isRecordsPresented = true
+                    } showAchievements: {
+                        isAchievementsPresented = true
                     }
                     .padding(24)
                 }
@@ -219,6 +230,7 @@ private struct AchievementToastView: View {
 private struct HUDView: View {
     @EnvironmentObject private var gameState: GameState
     let openSettings: () -> Void
+    let openAchievements: () -> Void
     let togglePause: () -> Void
 
     var body: some View {
@@ -301,6 +313,16 @@ private struct HUDView: View {
                 .background(.white.opacity(0.12), in: Circle())
                 .disabled(!gameState.hasSeenTutorial || gameState.isGameOver)
                 .accessibilityLabel(Text(gameState.isUserPaused ? "pause.resume" : "pause.title"))
+
+                Button(action: openAchievements) {
+                    Image(systemName: "trophy.fill")
+                        .font(.title3.weight(.bold))
+                        .frame(width: 42, height: 42)
+                }
+                .buttonStyle(.plain)
+                .foregroundStyle(Color(red: 1.0, green: 0.82, blue: 0.28))
+                .background(.white.opacity(0.12), in: Circle())
+                .accessibilityLabel(Text("achievements.title"))
 
                 Button(action: openSettings) {
                     Image(systemName: "gearshape.fill")
@@ -510,6 +532,7 @@ private struct GameOverView: View {
     @EnvironmentObject private var gameCenter: GameCenterManager
     let restart: () -> Void
     let showRecords: () -> Void
+    let showAchievements: () -> Void
 
     var body: some View {
         VStack(spacing: 16) {
@@ -598,6 +621,15 @@ private struct GameOverView: View {
 
             Button(action: showRecords) {
                 Label("records.title", systemImage: "chart.bar.fill")
+                    .font(.headline.weight(.bold))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+            }
+            .buttonStyle(.bordered)
+            .tint(.white)
+
+            Button(action: showAchievements) {
+                Label("achievements.title", systemImage: "trophy.fill")
                     .font(.headline.weight(.bold))
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 12)
@@ -783,6 +815,41 @@ private struct SettingsView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("settings.done") {
                         gameState.closeSettings()
+                    }
+                }
+            }
+        }
+    }
+}
+
+private struct AchievementsView: View {
+    @EnvironmentObject private var gameState: GameState
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            List {
+                Section {
+                    HStack {
+                        Text("achievements.all")
+                        Spacer()
+                        Text("\(gameState.completedAchievementCount)/\(AchievementDefinition.all.count)")
+                            .fontWeight(.bold)
+                            .monospacedDigit()
+                    }
+                }
+
+                Section("achievements.title") {
+                    ForEach(AchievementDefinition.all) { achievement in
+                        AchievementRow(achievement: achievement)
+                    }
+                }
+            }
+            .navigationTitle("achievements.title")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("settings.done") {
+                        dismiss()
                     }
                 }
             }
