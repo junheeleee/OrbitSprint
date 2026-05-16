@@ -7,6 +7,7 @@ struct LumenRunApp: App {
 
     init() {
         SoundPlayer.configure()
+        Haptics.configure()
     }
 
     var body: some Scene {

@@ -1,6 +1,7 @@
 # Lumen Run Work Log
 
 ## 2026-05-16
+- Reduced first-tap stutter risk by prewarming and reusing haptic feedback generators.
 - Added a free/offline local records board for top runs and recent runs so progression works before paid App Store Connect/Game Center setup.
 - Confirmed Game Center authentication on device; leaderboard still needs App Store Connect configuration to show score rankings.
 - Added Game Center code integration for high-score leaderboard authentication, score submission, and leaderboard UI.
