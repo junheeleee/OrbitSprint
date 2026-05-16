@@ -97,6 +97,8 @@
 "rewards.previewTitle" = "Reward Preview";
 "rewards.previewSubtitle" = "Complete missions to unlock themes and core skins.";
 "rewards.remaining" = "%d missions left";
+"rewards.equipped" = "Equipped";
+"rewards.tapToEquip" = "Tap to Equip";
 
 "theme.aurora" = "Neon Tide";
 "theme.solar" = "Solar Rift";

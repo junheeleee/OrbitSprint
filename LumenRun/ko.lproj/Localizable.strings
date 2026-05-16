@@ -97,6 +97,8 @@
 "rewards.previewTitle" = "리워드 미리보기";
 "rewards.previewSubtitle" = "미션을 완료해서 테마와 코어 스킨을 해금하세요.";
 "rewards.remaining" = "미션 %d개 남음";
+"rewards.equipped" = "장착중";
+"rewards.tapToEquip" = "탭해서 장착";
 
 "theme.aurora" = "네온 타이드";
 "theme.solar" = "솔라 리프트";

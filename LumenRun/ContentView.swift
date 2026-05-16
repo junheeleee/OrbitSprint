@@ -1060,11 +1060,18 @@ private struct RewardShowcasePanel: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 10) {
                     ForEach(GameTheme.allCases) { theme in
+                        let isUnlocked = gameState.isThemeUnlocked(theme)
+                        let isSelected = gameState.selectedTheme == theme
                         RewardPreviewCard(
                             title: theme.titleKey,
-                            subtitle: rewardSubtitle(required: theme.unlockRequirement, isUnlocked: gameState.isThemeUnlocked(theme)),
-                            isUnlocked: gameState.isThemeUnlocked(theme),
-                            isSelected: gameState.selectedTheme == theme
+                            subtitle: rewardSubtitle(required: theme.unlockRequirement, isUnlocked: isUnlocked, isSelected: isSelected),
+                            isUnlocked: isUnlocked,
+                            isSelected: isSelected,
+                            onSelect: {
+                                if isUnlocked {
+                                    gameState.selectedTheme = theme
+                                }
+                            }
                         ) {
                             LinearGradient(
                                 colors: theme.feverColors,
@@ -1075,11 +1082,18 @@ private struct RewardShowcasePanel: View {
                     }
 
                     ForEach(CoreSkin.allCases) { skin in
+                        let isUnlocked = gameState.isCoreSkinUnlocked(skin)
+                        let isSelected = gameState.selectedCoreSkin == skin
                         RewardPreviewCard(
                             title: skin.titleKey,
-                            subtitle: rewardSubtitle(required: skin.unlockRequirement, isUnlocked: gameState.isCoreSkinUnlocked(skin)),
-                            isUnlocked: gameState.isCoreSkinUnlocked(skin),
-                            isSelected: gameState.selectedCoreSkin == skin
+                            subtitle: rewardSubtitle(required: skin.unlockRequirement, isUnlocked: isUnlocked, isSelected: isSelected),
+                            isUnlocked: isUnlocked,
+                            isSelected: isSelected,
+                            onSelect: {
+                                if isUnlocked {
+                                    gameState.selectedCoreSkin = skin
+                                }
+                            }
                         ) {
                             ZStack {
                                 Circle()
@@ -1098,9 +1112,12 @@ private struct RewardShowcasePanel: View {
         .background(.black.opacity(0.16), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
     }
 
-    private func rewardSubtitle(required: Int, isUnlocked: Bool) -> String {
+    private func rewardSubtitle(required: Int, isUnlocked: Bool, isSelected: Bool) -> String {
+        if isSelected {
+            return NSLocalizedString("rewards.equipped", comment: "")
+        }
         if isUnlocked {
-            return NSLocalizedString("rewards.unlocked", comment: "")
+            return NSLocalizedString("rewards.tapToEquip", comment: "")
         }
         let remaining = max(0, required - gameState.completedMissionCount)
         return String(format: NSLocalizedString("rewards.remaining", comment: ""), remaining)
@@ -1112,34 +1129,39 @@ private struct RewardPreviewCard<Preview: View>: View {
     let subtitle: String
     let isUnlocked: Bool
     let isSelected: Bool
+    let onSelect: () -> Void
     @ViewBuilder let preview: () -> Preview
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            ZStack(alignment: .topTrailing) {
-                preview()
-                    .frame(width: 94, height: 46)
-                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
-                    .opacity(isUnlocked ? 1 : 0.52)
+        Button(action: onSelect) {
+            VStack(alignment: .leading, spacing: 8) {
+                ZStack(alignment: .topTrailing) {
+                    preview()
+                        .frame(width: 94, height: 46)
+                        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                        .opacity(isUnlocked ? 1 : 0.52)
 
-                Image(systemName: isUnlocked ? (isSelected ? "checkmark.circle.fill" : "lock.open.fill") : "lock.fill")
+                    Image(systemName: isUnlocked ? (isSelected ? "checkmark.circle.fill" : "hand.tap.fill") : "lock.fill")
+                        .font(.caption.weight(.black))
+                        .foregroundStyle(isUnlocked ? Color(red: 0.52, green: 1.0, blue: 0.72) : .white.opacity(0.78))
+                        .padding(5)
+                }
+
+                Text(title)
                     .font(.caption.weight(.black))
-                    .foregroundStyle(isUnlocked ? Color(red: 0.52, green: 1.0, blue: 0.72) : .white.opacity(0.78))
-                    .padding(5)
+                    .foregroundStyle(.white)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.72)
+
+                Text(subtitle)
+                    .font(.caption2.weight(.bold))
+                    .foregroundStyle(isUnlocked ? Color(red: 0.52, green: 1.0, blue: 0.72) : Color(red: 1.0, green: 0.82, blue: 0.28))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.72)
             }
-
-            Text(title)
-                .font(.caption.weight(.black))
-                .foregroundStyle(.white)
-                .lineLimit(1)
-                .minimumScaleFactor(0.72)
-
-            Text(subtitle)
-                .font(.caption2.weight(.bold))
-                .foregroundStyle(isUnlocked ? Color(red: 0.52, green: 1.0, blue: 0.72) : Color(red: 1.0, green: 0.82, blue: 0.28))
-                .lineLimit(1)
-                .minimumScaleFactor(0.72)
         }
+        .buttonStyle(.plain)
+        .disabled(!isUnlocked)
         .padding(9)
         .frame(width: 112, height: 118, alignment: .topLeading)
         .background(.white.opacity(isSelected ? 0.18 : 0.08), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
