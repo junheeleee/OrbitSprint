@@ -1,0 +1,11 @@
+# Godot local editor/cache
+.godot/
+
+# Imported/generated local files
+.import/
+export.cfg
+export_presets.cfg
+
+# OS files
+.DS_Store
+Thumbs.db
