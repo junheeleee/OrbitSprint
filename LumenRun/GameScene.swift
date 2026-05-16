@@ -7,21 +7,6 @@ final class GameScene: SKScene {
         case switchback
         case harvest
         case overdrive
-
-        var titleKey: String {
-            switch self {
-            case .flow:
-                return "pattern.flow"
-            case .gate:
-                return "pattern.gate"
-            case .switchback:
-                return "pattern.switchback"
-            case .harvest:
-                return "pattern.harvest"
-            case .overdrive:
-                return "pattern.overdrive"
-            }
-        }
     }
 
     private enum NodeName {
@@ -326,7 +311,7 @@ final class GameScene: SKScene {
         patternWaveTimer = 0
         patternStep = 0
         patternDuration = max(6.8, 10.5 - Double(state.level) * 0.18)
-        showPatternBanner(currentPattern)
+        telegraphPatternStart(currentPattern)
     }
 
     private func availablePatternSequence() -> [RunPattern] {
@@ -394,6 +379,7 @@ final class GameScene: SKScene {
     private func spawnGateWave() {
         let safeIndex = reachableSafeLaneIndex()
         let waveAngle = nextPlayableSpawnAngle(minLead: 1.06, maxLead: 1.62)
+        pulseOrbit(at: orbitRadii[safeIndex], color: state.selectedTheme.shieldColor, duration: 0.48)
         for index in orbitRadii.indices where index != safeIndex {
             spawnShard(on: orbitRadii[index], near: waveAngle + CGFloat.random(in: -0.04...0.04), rewardChance: 0, allowParallel: true)
         }
@@ -405,6 +391,7 @@ final class GameScene: SKScene {
         let laneIndex = laneSequence[patternStep % laneSequence.count]
         let radius = orbitRadii[laneIndex]
         let spawnAngle = nextThreatSpawnAngle(on: radius, minLead: 0.82, maxLead: 1.42)
+        pulseOrbit(at: radius, color: state.selectedTheme.shardColor, duration: 0.32)
         spawnShard(on: radius, near: spawnAngle, rewardChance: patternStep.isMultiple(of: 2) ? 0.45 : 0.18, allowParallel: false)
         patternStep += 1
     }
@@ -424,26 +411,34 @@ final class GameScene: SKScene {
         min(max(currentOrbitIndex + orbitStepDirection, orbitRadii.startIndex), orbitRadii.index(before: orbitRadii.endIndex))
     }
 
-    private func showPatternBanner(_ pattern: RunPattern) {
-        let label = SKLabelNode(text: NSLocalizedString(pattern.titleKey, comment: ""))
-        label.fontName = "AvenirNext-Heavy"
-        label.fontSize = 24
-        label.fontColor = state.selectedTheme.sparkColor
-        label.position = CGPoint(x: center.x, y: center.y + (orbitRadii.last ?? 148) + 46)
-        label.zPosition = 32
-        label.alpha = 0
-        label.setScale(0.8)
-        addChild(label)
+    private func telegraphPatternStart(_ pattern: RunPattern) {
+        switch pattern {
+        case .flow:
+            break
+        case .gate:
+            pulseOrbit(at: orbitRadii[reachableSafeLaneIndex()], color: state.selectedTheme.shieldColor, duration: 0.72)
+        case .switchback:
+            pulseOrbit(at: orbitRadii[1], color: state.selectedTheme.shardColor, duration: 0.5)
+        case .harvest:
+            orbitRadii.forEach { pulseOrbit(at: $0, color: state.selectedTheme.sparkColor, duration: 0.46) }
+        case .overdrive:
+            orbitRadii.forEach { pulseOrbit(at: $0, color: state.selectedTheme.feverColor, duration: 0.62) }
+            flash(color: state.selectedTheme.feverColor.withAlphaComponent(0.12))
+        }
+    }
 
-        label.run(.sequence([
+    private func pulseOrbit(at radius: CGFloat, color: SKColor, duration: TimeInterval) {
+        let ring = SKShapeNode(circleOfRadius: radius)
+        ring.position = center
+        ring.strokeColor = color.withAlphaComponent(0.72)
+        ring.lineWidth = 4
+        ring.glowWidth = 12
+        ring.zPosition = 11
+        effectLayer.addChild(ring)
+        ring.run(.sequence([
             .group([
-                .fadeIn(withDuration: 0.12),
-                .scale(to: 1.0, duration: 0.18)
-            ]),
-            .wait(forDuration: 0.82),
-            .group([
-                .fadeOut(withDuration: 0.28),
-                .moveBy(x: 0, y: 12, duration: 0.28)
+                .scale(to: 1.08, duration: duration),
+                .fadeOut(withDuration: duration)
             ]),
             .removeFromParent()
         ]))

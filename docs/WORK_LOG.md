@@ -1,8 +1,8 @@
 # Lumen Run Work Log
 
 ## 2026-05-17
+- Replaced pattern-name popups with non-text orbit pulse telegraphs so pattern changes feel more integrated into play.
 - Added the first pattern-based run pacing system with Sync Flow, Gate Wave, Switchback, Lumen Rush, and Overdrive phases.
-- Added in-run pattern banners so players can recognize the current phase instead of reading pure random spawns.
 - Reprioritized the roadmap around gameplay depth: stage-like pacing, readable obstacle patterns, and strategic risk/reward routes come before additional cosmetic polish.
 - Separated reward browsing from the start and post-game screens into a dedicated rewards screen so the main flow stays shorter.
 - Restored start-screen scrolling and shortened tutorial/start copy to avoid truncated text.

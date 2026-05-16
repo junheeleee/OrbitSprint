@@ -4,12 +4,6 @@
 "hud.combo" = "%d 콤보";
 "hud.fever" = "피버 싱크";
 
-"pattern.flow" = "싱크 플로우";
-"pattern.gate" = "게이트 웨이브";
-"pattern.switchback" = "스위치백";
-"pattern.harvest" = "루멘 러시";
-"pattern.overdrive" = "오버드라이브";
-
 "loading.title" = "루멘런 점화 중";
 "start.eyebrow" = "네온 코어 러너";
 "start.subtitle" = "네온 궤도를 달리며 루멘 조각을 잇고 글리치를 피하세요.";
