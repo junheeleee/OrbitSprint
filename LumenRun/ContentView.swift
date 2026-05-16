@@ -755,6 +755,12 @@ private struct SettingsView: View {
                     .pickerStyle(.segmented)
                 }
 
+                Section("settings.skin") {
+                    ForEach(CoreSkin.allCases) { skin in
+                        CoreSkinUnlockRow(skin: skin)
+                    }
+                }
+
                 Section("settings.record") {
                     HStack {
                         Text("hud.best")
@@ -973,6 +979,56 @@ private struct ThemeUnlockRow: View {
             return "checkmark.circle.fill"
         }
         return gameState.isThemeUnlocked(theme) ? "circle" : "lock.fill"
+    }
+}
+
+private struct CoreSkinUnlockRow: View {
+    @EnvironmentObject private var gameState: GameState
+    let skin: CoreSkin
+
+    var body: some View {
+        Button {
+            guard gameState.isCoreSkinUnlocked(skin) else { return }
+            gameState.selectedCoreSkin = skin
+        } label: {
+            HStack(spacing: 12) {
+                Image(systemName: skin.iconName)
+                    .font(.title3.weight(.black))
+                    .foregroundStyle(gameState.selectedTheme.accentColor)
+                    .frame(width: 34, height: 34)
+                    .background(.secondary.opacity(0.12), in: Circle())
+
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(skin.titleKey)
+                        .font(.headline.weight(.bold))
+                    Text(subtitle)
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+
+                Image(systemName: trailingIcon)
+                    .font(.headline.weight(.bold))
+                    .foregroundStyle(gameState.selectedCoreSkin == skin ? gameState.selectedTheme.accentColor : .secondary)
+            }
+        }
+        .buttonStyle(.plain)
+        .disabled(!gameState.isCoreSkinUnlocked(skin))
+    }
+
+    private var subtitle: String {
+        if gameState.isCoreSkinUnlocked(skin) {
+            return NSLocalizedString("rewards.unlocked", comment: "")
+        }
+        return String(format: NSLocalizedString("rewards.unlockAt", comment: ""), skin.unlockRequirement)
+    }
+
+    private var trailingIcon: String {
+        if gameState.selectedCoreSkin == skin {
+            return "checkmark.circle.fill"
+        }
+        return gameState.isCoreSkinUnlocked(skin) ? "circle" : "lock.fill"
     }
 }
 

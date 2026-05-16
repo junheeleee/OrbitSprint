@@ -109,3 +109,70 @@ enum GameTheme: String, CaseIterable, Identifiable {
         }
     }
 }
+
+enum CoreSkin: String, CaseIterable, Identifiable {
+    case orb
+    case prism
+    case pulse
+
+    var id: String { rawValue }
+
+    var titleKey: LocalizedStringKey {
+        LocalizedStringKey(titleLocalizationKey)
+    }
+
+    var titleLocalizationKey: String {
+        switch self {
+        case .orb:
+            return "skin.orb"
+        case .prism:
+            return "skin.prism"
+        case .pulse:
+            return "skin.pulse"
+        }
+    }
+
+    var iconName: String {
+        switch self {
+        case .orb:
+            return "circle.fill"
+        case .prism:
+            return "diamond.fill"
+        case .pulse:
+            return "hexagon.fill"
+        }
+    }
+
+    var unlockRequirement: Int {
+        switch self {
+        case .orb:
+            return 0
+        case .prism:
+            return 5
+        case .pulse:
+            return 12
+        }
+    }
+
+    var glowWidth: CGFloat {
+        switch self {
+        case .orb:
+            return 7
+        case .prism:
+            return 9
+        case .pulse:
+            return 12
+        }
+    }
+
+    var lineWidth: CGFloat {
+        switch self {
+        case .orb:
+            return 3
+        case .prism:
+            return 3.5
+        case .pulse:
+            return 4
+        }
+    }
+}

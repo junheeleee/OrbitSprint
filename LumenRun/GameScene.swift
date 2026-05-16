@@ -34,6 +34,7 @@ final class GameScene: SKScene {
     private var comboTimer: TimeInterval = 0
     private var difficulty: CGFloat = 1
     private var renderedTheme: GameTheme?
+    private var renderedCoreSkin: CoreSkin?
     private var renderedFeverActive = false
     private var renderedShieldCharges = -1
 
@@ -101,7 +102,7 @@ final class GameScene: SKScene {
     }
 
     override func update(_ currentTime: TimeInterval) {
-        if renderedTheme != state.selectedTheme {
+        if renderedTheme != state.selectedTheme || renderedCoreSkin != state.selectedCoreSkin {
             applyTheme()
         }
         if renderedFeverActive != state.isFeverActive {
@@ -164,8 +165,6 @@ final class GameScene: SKScene {
 
         player.name = NodeName.player
         player.strokeColor = .white
-        player.lineWidth = 3
-        player.glowWidth = 7
         player.zPosition = 5
         addChild(player)
         setupShieldAura()
@@ -210,7 +209,11 @@ final class GameScene: SKScene {
 
     private func applyTheme() {
         renderedTheme = state.selectedTheme
+        renderedCoreSkin = state.selectedCoreSkin
+        player.path = playerPath(for: state.selectedCoreSkin)
         player.fillColor = state.selectedTheme.playerColor
+        player.lineWidth = state.selectedCoreSkin.lineWidth
+        player.glowWidth = state.selectedCoreSkin.glowWidth
         refreshShieldAura()
         drawOrbits()
         for node in objectLayer.children {
@@ -853,6 +856,20 @@ final class GameScene: SKScene {
         path.move(to: CGPoint(x: 0, y: -radius * 1.2))
         path.addLine(to: CGPoint(x: 0, y: radius * 1.2))
         return path
+    }
+
+    private func playerPath(for skin: CoreSkin) -> CGPath {
+        switch skin {
+        case .orb:
+            return CGPath(
+                ellipseIn: CGRect(x: -playerRadius, y: -playerRadius, width: playerRadius * 2, height: playerRadius * 2),
+                transform: nil
+            )
+        case .prism:
+            return diamondPath(radius: playerRadius * 1.2)
+        case .pulse:
+            return corePath(radius: playerRadius * 1.12)
+        }
     }
 
     private var center: CGPoint {

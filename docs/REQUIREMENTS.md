@@ -37,6 +37,7 @@
 - Daily missions should work offline and rotate by local calendar day.
 - Add lightweight unlocks such as themes, player core skins, trail effects, or title badges.
 - Theme unlocks should be driven by total completed daily missions and remain available offline.
+- Core skin unlocks should be driven by total completed daily missions and change the in-run player shape.
 
 ## Release Quality
 - Maintain App Store readiness: signing, bundle id, privacy manifest, localization, and stable device testing.

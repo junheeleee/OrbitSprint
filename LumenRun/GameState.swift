@@ -113,6 +113,15 @@ final class GameState: ObservableObject {
             UserDefaults.standard.set(selectedTheme.rawValue, forKey: selectedThemeKey)
         }
     }
+    @Published var selectedCoreSkin: CoreSkin {
+        didSet {
+            if !isCoreSkinUnlocked(selectedCoreSkin) {
+                selectedCoreSkin = .orb
+                return
+            }
+            UserDefaults.standard.set(selectedCoreSkin.rawValue, forKey: selectedCoreSkinKey)
+        }
+    }
 
     private let bestScoreKey = "bestScore"
     private let runRecordsKey = "runRecords"
@@ -125,6 +134,7 @@ final class GameState: ObservableObject {
     private let soundEnabledKey = "soundEnabled"
     private let hapticsEnabledKey = "hapticsEnabled"
     private let selectedThemeKey = "selectedTheme"
+    private let selectedCoreSkinKey = "selectedCoreSkin"
     private let feverComboThreshold = 12
     private let feverDuration: TimeInterval = 5
     private let shieldDuration: TimeInterval = 8
@@ -183,8 +193,12 @@ final class GameState: ObservableObject {
         isHapticsEnabled = defaults.object(forKey: hapticsEnabledKey) as? Bool ?? true
         completedMissionCount = defaults.integer(forKey: completedMissionCountKey)
         selectedTheme = GameTheme(rawValue: defaults.string(forKey: selectedThemeKey) ?? "") ?? .aurora
+        selectedCoreSkin = CoreSkin(rawValue: defaults.string(forKey: selectedCoreSkinKey) ?? "") ?? .orb
         if selectedTheme.unlockRequirement > completedMissionCount {
             selectedTheme = .aurora
+        }
+        if selectedCoreSkin.unlockRequirement > completedMissionCount {
+            selectedCoreSkin = .orb
         }
         updateMissionRewards()
         canShowAchievementToast = true
@@ -390,6 +404,10 @@ final class GameState: ObservableObject {
 
     func isThemeUnlocked(_ theme: GameTheme) -> Bool {
         completedMissionCount >= theme.unlockRequirement
+    }
+
+    func isCoreSkinUnlocked(_ skin: CoreSkin) -> Bool {
+        completedMissionCount >= skin.unlockRequirement
     }
 
     func achievementProgress(for achievement: AchievementDefinition) -> Int {

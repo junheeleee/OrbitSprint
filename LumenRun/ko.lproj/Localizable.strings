@@ -47,6 +47,7 @@
 "settings.haptics" = "햅틱";
 "settings.theme" = "테마";
 "settings.theme.quick" = "빠른 선택";
+"settings.skin" = "코어 스킨";
 "settings.record" = "기록";
 "settings.resetBest" = "최고 기록 초기화";
 "settings.help" = "도움말";
@@ -97,3 +98,6 @@
 "theme.aurora" = "네온 타이드";
 "theme.solar" = "솔라 리프트";
 "theme.mono" = "고스트 시그널";
+"skin.orb" = "루멘 오브";
+"skin.prism" = "프리즘 코어";
+"skin.pulse" = "펄스 코어";

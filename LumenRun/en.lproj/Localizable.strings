@@ -47,6 +47,7 @@
 "settings.haptics" = "Haptics";
 "settings.theme" = "Theme";
 "settings.theme.quick" = "Quick Select";
+"settings.skin" = "Core Skins";
 "settings.record" = "Record";
 "settings.resetBest" = "Reset Best Score";
 "settings.help" = "Help";
@@ -97,3 +98,6 @@
 "theme.aurora" = "Neon Tide";
 "theme.solar" = "Solar Rift";
 "theme.mono" = "Ghost Signal";
+"skin.orb" = "Lumen Orb";
+"skin.prism" = "Prism Core";
+"skin.pulse" = "Pulse Core";

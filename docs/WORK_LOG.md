@@ -1,6 +1,7 @@
 # Lumen Run Work Log
 
 ## 2026-05-16
+- Added unlockable player core skins tied to cumulative daily mission completions.
 - Added a dedicated achievements sheet with direct HUD and post-game entry points.
 - Clarified the achievements list as an all-achievements view with locked/unlocked status badges.
 - Added non-blocking achievement unlock toast feedback during gameplay.
