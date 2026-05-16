@@ -3,6 +3,7 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject private var gameState: GameState
+    @EnvironmentObject private var gameCenter: GameCenterManager
     @Environment(\.scenePhase) private var scenePhase
     @State private var scene: GameScene?
     @State private var didScheduleLoading = false
@@ -43,6 +44,10 @@ struct ContentView: View {
             SettingsView()
                 .presentationDetents([.medium])
                 .presentationDragIndicator(.visible)
+        }
+        .sheet(isPresented: $gameCenter.isShowingLeaderboard) {
+            GameCenterLeaderboardView()
+                .ignoresSafeArea()
         }
         .onAppear {
             if scene == nil {
@@ -407,6 +412,7 @@ private struct TutorialRow: View {
 
 private struct GameOverView: View {
     @EnvironmentObject private var gameState: GameState
+    @EnvironmentObject private var gameCenter: GameCenterManager
     let restart: () -> Void
 
     var body: some View {
@@ -425,7 +431,28 @@ private struct GameOverView: View {
                     .font(.subheadline.weight(.bold))
                     .foregroundStyle(.white.opacity(0.58))
                     .monospacedDigit()
+
+                if gameCenter.lastSubmissionSucceeded {
+                    Label("gamecenter.submitted", systemImage: "checkmark.circle.fill")
+                        .font(.caption.weight(.bold))
+                        .foregroundStyle(Color(red: 0.52, green: 1.0, blue: 0.72))
+                } else if gameCenter.lastSubmissionError != nil {
+                    Label("gamecenter.submitFailed", systemImage: "exclamationmark.triangle.fill")
+                        .font(.caption.weight(.bold))
+                        .foregroundStyle(Color(red: 1.0, green: 0.76, blue: 0.32))
+                }
             }
+
+            Button {
+                gameCenter.showLeaderboard()
+            } label: {
+                Label("gamecenter.leaderboard", systemImage: "list.number")
+                    .font(.headline.weight(.bold))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+            }
+            .buttonStyle(.bordered)
+            .tint(.white)
 
             Button(action: restart) {
                 Label("gameover.restart", systemImage: "arrow.clockwise")
@@ -443,6 +470,7 @@ private struct GameOverView: View {
 
 private struct SettingsView: View {
     @EnvironmentObject private var gameState: GameState
+    @EnvironmentObject private var gameCenter: GameCenterManager
 
     var body: some View {
         NavigationStack {
@@ -471,6 +499,25 @@ private struct SettingsView: View {
                     }
                     Button("settings.resetBest", role: .destructive) {
                         gameState.resetBestScore()
+                    }
+                }
+
+                Section("gamecenter.title") {
+                    HStack {
+                        Text("gamecenter.status")
+                        Spacer()
+                        Text(gameCenter.isAuthenticated ? gameCenter.playerAlias : NSLocalizedString("gamecenter.notConnected", comment: ""))
+                            .fontWeight(.semibold)
+                            .foregroundStyle(gameCenter.isAuthenticated ? .primary : .secondary)
+                    }
+
+                    Button {
+                        gameState.closeSettings()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                            gameCenter.showLeaderboard()
+                        }
+                    } label: {
+                        Label("gamecenter.leaderboard", systemImage: "list.number")
                     }
                 }
 

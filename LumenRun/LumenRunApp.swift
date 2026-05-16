@@ -3,6 +3,7 @@ import SwiftUI
 @main
 struct LumenRunApp: App {
     @StateObject private var gameState = GameState()
+    @StateObject private var gameCenter = GameCenterManager.shared
 
     init() {
         SoundPlayer.configure()
@@ -12,6 +13,10 @@ struct LumenRunApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(gameState)
+                .environmentObject(gameCenter)
+                .task {
+                    gameCenter.authenticate()
+                }
         }
     }
 }

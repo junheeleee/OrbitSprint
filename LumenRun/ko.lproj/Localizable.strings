@@ -23,6 +23,13 @@
 "gameover.level" = "도달 레벨 %d";
 "gameover.restart" = "다시 달리기";
 
+"gamecenter.title" = "게임 센터";
+"gamecenter.status" = "상태";
+"gamecenter.notConnected" = "연결 안 됨";
+"gamecenter.leaderboard" = "순위표";
+"gamecenter.submitted" = "게임 센터에 점수 전송 완료";
+"gamecenter.submitFailed" = "로그인 후 점수 전송 재시도";
+
 "pause.title" = "일시정지";
 "pause.resume" = "계속하기";
 

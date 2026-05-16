@@ -5,4 +5,5 @@
 - Use GitHub Desktop for daily commit, branch, and push workflow.
 - Keep generated Xcode build output out of version control.
 - Treat `docs/` as the source of truth for requirements and planning.
-
+- Use Apple Game Center as the first social comparison layer.
+- Use `com.junpacstudio.lumenrun.highscore` as the first leaderboard identifier.

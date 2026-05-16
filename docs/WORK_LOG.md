@@ -1,6 +1,7 @@
 # Lumen Run Work Log
 
 ## 2026-05-16
+- Added Game Center code integration for high-score leaderboard authentication, score submission, and leaderboard UI.
 - Reviewed App Store completion gaps and added retention/social comparison requirements.
 - Fixed a restart regression where the player stayed tiny after the death shrink animation.
 - Standardized project management around an independent GitHub Desktop repository.

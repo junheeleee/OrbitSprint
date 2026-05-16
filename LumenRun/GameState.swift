@@ -174,10 +174,14 @@ final class GameState: ObservableObject {
 
     func endGame() {
         isGameOver = true
+        let finalScore = score
         feverRemaining = 0
         updatePauseState()
         SoundPlayer.crash(enabled: isSoundEnabled)
         SoundPlayer.setFeverActive(false, enabled: isSoundEnabled)
+        Task { @MainActor in
+            GameCenterManager.shared.submit(score: finalScore)
+        }
     }
 
     func completeTutorial() {

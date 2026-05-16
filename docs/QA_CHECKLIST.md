@@ -39,6 +39,8 @@ Use this checklist before important commits, TestFlight builds, and App Store re
 ## App Store Readiness
 - Bundle identifier is valid.
 - Signing team is selected.
+- Game Center capability is enabled for release builds.
+- Leaderboard id `com.junpacstudio.lumenrun.highscore` exists in App Store Connect.
 - Privacy manifest exists.
 - App supports required orientation behavior.
 - App icon is present.

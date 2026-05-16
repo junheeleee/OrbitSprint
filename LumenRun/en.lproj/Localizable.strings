@@ -23,6 +23,13 @@
 "gameover.level" = "Reached Level %d";
 "gameover.restart" = "Run Again";
 
+"gamecenter.title" = "Game Center";
+"gamecenter.status" = "Status";
+"gamecenter.notConnected" = "Not connected";
+"gamecenter.leaderboard" = "Leaderboard";
+"gamecenter.submitted" = "Score sent to Game Center";
+"gamecenter.submitFailed" = "Score will retry after sign-in";
+
 "pause.title" = "Paused";
 "pause.resume" = "Resume";
 
