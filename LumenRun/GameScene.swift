@@ -157,6 +157,7 @@ final class GameScene: SKScene {
 
     private func setupScene() {
         removeAllChildren()
+        resetRunState()
         addChild(orbitLayer)
         addChild(objectLayer)
         addChild(effectLayer)
@@ -176,6 +177,35 @@ final class GameScene: SKScene {
         drawStars()
         drawOrbits()
         updatePlayerPosition()
+    }
+
+    private func resetRunState() {
+        currentRadius = orbitRadii[0]
+        targetRadius = orbitRadii[0]
+        orbitStartRadius = orbitRadii[0]
+        orbitTransitionElapsed = orbitTransitionDuration
+        currentOrbitIndex = 0
+        orbitStepDirection = 1
+        angle = -.pi / 2
+        angularSpeed = abs(angularSpeed)
+        lastUpdate = 0
+        elapsedTime = 0
+        safeUntil = 1.6
+        invulnerableUntil = 0
+        spawnTimer = 0
+        sparkTimer = 0
+        powerUpTimer = 0
+        comboTimer = 0
+        difficulty = 1
+        renderedShieldCharges = -1
+        renderedFeverActive = state.isFeverActive
+
+        player.removeAllActions()
+        player.setScale(1)
+        player.alpha = 1
+        shieldAura.removeAllActions()
+        shieldAura.setScale(1)
+        shieldAura.alpha = 0
     }
 
     private func applyTheme() {

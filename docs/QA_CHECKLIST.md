@@ -8,6 +8,7 @@ Use this checklist before important commits, TestFlight builds, and App Store re
 - Loading screen appears correctly.
 - Start screen appears correctly.
 - Restart after game over works without app relaunch.
+- Player appears at normal size and color after restarting from game over.
 
 ## Gameplay
 - Orbit movement responds immediately.
@@ -16,6 +17,7 @@ Use this checklist before important commits, TestFlight builds, and App Store re
 - Three-depth orbit pattern works as intended.
 - Collision only triggers on the current orbit layer.
 - Respawn does not place the player into immediate repeated collision.
+- Game-over shrink animation does not persist into the next run.
 - Obstacles do not spawn directly into unavoidable forward collision.
 - Fever mode grants invincibility.
 - Fever collisions convert into score.
@@ -41,4 +43,3 @@ Use this checklist before important commits, TestFlight builds, and App Store re
 - App supports required orientation behavior.
 - App icon is present.
 - No debug-only files are included.
-
