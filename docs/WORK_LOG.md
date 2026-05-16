@@ -1,6 +1,7 @@
 # Lumen Run Work Log
 
 ## 2026-05-16
+- Reviewed App Store completion gaps and added retention/social comparison requirements.
 - Fixed a restart regression where the player stayed tiny after the death shrink animation.
 - Standardized project management around an independent GitHub Desktop repository.
 - Re-rooted `main` so the repository contains the Lumen Run iOS project directly.

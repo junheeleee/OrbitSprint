@@ -21,6 +21,17 @@
 - Korean and English should be supported.
 - Korean App Store users should see Korean by default when device language is Korean.
 
+## Progression And Retention
+- Keep the local best score for offline play.
+- Add Game Center leaderboards so players can compare scores with friends and global players.
+- Add achievements for first run milestones, fever mastery, shield saves, score thresholds, and daily play streaks.
+- Add a clear post-game results screen that shows score, best score, rank/percentile when available, earned achievements, and a strong retry call-to-action.
+- Add daily or weekly challenge goals to create reasons to return.
+- Add lightweight unlocks such as themes, player core skins, trail effects, or title badges.
+
 ## Release Quality
 - Maintain App Store readiness: signing, bundle id, privacy manifest, localization, and stable device testing.
 
+## App Store Completion
+- Prepare App Store screenshots, preview text, subtitle, keyword set, privacy answers, support URL, and marketing copy.
+- Ensure the game works offline, with online features gracefully hidden or delayed when Game Center is unavailable.

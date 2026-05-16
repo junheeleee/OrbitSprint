@@ -21,10 +21,11 @@ This document keeps the game identity consistent across title, visuals, sound, U
 - App icon direction.
 - Fever mode color language.
 - Long-term collectible or progression theme.
+- Cosmetic unlock identity: core skins, orbit trails, badges, or ship-like avatars?
+- Leaderboard framing: pure score competition, weekly challenge, or friend rivalry?
 
 ## Avoid
 - Generic abstract shapes with no role clarity.
 - Mixed audio styles that feel unrelated.
 - Visual effects that hide obstacles.
 - Overly dark backgrounds that reduce gameplay readability.
-
