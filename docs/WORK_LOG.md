@@ -1,6 +1,7 @@
 # Lumen Run Work Log
 
 ## 2026-05-17
+- Restored per-frame magnet motion while keeping capped spark pulls so the magnet effect feels smooth instead of stepping at a lower frame rate.
 - Optimized magnet pulls by throttling pull updates, limiting affected sparks, using squared-distance checks, and reducing magnet collection particles.
 - Softened early difficulty with score-gated pattern unlocks, slower spawn scaling, reduced Fever speed, and lighter Fever entry effects.
 - Removed player-core opacity animations, fixed SpriteKit render ordering, and further reduced particle/node caps to address respawn transparency and device stutter.

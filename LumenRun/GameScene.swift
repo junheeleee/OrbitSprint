@@ -46,7 +46,6 @@ final class GameScene: SKScene {
     private var powerUpTimer: TimeInterval = 0
     private var comboTimer: TimeInterval = 0
     private var cleanupTimer: TimeInterval = 0
-    private var magnetPullTimer: TimeInterval = 0
     private var patternTimer: TimeInterval = 0
     private var patternWaveTimer: TimeInterval = 0
     private var patternDuration: TimeInterval = 8.5
@@ -160,7 +159,6 @@ final class GameScene: SKScene {
         powerUpTimer += delta
         comboTimer += delta
         cleanupTimer += delta
-        magnetPullTimer += delta
         patternTimer += delta
         patternWaveTimer += delta
         state.tick(delta: delta)
@@ -224,7 +222,6 @@ final class GameScene: SKScene {
         powerUpTimer = 0
         comboTimer = 0
         cleanupTimer = 0
-        magnetPullTimer = 0
         patternTimer = 0
         patternWaveTimer = 0
         patternDuration = 8.5
@@ -804,18 +801,15 @@ final class GameScene: SKScene {
 
     private func updateMagnetPull(delta: TimeInterval) {
         guard state.magnetTimeRemaining > 0 else { return }
-        guard magnetPullTimer >= 1.0 / 24.0 else { return }
-        let pullDelta = magnetPullTimer
-        magnetPullTimer = 0
 
         var movedSparkCount = 0
         let captureRadiusSquared: CGFloat = 18 * 18
-        let pullRadiusSquared: CGFloat = 104 * 104
-        let pull = min(CGFloat(pullDelta) * 6.2, 0.26)
+        let pullRadiusSquared: CGFloat = 108 * 108
+        let pull = min(CGFloat(delta) * 8.4, 0.24)
 
         for node in objectLayer.children {
             guard node.lumenObjectKind == .spark else { continue }
-            guard movedSparkCount < 5 else { return }
+            guard movedSparkCount < 6 else { return }
 
             let dx = player.position.x - node.position.x
             let dy = player.position.y - node.position.y

@@ -7,7 +7,7 @@
 - Collision and pickup checks must stay reliable at high speed, including Fever, by accounting for movement between frames.
 - Collision reliability fixes should stay lightweight enough to preserve smooth gameplay on device.
 - SpriteKit transient effect and object counts should be bounded during long runs and Fever sequences.
-- Magnet behavior should avoid per-frame all-object work; pull updates should be throttled and capped to preserve smooth play.
+- Magnet behavior should move smoothly every frame while keeping affected-object counts capped to preserve smooth play.
 - Temporary invulnerability visuals must always restore the player core to full opacity when the effect ends.
 - Player-core feedback should avoid opacity animation; respawn and invulnerability should use scale/ring effects so the core never appears unintentionally transparent.
 - Obstacles should spawn in ways that preserve player agency.
