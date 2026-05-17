@@ -8,6 +8,7 @@
 - Fever mode should make the player invincible, faster, flashier, and able to convert collisions into score.
 - The HUD should show fever buildup progress so players can judge when to risk chasing one more spark.
 - HUD text for score, best score, combo, and fever status must remain single-line and non-overlapping on small iPhone screens.
+- Active power-up timers, especially shield duration, must remain visible while the effect is running.
 - Gameplay depth is the current highest product priority before more cosmetic polish.
 - Add stage-like pacing with recognizable obstacle patterns, escalation beats, and short relief windows.
 - Add strategic decisions inside runs, such as choosing risky score routes, safer survival routes, and timed item pickups.

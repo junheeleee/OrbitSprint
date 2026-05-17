@@ -1,6 +1,7 @@
 # Lumen Run Work Log
 
 ## 2026-05-17
+- Split the HUD into stable top and status rows, restoring visible shield, slow, and magnet timers after the score layout tightening.
 - Tightened the HUD score, best score, and fever combo layout so text stays single-line on narrow device screens.
 - Added a HUD fever meter showing fever buildup, remaining combo to fever, and active fever state.
 - Strengthened pattern identities: harvest now favors magnet pickups, gates seed shield preparation, switchbacks create bomb timing moments, and overdrive adds surge-core reward pressure.

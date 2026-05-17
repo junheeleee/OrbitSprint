@@ -255,51 +255,23 @@ private struct HUDView: View {
     let togglePause: () -> Void
 
     var body: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 4) {
-                Text("app.title")
-                    .font(.caption.weight(.bold))
-                    .foregroundStyle(.white.opacity(0.62))
-                Text("\(gameState.score)")
-                    .font(.system(size: 42, weight: .heavy, design: .rounded))
-                    .foregroundStyle(.white)
-                    .monospacedDigit()
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.55)
-                    .allowsTightening(true)
-                HStack(spacing: 8) {
-                    StatusPill(text: String(format: NSLocalizedString("hud.level", comment: ""), gameState.level))
-                    if gameState.multiplier > 1 {
-                        StatusPill(text: "x\(gameState.multiplier)")
-                    }
+        VStack(spacing: 7) {
+            HStack(alignment: .top, spacing: 10) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("app.title")
+                        .font(.caption.weight(.bold))
+                        .foregroundStyle(.white.opacity(0.62))
+                    Text("\(gameState.score)")
+                        .font(.system(size: 42, weight: .heavy, design: .rounded))
+                        .foregroundStyle(.white)
+                        .monospacedDigit()
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.55)
+                        .allowsTightening(true)
                 }
-            }
-            .layoutPriority(1)
-            .frame(maxWidth: 132, alignment: .leading)
+                .layoutPriority(1)
 
-            Spacer()
-
-            HStack(spacing: 7) {
-                VStack(alignment: .trailing, spacing: 4) {
-                    FeverMeter()
-                    HStack(spacing: 5) {
-                        if gameState.shieldTimeRemaining > 0 {
-                            Label("\(Int(ceil(gameState.shieldTimeRemaining)))", systemImage: "shield.fill")
-                                .font(.caption.weight(.black))
-                                .foregroundStyle(Color(red: 0.45, green: 0.82, blue: 1.0))
-                        }
-                        if gameState.slowTimeRemaining > 0 {
-                            Label("\(Int(ceil(gameState.slowTimeRemaining)))", systemImage: "timer")
-                                .font(.caption.weight(.black))
-                                .foregroundStyle(Color(red: 0.76, green: 0.58, blue: 1.0))
-                        }
-                        if gameState.magnetTimeRemaining > 0 {
-                            Label("\(Int(ceil(gameState.magnetTimeRemaining)))", systemImage: "dot.radiowaves.left.and.right")
-                                .font(.caption.weight(.black))
-                                .foregroundStyle(Color(red: 0.24, green: 0.92, blue: 0.84))
-                        }
-                    }
-                }
+                Spacer(minLength: 8)
 
                 VStack(alignment: .trailing, spacing: 4) {
                     Text("hud.best")
@@ -314,44 +286,65 @@ private struct HUDView: View {
                 }
                 .frame(width: 58, alignment: .trailing)
 
-                Button(action: togglePause) {
-                    Image(systemName: gameState.isUserPaused ? "play.fill" : "pause.fill")
-                        .font(.headline.weight(.bold))
-                        .frame(width: 36, height: 36)
-                        .contentShape(Circle())
-                }
-                .buttonStyle(.plain)
-                .foregroundStyle(.white)
-                .background(.white.opacity(0.12), in: Circle())
-                .contentShape(Circle())
+                HUDIconButton(
+                    systemName: gameState.isUserPaused ? "play.fill" : "pause.fill",
+                    foreground: .white,
+                    accessibilityKey: LocalizedStringKey(gameState.isUserPaused ? "pause.resume" : "pause.title"),
+                    action: togglePause
+                )
                 .disabled(!gameState.hasSeenTutorial || gameState.isGameOver)
-                .accessibilityLabel(Text(gameState.isUserPaused ? "pause.resume" : "pause.title"))
 
-                Button(action: openAchievements) {
-                    Image(systemName: "trophy.fill")
-                        .font(.headline.weight(.bold))
-                        .frame(width: 36, height: 36)
-                        .contentShape(Circle())
-                }
-                .buttonStyle(.plain)
-                .foregroundStyle(Color(red: 1.0, green: 0.82, blue: 0.28))
-                .background(.white.opacity(0.12), in: Circle())
-                .contentShape(Circle())
-                .accessibilityLabel(Text("achievements.title"))
+                HUDIconButton(
+                    systemName: "trophy.fill",
+                    foreground: Color(red: 1.0, green: 0.82, blue: 0.28),
+                    accessibilityKey: "achievements.title",
+                    action: openAchievements
+                )
 
-                Button(action: openSettings) {
-                    Image(systemName: "gearshape.fill")
-                        .font(.headline.weight(.bold))
-                        .frame(width: 36, height: 36)
-                        .contentShape(Circle())
+                HUDIconButton(
+                    systemName: "gearshape.fill",
+                    foreground: .white,
+                    accessibilityKey: "settings.title",
+                    action: openSettings
+                )
+            }
+
+            HStack(alignment: .center, spacing: 8) {
+                HStack(spacing: 8) {
+                    StatusPill(text: String(format: NSLocalizedString("hud.level", comment: ""), gameState.level))
+                    if gameState.multiplier > 1 {
+                        StatusPill(text: "x\(gameState.multiplier)")
+                    }
                 }
-                .buttonStyle(.plain)
-                .foregroundStyle(.white)
-                .background(.white.opacity(0.12), in: Circle())
-                .contentShape(Circle())
-                .accessibilityLabel(Text("settings.title"))
+                .layoutPriority(1)
+
+                Spacer(minLength: 8)
+
+                PowerupTimersView()
+                FeverMeter()
             }
         }
+    }
+}
+
+private struct HUDIconButton: View {
+    let systemName: String
+    let foreground: Color
+    let accessibilityKey: LocalizedStringKey
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: systemName)
+                .font(.headline.weight(.bold))
+                .frame(width: 36, height: 36)
+                .contentShape(Circle())
+        }
+        .buttonStyle(.plain)
+        .foregroundStyle(foreground)
+        .background(.white.opacity(0.12), in: Circle())
+        .contentShape(Circle())
+        .accessibilityLabel(Text(accessibilityKey))
     }
 }
 
@@ -560,6 +553,61 @@ private struct FeverMeter: View {
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
         }
+    }
+}
+
+private struct PowerupTimersView: View {
+    @EnvironmentObject private var gameState: GameState
+
+    var body: some View {
+        HStack(spacing: 5) {
+            if gameState.shieldTimeRemaining > 0 {
+                PowerupTimerBadge(
+                    systemName: "shield.fill",
+                    value: gameState.shieldTimeRemaining,
+                    color: Color(red: 0.45, green: 0.82, blue: 1.0)
+                )
+            }
+            if gameState.slowTimeRemaining > 0 {
+                PowerupTimerBadge(
+                    systemName: "timer",
+                    value: gameState.slowTimeRemaining,
+                    color: Color(red: 0.76, green: 0.58, blue: 1.0)
+                )
+            }
+            if gameState.magnetTimeRemaining > 0 {
+                PowerupTimerBadge(
+                    systemName: "dot.radiowaves.left.and.right",
+                    value: gameState.magnetTimeRemaining,
+                    color: Color(red: 0.24, green: 0.92, blue: 0.84)
+                )
+            }
+        }
+        .frame(minWidth: 0, maxWidth: 116, alignment: .trailing)
+    }
+}
+
+private struct PowerupTimerBadge: View {
+    let systemName: String
+    let value: TimeInterval
+    let color: Color
+
+    var body: some View {
+        HStack(spacing: 3) {
+            Image(systemName: systemName)
+                .font(.caption2.weight(.black))
+                .frame(width: 12)
+            Text("\(Int(ceil(value)))")
+                .font(.caption2.weight(.black))
+                .monospacedDigit()
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+        }
+        .foregroundStyle(color)
+        .padding(.horizontal, 5)
+        .padding(.vertical, 3)
+        .background(color.opacity(0.16), in: Capsule())
+        .overlay(Capsule().stroke(color.opacity(0.45), lineWidth: 1))
     }
 }
 
