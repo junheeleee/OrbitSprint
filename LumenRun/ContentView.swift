@@ -637,19 +637,22 @@ private struct PauseView: View {
 }
 
 private struct LoadingView: View {
+    @EnvironmentObject private var gameState: GameState
+
     var body: some View {
         ZStack {
             Rectangle()
                 .fill(
                     LinearGradient(
-                        colors: [
-                            Color(red: 0.015, green: 0.018, blue: 0.04),
-                            Color(red: 0.02, green: 0.1, blue: 0.12)
-                        ],
+                        colors: gameState.selectedTheme.backgroundColors,
                         startPoint: .top,
                         endPoint: .bottom
                     )
                 )
+                .ignoresSafeArea()
+
+            LumenSignalField()
+                .opacity(0.54)
                 .ignoresSafeArea()
 
             VStack(spacing: 18) {
@@ -677,8 +680,15 @@ private struct StartView: View {
     var body: some View {
         VStack(spacing: 22) {
             VStack(spacing: 14) {
-                LumenSignalMark(size: 168, isCompact: false)
-                    .padding(.bottom, 4)
+                ZStack {
+                    LumenSignalField()
+                        .frame(height: 210)
+                        .opacity(0.62)
+
+                    LumenSignalMark(size: 168, isCompact: false)
+                        .padding(.bottom, 4)
+                }
+                .frame(maxWidth: .infinity)
 
                 Text("start.eyebrow")
                     .font(.caption.weight(.black))
@@ -737,21 +747,23 @@ private struct LumenSignalMark: View {
     var body: some View {
         ZStack {
             ForEach(0..<3, id: \.self) { index in
-                Ellipse()
+                RelayOrbitShape(gap: CGFloat(index) * 0.08)
+                    .trim(from: 0.05 + CGFloat(index) * 0.04, to: 0.88 - CGFloat(index) * 0.03)
                     .stroke(
                         LinearGradient(
                             colors: [
-                                Color(red: 0.0, green: 0.9, blue: 0.82).opacity(0.75 - Double(index) * 0.14),
-                                Color(red: 1.0, green: 0.22, blue: 0.55).opacity(0.55 - Double(index) * 0.1)
+                                LumenBrandColor.teal.opacity(0.82 - Double(index) * 0.14),
+                                LumenBrandColor.gold.opacity(0.74 - Double(index) * 0.12),
+                                LumenBrandColor.magenta.opacity(0.52 - Double(index) * 0.08)
                             ],
                             startPoint: .leading,
                             endPoint: .trailing
                         ),
-                        lineWidth: index == 1 ? 2 : 1.2
+                        style: StrokeStyle(lineWidth: index == 1 ? 2.2 : 1.35, lineCap: .round)
                     )
-                    .frame(width: size * (0.58 + CGFloat(index) * 0.2), height: size * (0.26 + CGFloat(index) * 0.1))
-                    .rotationEffect(.degrees(Double(index) * 58 - 20))
-                    .shadow(color: Color(red: 0.0, green: 0.88, blue: 0.82).opacity(0.25), radius: 10)
+                    .frame(width: size * (0.62 + CGFloat(index) * 0.18), height: size * (0.3 + CGFloat(index) * 0.1))
+                    .rotationEffect(.degrees(Double(index) * 58 - 24))
+                    .shadow(color: LumenBrandColor.teal.opacity(0.22), radius: 9)
             }
 
             Circle()
@@ -759,8 +771,8 @@ private struct LumenSignalMark: View {
                     RadialGradient(
                         colors: [
                             .white,
-                            Color(red: 1.0, green: 0.86, blue: 0.24),
-                            Color(red: 0.0, green: 0.84, blue: 0.8).opacity(0.85)
+                            LumenBrandColor.gold,
+                            LumenBrandColor.teal.opacity(0.88)
                         ],
                         center: .center,
                         startRadius: 2,
@@ -768,36 +780,119 @@ private struct LumenSignalMark: View {
                     )
                 )
                 .frame(width: size * 0.26, height: size * 0.26)
-                .shadow(color: Color(red: 1.0, green: 0.78, blue: 0.18).opacity(0.72), radius: size * 0.13)
+                .overlay {
+                    Circle()
+                        .stroke(.white.opacity(0.62), lineWidth: max(1.3, size * 0.012))
+                        .padding(size * 0.025)
+                }
+                .shadow(color: LumenBrandColor.gold.opacity(0.72), radius: size * 0.13)
 
-            GlitchShardMark(size: size * 0.28)
-                .rotationEffect(.degrees(-16))
-                .offset(x: size * 0.27, y: -size * 0.18)
+            ForEach(0..<4, id: \.self) { index in
+                RelayNodeMark(size: size * (index == 0 ? 0.1 : 0.074), color: relayNodeColor(index))
+                    .offset(relayNodeOffset(index))
+            }
         }
         .frame(width: size, height: size)
         .accessibilityHidden(true)
     }
+
+    private func relayNodeColor(_ index: Int) -> Color {
+        switch index {
+        case 0:
+            return LumenBrandColor.gold
+        case 1:
+            return LumenBrandColor.teal
+        case 2:
+            return LumenBrandColor.magenta
+        default:
+            return .white.opacity(0.92)
+        }
+    }
+
+    private func relayNodeOffset(_ index: Int) -> CGSize {
+        let compactScale = isCompact ? 0.72 : 1
+        switch index {
+        case 0:
+            return CGSize(width: size * 0.3 * compactScale, height: -size * 0.14 * compactScale)
+        case 1:
+            return CGSize(width: -size * 0.34 * compactScale, height: size * 0.04 * compactScale)
+        case 2:
+            return CGSize(width: size * 0.16 * compactScale, height: size * 0.28 * compactScale)
+        default:
+            return CGSize(width: -size * 0.1 * compactScale, height: -size * 0.28 * compactScale)
+        }
+    }
 }
 
-private struct GlitchShardMark: View {
+private struct RelayNodeMark: View {
     let size: CGFloat
+    let color: Color
 
     var body: some View {
-        ZStack {
-            StarGuideShape(points: 6, innerRatio: 0.56)
-                .fill(Color(red: 1.0, green: 0.1, blue: 0.45))
-                .overlay {
-                    StarGuideShape(points: 6, innerRatio: 0.56)
-                        .stroke(Color(red: 0.08, green: 0.0, blue: 0.04).opacity(0.82), lineWidth: max(3, size * 0.08))
-                }
-
-            XGuideShape()
-                .stroke(Color(red: 0.08, green: 0.0, blue: 0.04).opacity(0.84), style: StrokeStyle(lineWidth: max(4, size * 0.11), lineCap: .round))
-                .padding(size * 0.18)
-        }
-        .frame(width: size, height: size)
-        .shadow(color: Color(red: 1.0, green: 0.1, blue: 0.45).opacity(0.58), radius: size * 0.18)
+        Circle()
+            .fill(color)
+            .overlay {
+                Circle()
+                    .stroke(.white.opacity(0.55), lineWidth: max(1, size * 0.12))
+            }
+            .frame(width: size, height: size)
+            .shadow(color: color.opacity(0.54), radius: size * 0.8)
     }
+}
+
+private struct RelayOrbitShape: Shape {
+    let gap: CGFloat
+
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        let insetRect = rect.insetBy(dx: rect.width * gap, dy: rect.height * gap)
+        path.addEllipse(in: insetRect)
+        return path
+    }
+}
+
+private struct LumenSignalField: View {
+    var body: some View {
+        GeometryReader { proxy in
+            let width = proxy.size.width
+            let height = proxy.size.height
+
+            ZStack {
+                ForEach(0..<5, id: \.self) { index in
+                    Path { path in
+                        let y = height * (0.18 + CGFloat(index) * 0.15)
+                        path.move(to: CGPoint(x: width * 0.08, y: y))
+                        path.addCurve(
+                            to: CGPoint(x: width * 0.92, y: y + CGFloat(index % 2 == 0 ? 18 : -18)),
+                            control1: CGPoint(x: width * 0.32, y: y - 28),
+                            control2: CGPoint(x: width * 0.68, y: y + 28)
+                        )
+                    }
+                    .stroke(
+                        LinearGradient(
+                            colors: [
+                                LumenBrandColor.teal.opacity(0.0),
+                                LumenBrandColor.teal.opacity(0.18),
+                                LumenBrandColor.magenta.opacity(0.12),
+                                LumenBrandColor.teal.opacity(0.0)
+                            ],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        ),
+                        style: StrokeStyle(lineWidth: 1, lineCap: .round)
+                    )
+                }
+            }
+        }
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+    }
+}
+
+private enum LumenBrandColor {
+    static let teal = Color(red: 0.0, green: 0.9, blue: 0.82)
+    static let gold = Color(red: 1.0, green: 0.86, blue: 0.24)
+    static let magenta = Color(red: 1.0, green: 0.22, blue: 0.55)
 }
 
 private struct StartActionButton: View {

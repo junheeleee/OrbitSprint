@@ -7,6 +7,7 @@ Use this checklist before important commits, TestFlight builds, and App Store re
 - App launches on a real iPhone.
 - Loading screen appears correctly.
 - Start screen appears correctly.
+- Loading/start logo reads as a Lumen core and relay orbit, not as a hazard object.
 - Restart after game over works without app relaunch.
 - Player appears at normal size and color after restarting from game over.
 

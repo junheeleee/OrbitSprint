@@ -20,6 +20,7 @@ This document defines the target for the first playable beta. The goal is not Ap
 - [ ] Card rarity and risk cards are understandable at a glance.
 - [ ] Selected cards leave a small visible build summary during the run.
 - [ ] New stages show a short route identity cue so observers understand that the route changed.
+- [ ] Loading/start branding feels like the same Lumen core/orbit IP as the in-game objects.
 - [ ] Fever feels powerful but does not cause stutter.
 - [ ] Magnet can collect many sparks without frame spikes.
 - [ ] Game over, retry, pause, settings, rewards, achievements, and object guide all remain usable.
@@ -44,6 +45,7 @@ Run this script on device after every major gameplay/balance commit.
 - Stage target score may still need tuning after real play.
 - Relay cards now have rarity and risk picks, but still need real-device tuning for whether downsides feel fair.
 - Stage themes currently change visual tone and opening route, but later should add clearer stage-specific rules.
+- Start/loading branding now uses the Lumen core and relay orbit language, but app icon/start/gameplay should still be compared side by side on device.
 - Game Center leaderboard still depends on App Store Connect setup.
 - App Store release needs metadata, screenshots, privacy review, and final signing checks.
 
