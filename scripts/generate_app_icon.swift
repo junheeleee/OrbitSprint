@@ -90,15 +90,15 @@ for spec in orbitSpecs {
     orbit.stroke()
 }
 
-let glow = NSGradient(colors: [
-    color(1.0, 0.86, 0.24, 0.95),
-    color(0.0, 0.86, 0.82, 0.72),
-    color(0.0, 0.86, 0.82, 0.0)
-])!
-NSGraphicsContext.saveGraphicsState()
-NSBezierPath(ovalIn: CGRect(x: 286, y: 286, width: 452, height: 452)).addClip()
-glow.draw(in: CGRect(x: 286, y: 286, width: 452, height: 452), relativeCenterPosition: .zero)
-NSGraphicsContext.restoreGraphicsState()
+for ringIndex in 0..<5 {
+    let diameter = CGFloat(410 + ringIndex * 42)
+    let alpha = CGFloat(0.16 - Double(ringIndex) * 0.025)
+    let ringRect = CGRect(x: center.x - diameter / 2, y: center.y - diameter / 2, width: diameter, height: diameter)
+    let ring = NSBezierPath(ovalIn: ringRect)
+    color(0.0, 0.92, 0.82, alpha).setStroke()
+    ring.lineWidth = 16
+    ring.stroke()
+}
 
 let core = NSBezierPath(ovalIn: CGRect(x: 392, y: 392, width: 240, height: 240))
 color(1.0, 0.83, 0.18).setFill()
