@@ -37,6 +37,29 @@ enum RunUpgradeKind: CaseIterable, Hashable {
     case scoreSurge
     case comboEngine
     case overclock
+    case volatileSurge
+    case compressionGate
+    case unstableFever
+}
+
+enum RunUpgradeRarity {
+    case common
+    case rare
+    case risk
+    case legendary
+
+    var titleKey: String {
+        switch self {
+        case .common:
+            return "upgrade.rarity.common"
+        case .rare:
+            return "upgrade.rarity.rare"
+        case .risk:
+            return "upgrade.rarity.risk"
+        case .legendary:
+            return "upgrade.rarity.legendary"
+        }
+    }
 }
 
 struct RunUpgradeChoice: Identifiable, Equatable {
@@ -44,6 +67,7 @@ struct RunUpgradeChoice: Identifiable, Equatable {
     let titleKey: String
     let descriptionKey: String
     let iconName: String
+    let rarity: RunUpgradeRarity
 
     var id: RunUpgradeKind { kind }
 }
@@ -794,22 +818,59 @@ final class GameState: ObservableObject {
     }
 
     private func makeRunUpgradeChoices() -> [RunUpgradeChoice] {
-        let pool: [RunUpgradeChoice] = [
-            RunUpgradeChoice(kind: .shieldCache, titleKey: "upgrade.shield.title", descriptionKey: "upgrade.shield.desc", iconName: "shield.fill"),
-            RunUpgradeChoice(kind: .magnetBoost, titleKey: "upgrade.magnet.title", descriptionKey: "upgrade.magnet.desc", iconName: "dot.radiowaves.left.and.right"),
-            RunUpgradeChoice(kind: .timeBend, titleKey: "upgrade.slow.title", descriptionKey: "upgrade.slow.desc", iconName: "hourglass"),
-            RunUpgradeChoice(kind: .feverCharge, titleKey: "upgrade.fever.title", descriptionKey: "upgrade.fever.desc", iconName: "flame.fill"),
-            RunUpgradeChoice(kind: .scoreSurge, titleKey: "upgrade.score.title", descriptionKey: "upgrade.score.desc", iconName: "bolt.fill"),
-            RunUpgradeChoice(kind: .comboEngine, titleKey: "upgrade.combo.title", descriptionKey: "upgrade.combo.desc", iconName: "link.circle.fill"),
-            RunUpgradeChoice(kind: .overclock, titleKey: "upgrade.overclock.title", descriptionKey: "upgrade.overclock.desc", iconName: "speedometer")
-        ]
-        let freshPool = pool.filter { !recentRunUpgradeKinds.contains($0.kind) }
-        let choicePool = freshPool.count >= 3 ? freshPool : pool
         let seed = max(0, score / 11 + stage * 5 + combo * 2 + clearedStage)
+        let commonPool = [
+            runUpgradeChoice(.shieldCache),
+            runUpgradeChoice(.magnetBoost),
+            runUpgradeChoice(.timeBend),
+            runUpgradeChoice(.scoreSurge),
+            runUpgradeChoice(.comboEngine)
+        ]
+        let rarePool = [
+            runUpgradeChoice(.feverCharge),
+            runUpgradeChoice(.overclock)
+        ]
+        let riskPool = [
+            runUpgradeChoice(.volatileSurge),
+            runUpgradeChoice(.compressionGate),
+            runUpgradeChoice(.unstableFever)
+        ]
+        let legendaryPool = [
+            runUpgradeChoice(.unstableFever),
+            runUpgradeChoice(.overclock)
+        ]
 
-        return (0..<min(3, choicePool.count)).map { offset in
-            choicePool[(seed + offset * 3) % choicePool.count]
+        var choices: [RunUpgradeChoice] = []
+        choices.append(pickChoice(from: commonPool, seed: seed))
+
+        if stage >= 3, seed % 5 == 0 {
+            choices.append(pickChoice(from: legendaryPool, seed: seed + 7))
+        } else {
+            choices.append(pickChoice(from: rarePool + commonPool, seed: seed + 7))
         }
+
+        if stage >= 2, seed % 3 != 1 {
+            choices.append(pickChoice(from: riskPool, seed: seed + 13))
+        } else {
+            choices.append(pickChoice(from: commonPool + rarePool, seed: seed + 13))
+        }
+
+        var uniqueChoices: [RunUpgradeChoice] = []
+        for choice in choices {
+            let replacementSeed = seed + uniqueChoices.count * 17
+            var candidate = choice
+            if recentRunUpgradeKinds.contains(candidate.kind) || uniqueChoices.contains(where: { $0.kind == candidate.kind }) {
+                let fallbackPool = (commonPool + rarePool + riskPool).filter { fallback in
+                    !recentRunUpgradeKinds.contains(fallback.kind) && !uniqueChoices.contains(where: { $0.kind == fallback.kind })
+                }
+                if !fallbackPool.isEmpty {
+                    candidate = pickChoice(from: fallbackPool, seed: replacementSeed)
+                }
+            }
+            uniqueChoices.append(candidate)
+        }
+
+        return Array(uniqueChoices.prefix(3))
     }
 
     private func applyRunUpgrade(_ kind: RunUpgradeKind) {
@@ -853,6 +914,36 @@ final class GameState: ObservableObject {
             updateScoreAchievements()
             updateBestScore()
             SoundPlayer.timeCore(enabled: isSoundEnabled)
+        case .volatileSurge:
+            score += max(32, multiplier * 15)
+            combo += 5
+            multiplier = min(isFeverActive ? 8 : 5, 1 + combo / 5)
+            shieldCharges = 0
+            shieldTimeRemaining = 0
+            level = max(1, score / 25 + 1)
+            updateScoreMission()
+            updateScoreAchievements()
+            updateBestScore()
+            SoundPlayer.timeCore(enabled: isSoundEnabled)
+        case .compressionGate:
+            score += max(42, multiplier * 18)
+            nextStageScore = max(score + 85, nextStageScore - 80)
+            stageTargetScore = nextStageScore
+            level = max(1, score / 25 + 1)
+            updateScoreMission()
+            updateScoreAchievements()
+            updateBestScore()
+            SoundPlayer.timeCore(enabled: isSoundEnabled)
+        case .unstableFever:
+            if isFeverActive {
+                feverRemaining = min(feverRemaining + 3.5, feverDuration + 4)
+            } else {
+                combo = min(feverComboThreshold - 1, combo + 8)
+                multiplier = min(5, 1 + combo / 5)
+            }
+            magnetTimeRemaining = min(magnetTimeRemaining, 1.2)
+            slowTimeRemaining = 0
+            SoundPlayer.feverStart(enabled: isSoundEnabled)
         }
     }
 
@@ -876,6 +967,12 @@ final class GameState: ObservableObject {
             return "upgrade.combo.title"
         case .overclock:
             return "upgrade.overclock.title"
+        case .volatileSurge:
+            return "upgrade.volatile.title"
+        case .compressionGate:
+            return "upgrade.compression.title"
+        case .unstableFever:
+            return "upgrade.unstableFever.title"
         }
     }
 
@@ -895,10 +992,68 @@ final class GameState: ObservableObject {
             return "link.circle.fill"
         case .overclock:
             return "speedometer"
+        case .volatileSurge:
+            return "bolt.trianglebadge.exclamationmark.fill"
+        case .compressionGate:
+            return "arrow.down.forward.and.arrow.up.backward.circle.fill"
+        case .unstableFever:
+            return "flame.circle.fill"
         }
     }
 
     private func upgradeSortIndex(_ kind: RunUpgradeKind) -> Int {
         RunUpgradeKind.allCases.firstIndex(of: kind) ?? 0
+    }
+
+    private func runUpgradeChoice(_ kind: RunUpgradeKind) -> RunUpgradeChoice {
+        RunUpgradeChoice(
+            kind: kind,
+            titleKey: upgradeTitleKey(for: kind),
+            descriptionKey: upgradeDescriptionKey(for: kind),
+            iconName: upgradeIconName(for: kind),
+            rarity: upgradeRarity(for: kind)
+        )
+    }
+
+    private func pickChoice(from pool: [RunUpgradeChoice], seed: Int) -> RunUpgradeChoice {
+        pool[abs(seed) % pool.count]
+    }
+
+    private func upgradeDescriptionKey(for kind: RunUpgradeKind) -> String {
+        switch kind {
+        case .shieldCache:
+            return "upgrade.shield.desc"
+        case .magnetBoost:
+            return "upgrade.magnet.desc"
+        case .timeBend:
+            return "upgrade.slow.desc"
+        case .feverCharge:
+            return "upgrade.fever.desc"
+        case .scoreSurge:
+            return "upgrade.score.desc"
+        case .comboEngine:
+            return "upgrade.combo.desc"
+        case .overclock:
+            return "upgrade.overclock.desc"
+        case .volatileSurge:
+            return "upgrade.volatile.desc"
+        case .compressionGate:
+            return "upgrade.compression.desc"
+        case .unstableFever:
+            return "upgrade.unstableFever.desc"
+        }
+    }
+
+    private func upgradeRarity(for kind: RunUpgradeKind) -> RunUpgradeRarity {
+        switch kind {
+        case .shieldCache, .magnetBoost, .timeBend, .scoreSurge, .comboEngine:
+            return .common
+        case .feverCharge:
+            return .rare
+        case .overclock:
+            return stage >= 3 ? .legendary : .rare
+        case .volatileSurge, .compressionGate, .unstableFever:
+            return .risk
+        }
     }
 }

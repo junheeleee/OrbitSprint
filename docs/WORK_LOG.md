@@ -1,6 +1,7 @@
 # Lumen Run Work Log
 
 ## 2026-05-18
+- Added relay card rarity labels and three risk cards so stage-clear picks feel more like roguelike build decisions instead of flat bonuses.
 - Made stage 1 less empty by adding a richer opening route, an early surge lure, occasional first-stage reward forks, and a slower first-stage magnet moment before the first card pick.
 - Added friend-beta clarity polish with selected-card build summary chips and short next-stage route intro to make the run easier to understand from the outside.
 - Prevented accidental relay card picks from held gameplay taps by adding a short input lock and moving selection to explicit per-card pick buttons.

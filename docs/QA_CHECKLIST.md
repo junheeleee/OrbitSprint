@@ -27,6 +27,8 @@ Use this checklist before important commits, TestFlight builds, and App Store re
 - Relay card choices appear only after stage clears.
 - Relay card choices cannot be accidentally selected by a held gameplay tap when the card screen appears.
 - Choosing a relay card resumes the run cleanly into the next stage.
+- Relay card rarity badges are readable.
+- Risk cards clearly show both the tempting upside and the downside.
 - Stage 2 and later routes feel visually or structurally different from stage 1.
 - Selected relay cards appear in the HUD as a readable build summary.
 - Next-stage route intro appears briefly and does not block controls.

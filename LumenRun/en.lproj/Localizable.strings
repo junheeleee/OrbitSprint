@@ -99,6 +99,10 @@
 "upgrade.title" = "Relay Card Pick";
 "upgrade.subtitle" = "Choose one card to strengthen this run's build.";
 "upgrade.choose" = "Pick";
+"upgrade.rarity.common" = "Common";
+"upgrade.rarity.rare" = "Rare";
+"upgrade.rarity.risk" = "Risk";
+"upgrade.rarity.legendary" = "Legendary";
 "upgrade.shield.title" = "Shield Cache";
 "upgrade.shield.desc" = "Gain a shield immediately to block the next crash.";
 "upgrade.magnet.title" = "Magnet Amplifier";
@@ -113,6 +117,12 @@
 "upgrade.combo.desc" = "Raise combo to move closer to Fever and a stronger multiplier.";
 "upgrade.overclock.title" = "Risky Overclock";
 "upgrade.overclock.desc" = "Gain a larger score and combo burst, pushing the run forward fast.";
+"upgrade.volatile.title" = "Volatile Surge";
+"upgrade.volatile.desc" = "Gain a large score and combo burst, but burn every stored shield.";
+"upgrade.compression.title" = "Compression Gate";
+"upgrade.compression.desc" = "Gain a huge score burst, but pull the next stage closer.";
+"upgrade.unstableFever.title" = "Unstable Fever";
+"upgrade.unstableFever.desc" = "Push hard toward Fever, but destabilize magnet and slow-time support.";
 
 "achievements.title" = "Achievements";
 "achievements.all" = "All Achievements";

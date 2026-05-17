@@ -17,6 +17,7 @@ This document defines the target for the first playable beta. The goal is not Ap
 - [ ] Stage clear feels like a real checkpoint, not only a pause popup.
 - [ ] Card choices do not appear too often.
 - [ ] Card choices do not repeat in a boring pattern.
+- [ ] Card rarity and risk cards are understandable at a glance.
 - [ ] Selected cards leave a small visible build summary during the run.
 - [ ] New stages show a short route identity cue so observers understand that the route changed.
 - [ ] Fever feels powerful but does not cause stutter.
@@ -41,12 +42,12 @@ Run this script on device after every major gameplay/balance commit.
 
 ## Known Watch Areas
 - Stage target score may still need tuning after real play.
-- Relay cards need stronger long-term identity: rarity, levels, risk cards, and build summary.
+- Relay cards now have rarity and risk picks, but still need real-device tuning for whether downsides feel fair.
 - Stage themes currently change visual tone and opening route, but later should add clearer stage-specific rules.
 - Game Center leaderboard still depends on App Store Connect setup.
 - App Store release needs metadata, screenshots, privacy review, and final signing checks.
 
 ## Next Beta Work
-- Add card rarity and 2-3 risky cards.
 - Do a device performance pass after 5-minute runs.
+- Tune risk card frequency after friend playtests.
 - Prepare TestFlight/App Store Connect checklist once the gameplay loop survives playtesting.

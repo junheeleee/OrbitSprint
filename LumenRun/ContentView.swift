@@ -297,17 +297,35 @@ private struct RunUpgradeView: View {
             VStack(spacing: 9) {
                 ForEach(gameState.runUpgradeChoices) { choice in
                     HStack(spacing: 12) {
+                        let rarityColor = rarityColor(choice.rarity)
+
                         ZStack {
                             Circle()
-                                .fill(gameState.selectedTheme.accentColor.opacity(0.18))
+                                .fill(rarityColor.opacity(0.18))
 
                             Image(systemName: choice.iconName)
                                 .font(.headline.weight(.black))
-                                .foregroundStyle(gameState.selectedTheme.accentColor)
+                                .foregroundStyle(rarityColor)
                         }
                         .frame(width: 42, height: 42)
 
-                        VStack(alignment: .leading, spacing: 3) {
+                        VStack(alignment: .leading, spacing: 5) {
+                            HStack(spacing: 7) {
+                                Text(LocalizedStringKey(choice.rarity.titleKey))
+                                    .font(.caption2.weight(.black))
+                                    .foregroundStyle(rarityColor)
+                                    .textCase(.uppercase)
+                                    .padding(.horizontal, 7)
+                                    .frame(height: 20)
+                                    .background(rarityColor.opacity(0.16), in: Capsule())
+                                    .overlay {
+                                        Capsule()
+                                            .stroke(rarityColor.opacity(0.42), lineWidth: 1)
+                                    }
+
+                                Spacer(minLength: 0)
+                            }
+
                             Text(LocalizedStringKey(choice.titleKey))
                                 .font(.headline.weight(.black))
                                 .foregroundStyle(.white)
@@ -345,10 +363,11 @@ private struct RunUpgradeView: View {
                     }
                     .padding(12)
                     .frame(maxWidth: .infinity, minHeight: 68, alignment: .leading)
-                    .background(.white.opacity(0.09), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+                    .background(rarityColor(choice.rarity).opacity(0.08), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+                    .background(.white.opacity(0.07), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
                     .overlay {
                         RoundedRectangle(cornerRadius: 8, style: .continuous)
-                            .stroke(.white.opacity(0.13), lineWidth: 1)
+                            .stroke(rarityColor(choice.rarity).opacity(choice.rarity == .common ? 0.18 : 0.52), lineWidth: 1)
                     }
                 }
             }
@@ -372,6 +391,19 @@ private struct RunUpgradeView: View {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
                 isSelectionEnabled = true
             }
+        }
+    }
+
+    private func rarityColor(_ rarity: RunUpgradeRarity) -> Color {
+        switch rarity {
+        case .common:
+            return gameState.selectedTheme.accentColor
+        case .rare:
+            return .cyan
+        case .risk:
+            return .orange
+        case .legendary:
+            return .yellow
         }
     }
 }

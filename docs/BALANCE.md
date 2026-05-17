@@ -25,6 +25,7 @@ Track gameplay tuning changes here so the game becomes more skillful and less ra
 - Stage checkpoints should be far enough apart to feel earned.
 - Relay card picks should feel meaningful without interrupting the run too often.
 - Stage 1 should teach the rhythm before advanced patterns and risky objects appear.
+- Risk cards should look tempting, but their downside should be readable before selection.
 
 ## First Beta Baseline
 - Stage 1 target: 120 score.
@@ -33,6 +34,8 @@ Track gameplay tuning changes here so the game becomes more skillful and less ra
 - Early difficulty ramp should prioritize readability over punishment.
 - Score-only card effects should not skip too much stage progression by themselves.
 - Stage 1 should still contain small reward forks and early power-up moments so the first card does not feel like a long wait.
+- Risk cards begin appearing after stage 1 so the player learns the base rhythm before seeing high-variance build choices.
+- Current risk card baselines: Volatile Surge trades shields for score/combo, Compression Gate pulls the next stage closer, and Unstable Fever trades utility stability for stronger fever pressure.
 
 ## Change Log Template
 
