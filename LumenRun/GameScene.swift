@@ -36,7 +36,7 @@ final class GameScene: SKScene {
     private var orbitStepDirection = 1
     private var angle: CGFloat = -.pi / 2
     private var previousAngle: CGFloat = -.pi / 2
-    private var angularSpeed: CGFloat = 1.72
+    private var angularSpeed: CGFloat = 1.66
     private var lastUpdate: TimeInterval = 0
     private var elapsedTime: TimeInterval = 0
     private var safeUntil: TimeInterval = 1.6
@@ -169,9 +169,9 @@ final class GameScene: SKScene {
         lastUpdate = currentTime
         elapsedTime += delta
 
-        difficulty = 1 + CGFloat(difficultyProgress) * 0.85
+        difficulty = 1 + CGFloat(difficultyProgress) * 0.72
         let timeScale: CGFloat = state.slowTimeRemaining > 0 ? 0.62 : 1
-        let feverScale: CGFloat = state.isFeverActive ? 1.65 : 1
+        let feverScale: CGFloat = state.isFeverActive ? 1.52 : 1
         previousAngle = angle
         angle += angularSpeed * difficulty * timeScale * feverScale * CGFloat(delta)
         updateOrbitRadius(delta: delta)
@@ -185,14 +185,14 @@ final class GameScene: SKScene {
         state.tick(delta: delta)
         updateFeverEndingCue()
 
-        if comboTimer > scaledInterval(easy: 3.1, hard: 1.75) {
+        if comboTimer > scaledInterval(easy: 3.45, hard: 2.05) {
             state.breakCombo()
         }
 
         updateRunPattern()
         updatePatternSpawns()
 
-        if powerUpTimer > scaledInterval(easy: 8.8, hard: 4.8) {
+        if powerUpTimer > scaledInterval(easy: 10.5, hard: 6.2) {
             spawnPowerUp()
             powerUpTimer = 0
         }
@@ -545,13 +545,13 @@ final class GameScene: SKScene {
     }
 
     private func availablePatternSequence() -> [RunPattern] {
-        if state.score < 35 {
+        if state.stage <= 1 {
             return [.flow, .harvest]
         }
-        if state.score < 90 {
+        if state.stage == 2 {
             return [.flow, .harvest, .gate]
         }
-        if state.score < 160 {
+        if state.stage == 3 {
             return [.flow, .gate, .harvest, .switchback]
         }
         return [.gate, .switchback, .harvest, .overdrive]
@@ -567,20 +567,20 @@ final class GameScene: SKScene {
 
         switch currentPattern {
         case .flow:
-            if spawnTimer > scaledInterval(easy: 1.72, hard: 0.78) {
+            if spawnTimer > scaledInterval(easy: 1.95, hard: 0.92) {
                 spawnShard()
                 spawnTimer = 0
             }
-            if elapsedTime > 0.45, sparkTimer > scaledInterval(easy: 1.08, hard: 0.64) {
+            if elapsedTime > 0.45, sparkTimer > scaledInterval(easy: 1.14, hard: 0.7) {
                 spawnSpark()
-                if state.score >= 45, patternStep.isMultiple(of: 5) {
+                if state.stage >= 2, patternStep.isMultiple(of: 6) {
                     spawnChoiceFork()
                 }
                 patternStep += 1
                 sparkTimer = 0
             }
         case .gate:
-            if spawnTimer > scaledInterval(easy: 2.05, hard: 1.12) {
+            if spawnTimer > scaledInterval(easy: 2.24, hard: 1.22) {
                 spawnGateWave()
                 spawnTimer = 0
             }
@@ -589,7 +589,7 @@ final class GameScene: SKScene {
                 sparkTimer = 0
             }
         case .switchback:
-            if patternWaveTimer > scaledInterval(easy: 1.15, hard: 0.66) {
+            if patternWaveTimer > scaledInterval(easy: 1.3, hard: 0.76) {
                 spawnSwitchbackStep()
                 patternWaveTimer = 0
             }
@@ -598,11 +598,11 @@ final class GameScene: SKScene {
                 sparkTimer = 0
             }
         case .harvest:
-            if sparkTimer > scaledInterval(easy: 0.72, hard: 0.38) {
+            if sparkTimer > scaledInterval(easy: 0.82, hard: 0.46) {
                 spawnSparkTrail()
                 sparkTimer = 0
             }
-            if state.score >= 45, patternWaveTimer > scaledInterval(easy: 3.2, hard: 2.1) {
+            if state.stage >= 2, patternWaveTimer > scaledInterval(easy: 3.6, hard: 2.45) {
                 spawnPowerUp(kind: .magnet, on: randomOrbitRadius(), near: nextPlayableSpawnAngle(minLead: 0.9, maxLead: 2.1))
                 patternWaveTimer = 0
             }
@@ -611,8 +611,8 @@ final class GameScene: SKScene {
                 spawnTimer = 0
             }
         case .overdrive:
-            if spawnTimer > scaledInterval(easy: 1.12, hard: 0.55) {
-                if patternStep.isMultiple(of: 3) {
+            if spawnTimer > scaledInterval(easy: 1.28, hard: 0.68) {
+                if patternStep.isMultiple(of: 4) {
                     spawnChoiceFork()
                 } else {
                     spawnShard()
@@ -661,7 +661,7 @@ final class GameScene: SKScene {
             spawnShard(on: orbitRadii[index], near: waveAngle + CGFloat.random(in: -0.04...0.04), rewardChance: 0, allowParallel: true)
         }
         spawnSpark(on: orbitRadii[safeIndex], near: waveAngle + CGFloat.random(in: -0.08...0.08))
-        if state.score >= 70 {
+        if state.stage >= 2 {
             let riskyIndex = (safeIndex + orbitStepDirection + orbitRadii.count) % orbitRadii.count
             spawnPowerUp(kind: .surge, on: orbitRadii[riskyIndex], near: waveAngle + 0.24)
         }
@@ -678,7 +678,7 @@ final class GameScene: SKScene {
         let spawnAngle = nextThreatSpawnAngle(on: radius, minLead: 0.82, maxLead: 1.42)
         pulseOrbit(at: radius, color: state.selectedTheme.shardColor, duration: 0.32)
         spawnShard(on: radius, near: spawnAngle, rewardChance: patternStep.isMultiple(of: 2) ? 0.45 : 0.18, allowParallel: false)
-        if state.score >= 120, patternStep % 5 == 4 {
+        if state.stage >= 3, patternStep % 5 == 4 {
             spawnPowerUp(kind: .bomb, on: rewardRadius(awayFrom: radius), near: spawnAngle + 0.16)
         } else if patternStep.isMultiple(of: 3) {
             spawnSpark(on: rewardRadius(awayFrom: radius), near: spawnAngle + 0.22)
@@ -695,7 +695,7 @@ final class GameScene: SKScene {
             let index = rawIndex % orbitRadii.count
             spawnSpark(on: orbitRadii[index], near: baseAngle + CGFloat(offset) * 0.18)
         }
-        if state.score >= 75, patternStep.isMultiple(of: 4) {
+        if state.stage >= 2, patternStep.isMultiple(of: 4) {
             spawnPowerUp(kind: .magnet, on: orbitRadii[startIndex], near: baseAngle - 0.2)
         }
         patternStep += 1
@@ -848,13 +848,13 @@ final class GameScene: SKScene {
     }
 
     private func selectedPowerUpKind(for roll: CGFloat) -> LumenObjectKind {
-        if state.score >= 120 && roll < 0.16 {
+        if state.stage >= 3 && roll < 0.15 {
             return .bomb
         }
-        if state.score >= 70 && roll < 0.32 {
+        if state.stage >= 2 && roll < 0.28 {
             return .surge
         }
-        if state.score >= 45 && roll < 0.48 {
+        if state.stage >= 2 && roll < 0.44 {
             return .magnet
         }
         if state.shieldCharges == 0 || roll < 0.72 {
@@ -1482,7 +1482,7 @@ final class GameScene: SKScene {
     }
 
     private var difficultyProgress: Double {
-        min(1, Double(max(state.score - 20, 0)) / 150)
+        min(1, Double(max(state.score - 35, 0)) / 260)
     }
 
     private func scaledInterval(easy: Double, hard: Double) -> Double {

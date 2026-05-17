@@ -92,7 +92,7 @@ final class GameState: ObservableObject {
     @Published var multiplier = 1
     @Published var level = 1
     @Published private(set) var stage = 1
-    @Published private(set) var stageTargetScore = 90
+    @Published private(set) var stageTargetScore = 120
     @Published private(set) var clearedStage = 0
     @Published private(set) var stageClearSerial = 0
     @Published private(set) var stageResumeSerial = 0
@@ -167,12 +167,12 @@ final class GameState: ObservableObject {
     private let hapticsEnabledKey = "hapticsEnabled"
     private let selectedThemeKey = "selectedTheme"
     private let selectedCoreSkinKey = "selectedCoreSkin"
-    private let feverComboThreshold = 12
-    private let feverDuration: TimeInterval = 5
-    private let shieldDuration: TimeInterval = 8
+    private let feverComboThreshold = 13
+    private let feverDuration: TimeInterval = 5.4
+    private let shieldDuration: TimeInterval = 8.5
     private let shieldExtensionDuration: TimeInterval = 6
-    private let magnetDuration: TimeInterval = 5
-    private var nextStageScore = 90
+    private let magnetDuration: TimeInterval = 5.5
+    private var nextStageScore = 120
     private var recentRunUpgradeKinds: [RunUpgradeKind] = []
     private var canShowAchievementToast = false
     private var pendingAchievementToasts: [AchievementDefinition] = []
@@ -260,7 +260,7 @@ final class GameState: ObservableObject {
         multiplier = 1
         level = 1
         stage = 1
-        stageTargetScore = 90
+        stageTargetScore = 120
         clearedStage = 0
         stageClearSerial = 0
         stageResumeSerial = 0
@@ -271,7 +271,7 @@ final class GameState: ObservableObject {
         feverRemaining = 0
         runUpgradeChoices = []
         isRunUpgradePresented = false
-        nextStageScore = 90
+        nextStageScore = 120
         recentRunUpgradeKinds = []
         SoundPlayer.setFeverActive(false, enabled: isSoundEnabled)
         isGameOver = false
@@ -790,19 +790,19 @@ final class GameState: ObservableObject {
             }
             SoundPlayer.feverStart(enabled: isSoundEnabled)
         case .scoreSurge:
-            score += max(12, multiplier * 10)
+            score += max(10, multiplier * 8)
             level = max(1, score / 25 + 1)
             updateScoreMission()
             updateScoreAchievements()
             updateBestScore()
             SoundPlayer.lumen(enabled: isSoundEnabled)
         case .comboEngine:
-            combo += 4
+            combo += 5
             multiplier = min(isFeverActive ? 8 : 5, 1 + combo / 5)
             SoundPlayer.lumen(enabled: isSoundEnabled)
         case .overclock:
-            score += max(18, multiplier * 12)
-            combo += 2
+            score += max(16, multiplier * 9)
+            combo += 3
             multiplier = min(isFeverActive ? 8 : 5, 1 + combo / 5)
             level = max(1, score / 25 + 1)
             updateScoreMission()
@@ -813,6 +813,6 @@ final class GameState: ObservableObject {
     }
 
     private func stageScoreRequirement(for stage: Int) -> Int {
-        110 + min(stage - 2, 6) * 40
+        170 + min(stage - 2, 6) * 50
     }
 }

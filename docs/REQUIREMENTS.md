@@ -13,6 +13,7 @@
 - Runs should use stage-clear moments for roguelike deckbuilding-style card choices, avoiding frequent interruption during active play.
 - The core run should remain endless, with stages acting as longer checkpoints that clear active objects and create a clear transition into the next segment.
 - Stage checkpoints should change the map feel and opening object mix so each segment feels like a distinct route, not only a score gate.
+- First beta balance should favor readable early runs, longer stage checkpoints, gradual pattern unlocks by stage, and fewer flow-breaking rewards.
 - Temporary invulnerability visuals must always restore the player core to full opacity when the effect ends.
 - Player-core feedback should avoid opacity animation; respawn and invulnerability should use scale/ring effects so the core never appears unintentionally transparent.
 - Obstacles should spawn in ways that preserve player agency.

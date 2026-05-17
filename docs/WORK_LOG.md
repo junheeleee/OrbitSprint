@@ -1,6 +1,7 @@
 # Lumen Run Work Log
 
 ## 2026-05-18
+- Tuned first-beta balance by lengthening stage goals, slowing early difficulty ramp, delaying advanced patterns/items by stage, and softening score-only card spikes.
 - Added first-pass stage route variety with stage-tinted orbit/star fields, different opening patterns, and stage-specific opening object mixes.
 - Shifted stages toward endless-run checkpoints with longer score targets, stage-clear object cleanup, clear transition pulses, and a fresh opening route when the next stage starts.
 - Reworked mid-run upgrades into stage-clear Relay Card picks with increasing stage score goals, less repetition, and new deckbuilding-style combo/overclock cards.
