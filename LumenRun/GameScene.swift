@@ -754,7 +754,7 @@ final class GameScene: SKScene {
                     state.collectFeverHit()
                 }
                 Haptics.collect(enabled: state.isHapticsEnabled)
-                emitBurst(at: hitPoint, color: state.isFeverActive ? state.selectedTheme.feverColor : state.selectedTheme.sparkColor, count: state.isFeverActive ? 8 : 9)
+                emitCollectSignal(at: hitPoint, color: state.isFeverActive ? state.selectedTheme.feverColor : state.selectedTheme.sparkColor, count: state.isFeverActive ? 8 : 9)
                 if state.isFeverActive {
                     throttledFeverFlash(color: state.selectedTheme.feverColor.withAlphaComponent(0.18))
                 } else {
@@ -769,7 +769,7 @@ final class GameScene: SKScene {
                     state.collectFeverHit()
                 }
                 Haptics.collect(enabled: state.isHapticsEnabled)
-                emitBurst(at: hitPoint, color: state.selectedTheme.shieldColor, count: 14)
+                emitPowerSignal(at: hitPoint, color: state.selectedTheme.shieldColor, count: 14, radius: 52)
                 flash(color: state.selectedTheme.shieldColor.withAlphaComponent(0.18))
             } else if kind == .slow {
                 let hitPoint = node.position
@@ -780,7 +780,7 @@ final class GameScene: SKScene {
                     state.collectFeverHit()
                 }
                 Haptics.collect(enabled: state.isHapticsEnabled)
-                emitBurst(at: hitPoint, color: state.selectedTheme.timeCoreColor, count: 14)
+                emitPowerSignal(at: hitPoint, color: state.selectedTheme.timeCoreColor, count: 14, radius: 50)
                 flash(color: state.selectedTheme.timeCoreColor.withAlphaComponent(0.18))
             } else if kind == .magnet {
                 let hitPoint = node.position
@@ -791,7 +791,7 @@ final class GameScene: SKScene {
                     state.collectFeverHit()
                 }
                 Haptics.collect(enabled: state.isHapticsEnabled)
-                emitBurst(at: hitPoint, color: objectColor(for: .magnet), count: 14)
+                emitPowerSignal(at: hitPoint, color: objectColor(for: .magnet), count: 14, radius: 58)
                 pulseOrbit(at: currentRadius, color: objectColor(for: .magnet), duration: 0.42)
                 flash(color: objectColor(for: .magnet).withAlphaComponent(0.16))
             } else if kind == .bomb {
@@ -804,8 +804,7 @@ final class GameScene: SKScene {
                     state.collectFeverHit()
                 }
                 Haptics.collect(enabled: state.isHapticsEnabled)
-                emitBurst(at: hitPoint, color: objectColor(for: .bomb), count: max(18, cleared * 8))
-                shockwave(at: hitPoint, color: objectColor(for: .bomb), radius: 118)
+                emitGlitchClearSignal(at: hitPoint, color: objectColor(for: .bomb), count: max(18, cleared * 8), radius: 118)
                 flash(color: objectColor(for: .bomb).withAlphaComponent(0.18))
             } else if kind == .surge {
                 let hitPoint = node.position
@@ -816,7 +815,7 @@ final class GameScene: SKScene {
                     state.collectFeverHit()
                 }
                 Haptics.collect(enabled: state.isHapticsEnabled)
-                emitBurst(at: hitPoint, color: objectColor(for: .surge), count: state.isFeverActive ? 10 : 18)
+                emitPowerSignal(at: hitPoint, color: objectColor(for: .surge), count: state.isFeverActive ? 10 : 18, radius: 64)
                 flash(color: objectColor(for: .surge).withAlphaComponent(0.2))
             } else if kind == .shard {
                 if state.isFeverActive {
@@ -825,7 +824,7 @@ final class GameScene: SKScene {
                     comboTimer = 0
                     state.collectFeverHit()
                     Haptics.collect(enabled: state.isHapticsEnabled)
-                    emitBurst(at: hitPoint, color: state.selectedTheme.feverColor, count: 10)
+                    emitGlitchClearSignal(at: hitPoint, color: state.selectedTheme.feverColor, count: 10, radius: 54)
                     throttledFeverFlash(color: state.selectedTheme.feverColor.withAlphaComponent(0.18))
                     continue
                 }
@@ -841,7 +840,7 @@ final class GameScene: SKScene {
                     let hitPoint = node.position
                     absorbShard(node, invulnerabilityDuration: 1.15)
                     Haptics.fail(enabled: state.isHapticsEnabled)
-                    emitBurst(at: hitPoint, color: state.selectedTheme.shieldColor, count: 18)
+                    emitPowerSignal(at: hitPoint, color: state.selectedTheme.shieldColor, count: 18, radius: 68)
                     flash(color: state.selectedTheme.shieldColor.withAlphaComponent(0.2))
                     continue
                 }
@@ -859,6 +858,7 @@ final class GameScene: SKScene {
                     ]),
                     withKey: "deathPulse"
                 )
+                emitGlitchClearSignal(at: player.position, color: state.selectedTheme.shardColor, count: 12, radius: 86)
                 flash(color: state.selectedTheme.shardColor.withAlphaComponent(0.24))
                 return
             }
@@ -888,7 +888,7 @@ final class GameScene: SKScene {
                 comboTimer = 0
                 state.collectSpark()
                 Haptics.collect(enabled: state.isHapticsEnabled)
-                emitBurst(at: hitPoint, color: state.selectedTheme.sparkColor, count: 3)
+                emitCollectSignal(at: hitPoint, color: state.selectedTheme.sparkColor, count: 3)
                 continue
             }
 
@@ -906,7 +906,7 @@ final class GameScene: SKScene {
             let distance = hypot(point.x - node.position.x, point.y - node.position.y)
             guard distance <= clearance else { return }
             cleared += 1
-            emitBurst(at: node.position, color: objectColor(for: .bomb), count: 6)
+            emitGlitchClearSignal(at: node.position, color: objectColor(for: .bomb), count: 6, radius: 40)
             node.removeFromParent()
         }
         return cleared
@@ -1056,6 +1056,73 @@ final class GameScene: SKScene {
         flash(color: color)
     }
 
+    private func emitCollectSignal(at position: CGPoint, color: SKColor, count: Int) {
+        emitBurst(at: position, color: color, count: count)
+        signalRing(at: position, color: color, radius: state.isFeverActive ? 42 : 30, duration: 0.24, lineWidth: 1.5)
+    }
+
+    private func emitPowerSignal(at position: CGPoint, color: SKColor, count: Int, radius: CGFloat) {
+        emitBurst(at: position, color: color, count: count)
+        signalRing(at: position, color: color, radius: radius, duration: 0.32, lineWidth: 2.4)
+        signalRing(at: position, color: .white.withAlphaComponent(0.75), radius: radius * 0.62, duration: 0.22, lineWidth: 1.2)
+    }
+
+    private func emitGlitchClearSignal(at position: CGPoint, color: SKColor, count: Int, radius: CGFloat) {
+        emitBurst(at: position, color: color, count: count)
+        emitGlitchFragments(at: position, color: color)
+        shockwave(at: position, color: color, radius: radius)
+    }
+
+    private func signalRing(at position: CGPoint, color: SKColor, radius: CGFloat, duration: TimeInterval, lineWidth: CGFloat) {
+        guard effectLayer.children.count < (state.isFeverActive ? 42 : 56) else { return }
+
+        let ring = SKShapeNode(circleOfRadius: 8)
+        ring.position = position
+        ring.strokeColor = color.withAlphaComponent(0.72)
+        ring.fillColor = .clear
+        ring.lineWidth = lineWidth
+        ring.glowWidth = 7
+        ring.zPosition = 12
+        effectLayer.addChild(ring)
+        ring.run(.sequence([
+            .group([
+                .scale(to: radius / 8, duration: duration),
+                .fadeOut(withDuration: duration)
+            ]),
+            .removeFromParent()
+        ]))
+    }
+
+    private func emitGlitchFragments(at position: CGPoint, color: SKColor) {
+        let fragmentLimit = state.isFeverActive ? 3 : 4
+        guard effectLayer.children.count + fragmentLimit < (state.isFeverActive ? 42 : 56) else { return }
+
+        for index in 0..<fragmentLimit {
+            let fragment = SKShapeNode(path: hazardShardPath(radius: CGFloat.random(in: 3.5...5.5)))
+            fragment.position = position
+            fragment.fillColor = color.withAlphaComponent(0.86)
+            fragment.strokeColor = .black.withAlphaComponent(0.45)
+            fragment.lineWidth = 0.8
+            fragment.glowWidth = 3
+            fragment.zRotation = CGFloat.random(in: 0...(2 * .pi))
+            fragment.zPosition = 13
+            effectLayer.addChild(fragment)
+
+            let angle = CGFloat(index) / CGFloat(max(fragmentLimit, 1)) * 2 * .pi + CGFloat.random(in: -0.4...0.4)
+            let distance = CGFloat.random(in: 24...54)
+            let duration = TimeInterval(CGFloat.random(in: 0.22...0.36))
+            fragment.run(.sequence([
+                .group([
+                    .moveBy(x: cos(angle) * distance, y: sin(angle) * distance, duration: duration),
+                    .rotate(byAngle: CGFloat.random(in: -2.4...2.4), duration: duration),
+                    .fadeOut(withDuration: duration),
+                    .scale(to: 0.15, duration: duration)
+                ]),
+                .removeFromParent()
+            ]))
+        }
+    }
+
     private func emitBurst(at position: CGPoint, color: SKColor, count: Int) {
         let effectLimit = state.isFeverActive ? 42 : 56
         guard effectLayer.children.count < effectLimit else {
@@ -1138,7 +1205,7 @@ final class GameScene: SKScene {
             guard let objectAngle = storedAngle(for: node) else { return }
             if angularDistance(objectAngle, angle) < 1.1 {
                 converted += 1
-                emitBurst(at: node.position, color: state.selectedTheme.feverColor, count: 4)
+                emitGlitchClearSignal(at: node.position, color: state.selectedTheme.feverColor, count: 4, radius: 44)
                 node.removeFromParent()
             }
         }

@@ -15,6 +15,7 @@ This document keeps the game identity consistent across title, visuals, sound, U
 - The player core should carry an inner lumen signal mark so it feels like the same object promised by the icon and title screen.
 - Objects should look meaningfully different by gameplay role.
 - Item pickup, collision, fever, shield, and score feedback should be easy to distinguish.
+- Spark collection should read as a small relay signal, power-up pickup as a stronger system pulse, and glitch collisions/clears as fractured shard energy.
 - Fever should feel like a dramatic power state, not just a stat change.
 - UI should support the sci-fi identity without hurting readability.
 - Menu screens should feel like entering a signal system, not reading a generic mobile-game card.

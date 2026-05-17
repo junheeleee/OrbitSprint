@@ -13,6 +13,7 @@
 - Obstacles should spawn in ways that preserve player agency.
 - The app icon, loading screen, and start screen should use the same core/orbit/shard identity so the game feels like a coherent IP rather than a generic mockup.
 - In-game player and orbit visuals should reinforce the same lumen-core and relay-network identity without reducing obstacle readability.
+- Object feedback effects should differ by gameplay role: collection signals, power-up pulses, and glitch fracture effects should be visually distinct.
 - Difficulty should ramp gradually from score, keeping the opening run approachable before gate, switchback, and overdrive patterns appear.
 - Fever should feel faster and rewarding without causing noticeable frame stutter on device.
 - Fever mode should make the player invincible, faster, flashier, and able to convert collisions into score.
