@@ -386,18 +386,26 @@ private struct LoadingView: View {
     var body: some View {
         ZStack {
             Rectangle()
-                .fill(.black.opacity(0.5))
+                .fill(
+                    LinearGradient(
+                        colors: [
+                            Color(red: 0.015, green: 0.018, blue: 0.04),
+                            Color(red: 0.02, green: 0.1, blue: 0.12)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
                 .ignoresSafeArea()
 
             VStack(spacing: 18) {
-                Image(systemName: "sparkles")
-                    .font(.system(size: 54, weight: .black))
-                    .foregroundStyle(.cyan, .pink)
+                LumenSignalMark(size: 116, isCompact: false)
                     .symbolEffect(.pulse)
 
                 Text("loading.title")
-                    .font(.system(size: 34, weight: .black, design: .rounded))
+                    .font(.system(size: 30, weight: .black, design: .rounded))
                     .foregroundStyle(.white)
+                    .multilineTextAlignment(.center)
 
                 ProgressView()
                     .tint(.white)
@@ -413,15 +421,18 @@ private struct StartView: View {
     let showObjectGuide: () -> Void
 
     var body: some View {
-        VStack(spacing: 18) {
-            VStack(spacing: 8) {
+        VStack(spacing: 22) {
+            VStack(spacing: 14) {
+                LumenSignalMark(size: 168, isCompact: false)
+                    .padding(.bottom, 4)
+
                 Text("start.eyebrow")
                     .font(.caption.weight(.black))
                     .foregroundStyle(Color(red: 0.0, green: 0.92, blue: 0.82))
                     .tracking(1.8)
 
                 Text("app.title")
-                    .font(.system(size: 46, weight: .black, design: .rounded))
+                    .font(.system(size: 52, weight: .black, design: .rounded))
                     .foregroundStyle(
                         LinearGradient(
                             colors: gameState.selectedTheme.feverColors,
@@ -430,6 +441,7 @@ private struct StartView: View {
                         )
                     )
                     .multilineTextAlignment(.center)
+                    .shadow(color: gameState.selectedTheme.accentColor.opacity(0.35), radius: 18, x: 0, y: 10)
 
                 Text("start.subtitle")
                     .font(.headline.weight(.semibold))
@@ -446,24 +458,6 @@ private struct StartView: View {
 
             DailyMissionsPanel()
 
-            Button(action: showRewards) {
-                Label("rewards.title", systemImage: "gift.fill")
-                    .font(.headline.weight(.bold))
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 12)
-            }
-            .buttonStyle(.bordered)
-            .tint(.white)
-
-            Button(action: showObjectGuide) {
-                Label("objects.title", systemImage: "questionmark.circle.fill")
-                    .font(.headline.weight(.bold))
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 12)
-            }
-            .buttonStyle(.bordered)
-            .tint(.white)
-
             Button(action: start) {
                 Label("start.play", systemImage: "play.fill")
                     .font(.headline.weight(.bold))
@@ -472,12 +466,98 @@ private struct StartView: View {
             }
             .buttonStyle(.borderedProminent)
             .tint(gameState.selectedTheme.accentColor)
+
+            HStack(spacing: 10) {
+                StartActionButton(title: "rewards.title", systemImage: "gift.fill", action: showRewards)
+                StartActionButton(title: "objects.title", systemImage: "scope", action: showObjectGuide)
+            }
         }
-        .padding(24)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+        .padding(.vertical, 28)
+    }
+}
+
+private struct LumenSignalMark: View {
+    let size: CGFloat
+    let isCompact: Bool
+
+    var body: some View {
+        ZStack {
+            ForEach(0..<3, id: \.self) { index in
+                Ellipse()
+                    .stroke(
+                        LinearGradient(
+                            colors: [
+                                Color(red: 0.0, green: 0.9, blue: 0.82).opacity(0.75 - Double(index) * 0.14),
+                                Color(red: 1.0, green: 0.22, blue: 0.55).opacity(0.55 - Double(index) * 0.1)
+                            ],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        ),
+                        lineWidth: index == 1 ? 2 : 1.2
+                    )
+                    .frame(width: size * (0.58 + CGFloat(index) * 0.2), height: size * (0.26 + CGFloat(index) * 0.1))
+                    .rotationEffect(.degrees(Double(index) * 58 - 20))
+                    .shadow(color: Color(red: 0.0, green: 0.88, blue: 0.82).opacity(0.25), radius: 10)
+            }
+
+            Circle()
+                .fill(
+                    RadialGradient(
+                        colors: [
+                            .white,
+                            Color(red: 1.0, green: 0.86, blue: 0.24),
+                            Color(red: 0.0, green: 0.84, blue: 0.8).opacity(0.85)
+                        ],
+                        center: .center,
+                        startRadius: 2,
+                        endRadius: size * 0.19
+                    )
+                )
+                .frame(width: size * 0.26, height: size * 0.26)
+                .shadow(color: Color(red: 1.0, green: 0.78, blue: 0.18).opacity(0.72), radius: size * 0.13)
+
+            Image(systemName: "exclamationmark.triangle.fill")
+                .font(.system(size: size * 0.16, weight: .black))
+                .foregroundStyle(Color(red: 1.0, green: 0.18, blue: 0.48))
+                .rotationEffect(.degrees(-18))
+                .offset(x: size * 0.24, y: -size * 0.19)
+                .shadow(color: Color(red: 1.0, green: 0.18, blue: 0.48).opacity(0.65), radius: 8)
+
+            if !isCompact {
+                ForEach(0..<4, id: \.self) { index in
+                    Capsule()
+                        .fill(.white.opacity(0.12))
+                        .frame(width: size * 0.2, height: 2)
+                        .offset(x: -size * 0.42, y: CGFloat(index - 2) * size * 0.085)
+                }
+            }
+        }
+        .frame(width: size, height: size)
+        .accessibilityHidden(true)
+    }
+}
+
+private struct StartActionButton: View {
+    let title: LocalizedStringKey
+    let systemImage: String
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Label(title, systemImage: systemImage)
+                .font(.subheadline.weight(.black))
+                .lineLimit(1)
+                .minimumScaleFactor(0.76)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 12)
+                .padding(.horizontal, 10)
+        }
+        .buttonStyle(.plain)
+        .foregroundStyle(.white)
+        .background(.white.opacity(0.1), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
         .overlay {
             RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .stroke(.white.opacity(0.18), lineWidth: 1)
+                .stroke(.white.opacity(0.2), lineWidth: 1)
         }
     }
 }

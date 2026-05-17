@@ -1,6 +1,7 @@
 # Lumen Run Work Log
 
 ## 2026-05-17
+- Started the first IP polish pass with a branded start/loading mark, unified title-screen action buttons, refreshed app icon art, and clearer core/orbit/shard visual direction.
 - Restored per-frame magnet motion while keeping capped spark pulls so the magnet effect feels smooth instead of stepping at a lower frame rate.
 - Optimized magnet pulls by throttling pull updates, limiting affected sparks, using squared-distance checks, and reducing magnet collection particles.
 - Softened early difficulty with score-gated pattern unlocks, slower spawn scaling, reduced Fever speed, and lighter Fever entry effects.

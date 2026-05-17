@@ -7,9 +7,9 @@
 "hud.feverSoon" = "%d TO FEVER";
 "hud.feverMeter" = "FEVER %d/%d";
 
-"loading.title" = "Igniting the Run";
-"start.eyebrow" = "NEON CORE RUNNER";
-"start.subtitle" = "Run neon orbits, chain lumen sparks, and dodge the glitch.";
+"loading.title" = "Igniting the Lumen Core";
+"start.eyebrow" = "COLLAPSING ORBIT SIGNAL";
+"start.subtitle" = "Relay a fading lumen core through a collapsing glitch orbit.";
 "start.play" = "Start Run";
 
 "tutorial.title" = "Run Protocol";

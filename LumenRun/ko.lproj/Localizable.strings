@@ -7,9 +7,9 @@
 "hud.feverSoon" = "피버까지 %d";
 "hud.feverMeter" = "피버 %d/%d";
 
-"loading.title" = "루멘런 점화 중";
-"start.eyebrow" = "네온 코어 러너";
-"start.subtitle" = "네온 궤도를 달리며 루멘 조각을 잇고 글리치를 피하세요.";
+"loading.title" = "루멘 코어 점화 중";
+"start.eyebrow" = "붕괴 궤도 신호망";
+"start.subtitle" = "꺼져가는 루멘 코어를 이어 글리치 궤도망을 돌파하세요.";
 "start.play" = "런 시작";
 
 "tutorial.title" = "런 프로토콜";
