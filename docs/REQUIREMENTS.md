@@ -10,6 +10,7 @@
 - SpriteKit transient effect and object counts should be bounded during long runs and Fever sequences.
 - Magnet behavior should move smoothly every frame while keeping affected-object counts capped to preserve smooth play.
 - Repeated magnet pickups should refresh the magnet benefit without stacking heavy sound, haptic, flash, or particle bursts.
+- Runs should periodically offer strategic upgrade choices so players can shape a build instead of only reacting to objects.
 - Temporary invulnerability visuals must always restore the player core to full opacity when the effect ends.
 - Player-core feedback should avoid opacity animation; respawn and invulnerability should use scale/ring effects so the core never appears unintentionally transparent.
 - Obstacles should spawn in ways that preserve player agency.

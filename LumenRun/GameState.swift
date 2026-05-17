@@ -29,6 +29,23 @@ struct DailyMission: Codable, Identifiable, Equatable {
     }
 }
 
+enum RunUpgradeKind: CaseIterable {
+    case shieldCache
+    case magnetBoost
+    case timeBend
+    case feverCharge
+    case scoreSurge
+}
+
+struct RunUpgradeChoice: Identifiable, Equatable {
+    let kind: RunUpgradeKind
+    let titleKey: String
+    let descriptionKey: String
+    let iconName: String
+
+    var id: RunUpgradeKind { kind }
+}
+
 enum AchievementID: String, CaseIterable, Codable {
     case firstRun
     case firstFever
@@ -77,6 +94,10 @@ final class GameState: ObservableObject {
     @Published var slowTimeRemaining: TimeInterval = 0
     @Published var magnetTimeRemaining: TimeInterval = 0
     @Published var feverRemaining: TimeInterval = 0
+    @Published private(set) var runUpgradeChoices: [RunUpgradeChoice] = []
+    @Published var isRunUpgradePresented = false {
+        didSet { updatePauseState() }
+    }
     @Published var isLoading = true {
         didSet { updatePauseState() }
     }
@@ -144,6 +165,7 @@ final class GameState: ObservableObject {
     private let shieldDuration: TimeInterval = 8
     private let shieldExtensionDuration: TimeInterval = 6
     private let magnetDuration: TimeInterval = 5
+    private var nextRunUpgradeScore = 45
     private var canShowAchievementToast = false
     private var pendingAchievementToasts: [AchievementDefinition] = []
 
@@ -234,6 +256,9 @@ final class GameState: ObservableObject {
         slowTimeRemaining = 0
         magnetTimeRemaining = 0
         feverRemaining = 0
+        runUpgradeChoices = []
+        isRunUpgradePresented = false
+        nextRunUpgradeScore = 45
         SoundPlayer.setFeverActive(false, enabled: isSoundEnabled)
         isGameOver = false
         isUserPaused = false
@@ -275,6 +300,7 @@ final class GameState: ObservableObject {
         updateScoreMission()
         updateScoreAchievements()
         updateBestScore()
+        offerRunUpgradeIfNeeded()
     }
 
     func collectFeverHit() {
@@ -285,6 +311,7 @@ final class GameState: ObservableObject {
         updateScoreMission()
         updateScoreAchievements()
         updateBestScore()
+        offerRunUpgradeIfNeeded()
     }
 
     func collectSurge() {
@@ -298,6 +325,7 @@ final class GameState: ObservableObject {
         updateScoreMission()
         updateScoreAchievements()
         updateBestScore()
+        offerRunUpgradeIfNeeded()
     }
 
     func collectBombClear(count: Int) {
@@ -310,6 +338,14 @@ final class GameState: ObservableObject {
         updateScoreMission()
         updateScoreAchievements()
         updateBestScore()
+        offerRunUpgradeIfNeeded()
+    }
+
+    func chooseRunUpgrade(_ choice: RunUpgradeChoice) {
+        guard isRunUpgradePresented else { return }
+        applyRunUpgrade(choice.kind)
+        runUpgradeChoices = []
+        isRunUpgradePresented = false
     }
 
     func breakCombo() {
@@ -684,6 +720,54 @@ final class GameState: ObservableObject {
     }
 
     private func updatePauseState() {
-        isPaused = isLoading || isStartScreenPresented || !hasSeenTutorial || isGameOver || isSettingsPresented || isAchievementsPresented || isRewardsPresented || isUserPaused || !isSceneActive
+        isPaused = isLoading || isStartScreenPresented || !hasSeenTutorial || isGameOver || isSettingsPresented || isAchievementsPresented || isRewardsPresented || isRunUpgradePresented || isUserPaused || !isSceneActive
+    }
+
+    private func offerRunUpgradeIfNeeded() {
+        guard !isRunUpgradePresented, !isGameOver, score >= nextRunUpgradeScore else { return }
+        runUpgradeChoices = makeRunUpgradeChoices()
+        nextRunUpgradeScore += 45
+        isRunUpgradePresented = true
+    }
+
+    private func makeRunUpgradeChoices() -> [RunUpgradeChoice] {
+        let pool: [RunUpgradeChoice] = [
+            RunUpgradeChoice(kind: .shieldCache, titleKey: "upgrade.shield.title", descriptionKey: "upgrade.shield.desc", iconName: "shield.fill"),
+            RunUpgradeChoice(kind: .magnetBoost, titleKey: "upgrade.magnet.title", descriptionKey: "upgrade.magnet.desc", iconName: "dot.radiowaves.left.and.right"),
+            RunUpgradeChoice(kind: .timeBend, titleKey: "upgrade.slow.title", descriptionKey: "upgrade.slow.desc", iconName: "hourglass"),
+            RunUpgradeChoice(kind: .feverCharge, titleKey: "upgrade.fever.title", descriptionKey: "upgrade.fever.desc", iconName: "flame.fill"),
+            RunUpgradeChoice(kind: .scoreSurge, titleKey: "upgrade.score.title", descriptionKey: "upgrade.score.desc", iconName: "bolt.fill")
+        ]
+        let seed = max(0, score / 9 + level * 3 + combo)
+        return (0..<3).map { offset in
+            pool[(seed + offset * 2) % pool.count]
+        }
+    }
+
+    private func applyRunUpgrade(_ kind: RunUpgradeKind) {
+        switch kind {
+        case .shieldCache:
+            grantShield()
+        case .magnetBoost:
+            magnetTimeRemaining = max(magnetTimeRemaining, magnetDuration + 2)
+            SoundPlayer.timeCore(enabled: isSoundEnabled)
+        case .timeBend:
+            triggerSlowTime(duration: 5.5)
+        case .feverCharge:
+            if isFeverActive {
+                feverRemaining = min(feverRemaining + 2.5, feverDuration + 3)
+            } else {
+                combo = min(feverComboThreshold - 1, combo + 5)
+                multiplier = min(5, 1 + combo / 5)
+            }
+            SoundPlayer.feverStart(enabled: isSoundEnabled)
+        case .scoreSurge:
+            score += max(12, multiplier * 10)
+            level = max(1, score / 25 + 1)
+            updateScoreMission()
+            updateScoreAchievements()
+            updateBestScore()
+            SoundPlayer.lumen(enabled: isSoundEnabled)
+        }
     }
 }

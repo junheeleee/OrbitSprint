@@ -1,6 +1,7 @@
 # Lumen Run Work Log
 
 ## 2026-05-18
+- Added mid-run Relay Choice upgrades that pause the run at score milestones and let players pick shield, magnet, slow-time, fever, or score boosts.
 - Reduced stutter from repeated magnet pickups by throttling stacked timecore sounds, shrinking refresh-only magnet bursts, and batching magnet spark pickup feedback.
 
 ## 2026-05-17

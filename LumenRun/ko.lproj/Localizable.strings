@@ -87,6 +87,19 @@
 "missions.fever" = "피버 %d회 발동";
 "missions.shields" = "실드 %d개 획득";
 
+"upgrade.title" = "릴레이 선택";
+"upgrade.subtitle" = "이번 런의 흐름을 바꿀 보너스를 고르세요.";
+"upgrade.shield.title" = "실드 캐시";
+"upgrade.shield.desc" = "즉시 보호막을 얻어 다음 충돌을 막습니다.";
+"upgrade.magnet.title" = "자석 증폭";
+"upgrade.magnet.desc" = "자석 시간을 길게 켜 주변 루멘을 끌어당깁니다.";
+"upgrade.slow.title" = "타임 벤드";
+"upgrade.slow.desc" = "잠시 시간이 느려져 위험 패턴을 읽기 쉬워집니다.";
+"upgrade.fever.title" = "피버 충전";
+"upgrade.fever.desc" = "피버에 가까워지거나 피버 시간을 연장합니다.";
+"upgrade.score.title" = "점수 서지";
+"upgrade.score.desc" = "즉시 보너스 점수를 얻어 기록을 밀어 올립니다.";
+
 "achievements.title" = "업적";
 "achievements.all" = "전체 업적";
 "achievements.unlocked" = "해금한 업적";

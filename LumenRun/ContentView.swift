@@ -134,6 +134,12 @@ struct ContentView: View {
                 .transition(.scale.combined(with: .opacity))
             }
 
+            if gameState.isRunUpgradePresented {
+                RunUpgradeView()
+                    .padding(20)
+                    .transition(.scale.combined(with: .opacity))
+            }
+
             if gameState.isGameOver {
                 ScrollView(.vertical, showsIndicators: true) {
                     GameOverView {
@@ -193,6 +199,86 @@ struct ContentView: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
             gameState.dismissAchievementToast(achievement)
         }
+    }
+}
+
+private struct RunUpgradeView: View {
+    @EnvironmentObject private var gameState: GameState
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack(spacing: 10) {
+                Image(systemName: "point.3.connected.trianglepath.dotted")
+                    .font(.title3.weight(.black))
+                    .foregroundStyle(gameState.selectedTheme.accentColor)
+
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("upgrade.title")
+                        .font(.title2.weight(.black))
+                        .foregroundStyle(.white)
+
+                    Text("upgrade.subtitle")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.white.opacity(0.68))
+                }
+            }
+
+            VStack(spacing: 9) {
+                ForEach(gameState.runUpgradeChoices) { choice in
+                    Button {
+                        gameState.chooseRunUpgrade(choice)
+                    } label: {
+                        HStack(spacing: 12) {
+                            ZStack {
+                                Circle()
+                                    .fill(gameState.selectedTheme.accentColor.opacity(0.18))
+
+                                Image(systemName: choice.iconName)
+                                    .font(.headline.weight(.black))
+                                    .foregroundStyle(gameState.selectedTheme.accentColor)
+                            }
+                            .frame(width: 42, height: 42)
+
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text(LocalizedStringKey(choice.titleKey))
+                                    .font(.headline.weight(.black))
+                                    .foregroundStyle(.white)
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.78)
+
+                                Text(LocalizedStringKey(choice.descriptionKey))
+                                    .font(.caption.weight(.semibold))
+                                    .foregroundStyle(.white.opacity(0.72))
+                                    .lineLimit(2)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
+
+                            Spacer(minLength: 0)
+
+                            Image(systemName: "chevron.right")
+                                .font(.caption.weight(.black))
+                                .foregroundStyle(.white.opacity(0.54))
+                        }
+                        .padding(12)
+                        .frame(maxWidth: .infinity, minHeight: 68, alignment: .leading)
+                        .background(.white.opacity(0.09), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 8, style: .continuous)
+                                .stroke(.white.opacity(0.13), lineWidth: 1)
+                        }
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+        }
+        .padding(18)
+        .frame(maxWidth: 430)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: 8, style: .continuous)
+                .stroke(gameState.selectedTheme.accentColor.opacity(0.42), lineWidth: 1)
+        }
+        .shadow(color: .black.opacity(0.32), radius: 22, x: 0, y: 12)
     }
 }
 

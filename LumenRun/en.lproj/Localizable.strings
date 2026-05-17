@@ -87,6 +87,19 @@
 "missions.fever" = "Trigger Fever %d times";
 "missions.shields" = "Pick up %d shields";
 
+"upgrade.title" = "Relay Choice";
+"upgrade.subtitle" = "Pick one boost to shape this run.";
+"upgrade.shield.title" = "Shield Cache";
+"upgrade.shield.desc" = "Gain a shield immediately to block the next crash.";
+"upgrade.magnet.title" = "Magnet Amplifier";
+"upgrade.magnet.desc" = "Extend magnet time and pull nearby sparks toward you.";
+"upgrade.slow.title" = "Time Bend";
+"upgrade.slow.desc" = "Slow time briefly so dangerous patterns are easier to read.";
+"upgrade.fever.title" = "Fever Charge";
+"upgrade.fever.desc" = "Move closer to Fever or extend active Fever time.";
+"upgrade.score.title" = "Score Surge";
+"upgrade.score.desc" = "Gain instant bonus points to push the record higher.";
+
 "achievements.title" = "Achievements";
 "achievements.all" = "All Achievements";
 "achievements.unlocked" = "Unlocked Achievements";
