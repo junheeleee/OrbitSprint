@@ -248,13 +248,38 @@ final class GameScene: SKScene {
         player.isHidden = false
     }
 
+    private func refreshPlayerIdentityMark() {
+        player.removeAllChildren()
+
+        let inner = SKShapeNode(circleOfRadius: playerRadius * 0.38)
+        inner.fillColor = .white.withAlphaComponent(0.9)
+        inner.strokeColor = state.selectedTheme.sparkColor.withAlphaComponent(0.95)
+        inner.lineWidth = 1.5
+        inner.glowWidth = 5
+        inner.zPosition = 1
+        player.addChild(inner)
+
+        for rotation in [CGFloat(-0.45), CGFloat(0.45)] {
+            let signal = SKShapeNode(path: arcPath(radius: playerRadius * 0.83, startAngle: -.pi * 0.18, endAngle: .pi * 0.52))
+            signal.strokeColor = .white.withAlphaComponent(0.76)
+            signal.lineWidth = 1.3
+            signal.glowWidth = 2
+            signal.lineCap = .round
+            signal.zRotation = rotation
+            signal.zPosition = 1
+            player.addChild(signal)
+        }
+    }
+
     private func applyTheme() {
         renderedTheme = state.selectedTheme
         renderedCoreSkin = state.selectedCoreSkin
         player.path = playerPath(for: state.selectedCoreSkin)
         player.fillColor = state.selectedTheme.playerColor
+        player.strokeColor = .white.withAlphaComponent(0.92)
         player.lineWidth = state.selectedCoreSkin.lineWidth
         player.glowWidth = state.selectedCoreSkin.glowWidth
+        refreshPlayerIdentityMark()
         refreshShieldAura()
         drawOrbits()
         for node in objectLayer.children {
@@ -273,10 +298,13 @@ final class GameScene: SKScene {
             ring.position = center
             ring.strokeColor = state.isFeverActive
                 ? state.selectedTheme.feverColor.withAlphaComponent(0.35 + CGFloat(index) * 0.12)
-                : SKColor.white.withAlphaComponent(0.16 + CGFloat(index) * 0.08)
+                : state.selectedTheme.playerColor.withAlphaComponent(0.12 + CGFloat(index) * 0.07)
             ring.lineWidth = state.isFeverActive ? 3 : 2
             ring.glowWidth = state.isFeverActive ? 7 : 1
             orbitLayer.addChild(ring)
+
+            addSignalSegments(to: orbitLayer, radius: radius, index: index)
+            addRelayNodes(to: orbitLayer, radius: radius, index: index)
         }
 
         let core = SKShapeNode(circleOfRadius: 42)
@@ -312,6 +340,44 @@ final class GameScene: SKScene {
             star.strokeColor = .clear
             star.zPosition = -2
             addChild(star)
+        }
+    }
+
+    private func addSignalSegments(to layer: SKNode, radius: CGFloat, index: Int) {
+        let segmentCount = state.isFeverActive ? 5 : 4
+        let arcLength: CGFloat = state.isFeverActive ? 0.34 : 0.24
+        let baseOffset = CGFloat(index) * 0.42
+
+        for segment in 0..<segmentCount {
+            let angle = CGFloat(segment) / CGFloat(segmentCount) * 2 * .pi + baseOffset
+            let path = arcPath(radius: radius, startAngle: angle, endAngle: angle + arcLength)
+            let node = SKShapeNode(path: path)
+            node.position = center
+            node.strokeColor = (state.isFeverActive ? state.selectedTheme.feverColor : state.selectedTheme.playerColor)
+                .withAlphaComponent(state.isFeverActive ? 0.72 : 0.34)
+            node.lineWidth = state.isFeverActive ? 4 : 2.6
+            node.glowWidth = state.isFeverActive ? 12 : 5
+            node.lineCap = .round
+            layer.addChild(node)
+        }
+    }
+
+    private func addRelayNodes(to layer: SKNode, radius: CGFloat, index: Int) {
+        let nodeAngles: [CGFloat] = [
+            -.pi / 2 + CGFloat(index) * 0.32,
+            .pi * 0.16 + CGFloat(index) * 0.26,
+            .pi * 0.82 + CGFloat(index) * 0.2
+        ]
+
+        for nodeAngle in nodeAngles {
+            let marker = SKShapeNode(circleOfRadius: state.isFeverActive ? 4.2 : 3.2)
+            marker.position = point(on: radius, angle: nodeAngle)
+            marker.fillColor = (state.isFeverActive ? state.selectedTheme.feverColor : state.selectedTheme.sparkColor)
+                .withAlphaComponent(state.isFeverActive ? 0.9 : 0.58)
+            marker.strokeColor = .white.withAlphaComponent(0.34)
+            marker.lineWidth = 0.8
+            marker.glowWidth = state.isFeverActive ? 9 : 4
+            layer.addChild(marker)
         }
     }
 
@@ -1343,6 +1409,12 @@ final class GameScene: SKScene {
             }
         }
         path.closeSubpath()
+        return path
+    }
+
+    private func arcPath(radius: CGFloat, startAngle: CGFloat, endAngle: CGFloat) -> CGPath {
+        let path = CGMutablePath()
+        path.addArc(center: .zero, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: false)
         return path
     }
 

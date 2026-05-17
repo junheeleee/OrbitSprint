@@ -11,6 +11,8 @@ This document keeps the game identity consistent across title, visuals, sound, U
 
 ## Identity Rules
 - The first visible brand signal should be the core/orbit/shard triangle: what the player controls, where they move, and what threatens them.
+- In-run orbit lanes should read as a signal network, using broken relay segments and small signal nodes rather than plain decorative circles.
+- The player core should carry an inner lumen signal mark so it feels like the same object promised by the icon and title screen.
 - Objects should look meaningfully different by gameplay role.
 - Item pickup, collision, fever, shield, and score feedback should be easy to distinguish.
 - Fever should feel like a dramatic power state, not just a stat change.
