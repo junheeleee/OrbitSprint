@@ -127,6 +127,8 @@ enum SoundPlayer {
             minimumInterval = isFeverActive ? 0.07 : 0.035
         case "tap":
             minimumInterval = 0.035
+        case "timecore":
+            minimumInterval = 0.25
         default:
             minimumInterval = 0
         }

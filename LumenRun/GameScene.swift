@@ -54,6 +54,7 @@ final class GameScene: SKScene {
     private var currentPattern: RunPattern = .flow
     private var lastScreenFlashTime: TimeInterval = -10
     private var lastFeverFlashTime: TimeInterval = -10
+    private var lastMagnetCollectFeedbackTime: TimeInterval = -10
     private var didWarnFeverEnding = false
     private var didSpawnOpeningRoute = false
     private var difficulty: CGFloat = 1
@@ -792,14 +793,22 @@ final class GameScene: SKScene {
                 let hitPoint = node.position
                 node.removeFromParent()
                 comboTimer = 0
+                let wasMagnetActive = state.magnetTimeRemaining > 0.35
                 state.triggerMagnet()
                 if state.isFeverActive {
                     state.collectFeverHit()
                 }
                 Haptics.collect(enabled: state.isHapticsEnabled)
-                emitPowerSignal(at: hitPoint, color: objectColor(for: .magnet), count: 14, radius: 58)
-                pulseOrbit(at: currentRadius, color: objectColor(for: .magnet), duration: 0.42)
-                flash(color: objectColor(for: .magnet).withAlphaComponent(0.16))
+                emitPowerSignal(
+                    at: hitPoint,
+                    color: objectColor(for: .magnet),
+                    count: wasMagnetActive ? 6 : 14,
+                    radius: wasMagnetActive ? 42 : 58
+                )
+                if !wasMagnetActive {
+                    pulseOrbit(at: currentRadius, color: objectColor(for: .magnet), duration: 0.42)
+                    flash(color: objectColor(for: .magnet).withAlphaComponent(0.16))
+                }
             } else if kind == .bomb {
                 let hitPoint = node.position
                 node.removeFromParent()
@@ -878,10 +887,12 @@ final class GameScene: SKScene {
         let captureRadiusSquared: CGFloat = 18 * 18
         let pullRadiusSquared: CGFloat = 108 * 108
         let pull = min(CGFloat(delta) * 8.4, 0.24)
+        var capturedSparkCount = 0
+        var lastCapturePoint = player.position
 
         for node in objectLayer.children {
             guard node.lumenObjectKind == .spark else { continue }
-            guard movedSparkCount < 6 else { return }
+            guard movedSparkCount < 6 else { break }
 
             let dx = player.position.x - node.position.x
             let dy = player.position.y - node.position.y
@@ -889,12 +900,11 @@ final class GameScene: SKScene {
             guard distanceSquared < pullRadiusSquared else { continue }
 
             if distanceSquared <= captureRadiusSquared {
-                let hitPoint = node.position
+                lastCapturePoint = node.position
                 node.removeFromParent()
                 comboTimer = 0
                 state.collectSpark()
-                Haptics.collect(enabled: state.isHapticsEnabled)
-                emitCollectSignal(at: hitPoint, color: state.selectedTheme.sparkColor, count: 3)
+                capturedSparkCount += 1
                 continue
             }
 
@@ -904,6 +914,16 @@ final class GameScene: SKScene {
             node.position = CGPoint(x: nextX, y: nextY)
             syncObjectTrackingData(for: node)
         }
+
+        guard capturedSparkCount > 0 else { return }
+        guard elapsedTime - lastMagnetCollectFeedbackTime > 0.08 else { return }
+        lastMagnetCollectFeedbackTime = elapsedTime
+        Haptics.collect(enabled: state.isHapticsEnabled)
+        emitCollectSignal(
+            at: lastCapturePoint,
+            color: state.selectedTheme.sparkColor,
+            count: min(5, 2 + capturedSparkCount)
+        )
     }
 
     private func clearShards(near point: CGPoint, clearance: CGFloat) -> Int {
