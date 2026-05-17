@@ -32,6 +32,7 @@ Track gameplay tuning changes here so the game becomes more skillful and less ra
 - Advanced patterns unlock by stage progression, not only raw score.
 - Early difficulty ramp should prioritize readability over punishment.
 - Score-only card effects should not skip too much stage progression by themselves.
+- Stage 1 should still contain small reward forks and early power-up moments so the first card does not feel like a long wait.
 
 ## Change Log Template
 

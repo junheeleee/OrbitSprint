@@ -573,7 +573,7 @@ final class GameScene: SKScene {
             }
             if elapsedTime > 0.45, sparkTimer > scaledInterval(easy: 1.14, hard: 0.7) {
                 spawnSpark()
-                if state.stage >= 2, patternStep.isMultiple(of: 6) {
+                if shouldSpawnRewardFork(step: patternStep) {
                     spawnChoiceFork()
                 }
                 patternStep += 1
@@ -602,7 +602,7 @@ final class GameScene: SKScene {
                 spawnSparkTrail()
                 sparkTimer = 0
             }
-            if state.stage >= 2, patternWaveTimer > scaledInterval(easy: 3.6, hard: 2.45) {
+            if patternWaveTimer > scaledInterval(easy: state.stage <= 1 ? 4.8 : 3.6, hard: state.stage <= 1 ? 3.35 : 2.45) {
                 spawnPowerUp(kind: .magnet, on: randomOrbitRadius(), near: nextPlayableSpawnAngle(minLead: 0.9, maxLead: 2.1))
                 patternWaveTimer = 0
             }
@@ -633,13 +633,14 @@ final class GameScene: SKScene {
 
     private func spawnOpeningRoute() {
         let baseAngle = nextPlayableSpawnAngle(minLead: 0.82, maxLead: 1.16)
-        for offset in 0..<5 {
+        for offset in 0..<(state.stage <= 1 ? 7 : 5) {
             let index = offset % orbitRadii.count
-            spawnSpark(on: orbitRadii[index], near: baseAngle + CGFloat(offset) * 0.22)
+            spawnSpark(on: orbitRadii[index], near: baseAngle + CGFloat(offset) * 0.2)
         }
         switch state.stage % 4 {
         case 1:
             spawnPowerUp(kind: .shield, on: orbitRadii[1], near: baseAngle + 0.52)
+            spawnPowerUp(kind: .surge, on: orbitRadii[2], near: baseAngle + 0.84)
         case 2:
             spawnPowerUp(kind: .slow, on: orbitRadii[2], near: baseAngle + 0.52)
             spawnSparkTrail()
@@ -715,6 +716,13 @@ final class GameScene: SKScene {
         spawnPowerUp(kind: .surge, on: riskyRadius, near: baseAngle + 0.04)
         spawnShard(on: riskyRadius, near: baseAngle - 0.28, rewardChance: 0, allowParallel: true)
         spawnShard(on: riskyRadius, near: baseAngle + 0.34, rewardChance: 0, allowParallel: true)
+    }
+
+    private func shouldSpawnRewardFork(step: Int) -> Bool {
+        if state.stage <= 1 {
+            return state.score >= 35 && step > 0 && step.isMultiple(of: 7)
+        }
+        return step.isMultiple(of: 6)
     }
 
     private func rewardLaneIndex(awayFrom index: Int) -> Int {

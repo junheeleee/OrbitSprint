@@ -1,6 +1,7 @@
 # Lumen Run Work Log
 
 ## 2026-05-18
+- Made stage 1 less empty by adding a richer opening route, an early surge lure, occasional first-stage reward forks, and a slower first-stage magnet moment before the first card pick.
 - Added friend-beta clarity polish with selected-card build summary chips and short next-stage route intro to make the run easier to understand from the outside.
 - Prevented accidental relay card picks from held gameplay taps by adding a short input lock and moving selection to explicit per-card pick buttons.
 - Added a first beta plan with readiness criteria, device playtest script, known watch areas, and next beta work.
