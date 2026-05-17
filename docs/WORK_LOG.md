@@ -1,6 +1,7 @@
 # Lumen Run Work Log
 
 ## 2026-05-17
+- Strengthened object readability by changing utility objects from round badges to function-first silhouettes, including U-shaped magnets and burst-shaped clear bombs.
 - Added teal magnet cores that pull nearby sparks and green clear bombs that remove nearby glitch shards for score.
 - Centralized object identity, guide text keys, colors, gameplay sizing, glow, and collision radii in a shared LumenObject catalog.
 - Reduced in-run object sizes and updated the object guide to use matching custom silhouettes instead of generic SF Symbol icons.

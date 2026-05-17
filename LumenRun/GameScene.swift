@@ -532,20 +532,20 @@ final class GameScene: SKScene {
 
         if state.level >= 4 && roll < 0.16 {
             kind = .bomb
-            node = SKShapeNode(path: circlePath(radius: kind.baseRadius))
-            addSymbol(to: node, path: burstPath(outerRadius: kind.baseRadius * 0.72, innerRadius: kind.baseRadius * 0.34, points: 6), color: .white.withAlphaComponent(0.9), lineWidth: 1.4)
+            node = SKShapeNode(path: burstPath(outerRadius: kind.baseRadius * 1.12, innerRadius: kind.baseRadius * 0.46, points: 8))
+            addSymbol(to: node, path: clearSlashPath(size: kind.baseRadius * 1.35), color: .white.withAlphaComponent(0.92), lineWidth: 2.6)
         } else if state.level >= 3 && roll < 0.32 {
             kind = .surge
             node = SKShapeNode(path: hexPath(radius: kind.baseRadius))
             addSymbol(to: node, path: lightningPath(size: kind.baseRadius * 1.16), color: .white.withAlphaComponent(0.9), lineWidth: 2)
         } else if state.level >= 2 && roll < 0.48 {
             kind = .magnet
-            node = SKShapeNode(path: circlePath(radius: kind.baseRadius))
-            addSymbol(to: node, path: magnetPath(radius: kind.baseRadius * 0.78), color: .white.withAlphaComponent(0.9), lineWidth: 2.7)
+            node = SKShapeNode(path: magnetBodyPath(radius: kind.baseRadius))
+            addSymbol(to: node, path: pullArrowPath(size: kind.baseRadius * 1.25), color: .white.withAlphaComponent(0.9), lineWidth: 2.4)
         } else if state.shieldCharges == 0 || roll < 0.72 {
             kind = .shield
             node = SKShapeNode(path: shieldPath(radius: kind.baseRadius))
-            addSymbol(to: node, path: checkPath(size: kind.baseRadius * 1.12), color: .white.withAlphaComponent(0.92), lineWidth: 2.2)
+            addSymbol(to: node, path: checkPath(size: kind.baseRadius * 1.25), color: .white.withAlphaComponent(0.92), lineWidth: 2.5)
         } else {
             kind = .slow
             node = SKShapeNode(path: hourglassPath(radius: kind.baseRadius))
@@ -1193,10 +1193,6 @@ final class GameScene: SKScene {
         CGPath(ellipseIn: CGRect(x: -radius, y: -radius, width: radius * 2, height: radius * 2), transform: nil)
     }
 
-    private func circlePath(radius: CGFloat) -> CGPath {
-        CGPath(ellipseIn: CGRect(x: -radius, y: -radius, width: radius * 2, height: radius * 2), transform: nil)
-    }
-
     private func burstPath(outerRadius: CGFloat, innerRadius: CGFloat, points: Int) -> CGPath {
         starPath(outerRadius: outerRadius, innerRadius: innerRadius, points: points)
     }
@@ -1222,15 +1218,38 @@ final class GameScene: SKScene {
         polygonPath(radius: radius, sides: 6)
     }
 
-    private func magnetPath(radius: CGFloat) -> CGPath {
+    private func magnetBodyPath(radius: CGFloat) -> CGPath {
         let path = CGMutablePath()
-        let width = radius * 0.72
-        let top = radius * 0.52
-        let bottom = -radius * 0.48
+        let width = radius * 0.82
+        let arm = radius * 0.34
+        let top = radius * 0.82
+        let bottom = -radius * 0.36
         path.move(to: CGPoint(x: -width, y: top))
-        path.addLine(to: CGPoint(x: -width, y: bottom))
-        path.addQuadCurve(to: CGPoint(x: width, y: bottom), control: CGPoint(x: 0, y: -radius * 1.18))
+        path.addLine(to: CGPoint(x: -arm, y: top))
+        path.addLine(to: CGPoint(x: -arm, y: bottom))
+        path.addQuadCurve(to: CGPoint(x: arm, y: bottom), control: CGPoint(x: 0, y: -radius * 1.1))
+        path.addLine(to: CGPoint(x: arm, y: top))
         path.addLine(to: CGPoint(x: width, y: top))
+        path.addLine(to: CGPoint(x: width, y: bottom))
+        path.addQuadCurve(to: CGPoint(x: -width, y: bottom), control: CGPoint(x: 0, y: -radius * 1.85))
+        path.closeSubpath()
+        return path
+    }
+
+    private func pullArrowPath(size: CGFloat) -> CGPath {
+        let path = CGMutablePath()
+        path.move(to: CGPoint(x: -size * 0.42, y: -size * 0.04))
+        path.addLine(to: CGPoint(x: size * 0.22, y: -size * 0.04))
+        path.move(to: CGPoint(x: size * 0.06, y: -size * 0.24))
+        path.addLine(to: CGPoint(x: size * 0.28, y: -size * 0.04))
+        path.addLine(to: CGPoint(x: size * 0.06, y: size * 0.16))
+        return path
+    }
+
+    private func clearSlashPath(size: CGFloat) -> CGPath {
+        let path = CGMutablePath()
+        path.move(to: CGPoint(x: -size * 0.42, y: -size * 0.32))
+        path.addLine(to: CGPoint(x: size * 0.42, y: size * 0.32))
         return path
     }
 
