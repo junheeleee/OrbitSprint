@@ -25,6 +25,7 @@ Use this checklist before important commits, TestFlight builds, and App Store re
 - Stage 1 clear happens after a meaningful run segment, not almost immediately.
 - Stage clear removes active objects and gives a clear checkpoint feeling.
 - Relay card choices appear only after stage clears.
+- Relay card choices cannot be accidentally selected by a held gameplay tap when the card screen appears.
 - Choosing a relay card resumes the run cleanly into the next stage.
 - Stage 2 and later routes feel visually or structurally different from stage 1.
 

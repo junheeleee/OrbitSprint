@@ -92,6 +92,7 @@
 "upgrade.stageCleared" = "Stage %d Cleared";
 "upgrade.title" = "Relay Card Pick";
 "upgrade.subtitle" = "Choose one card to strengthen this run's build.";
+"upgrade.choose" = "Pick";
 "upgrade.shield.title" = "Shield Cache";
 "upgrade.shield.desc" = "Gain a shield immediately to block the next crash.";
 "upgrade.magnet.title" = "Magnet Amplifier";

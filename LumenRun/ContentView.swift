@@ -204,6 +204,7 @@ struct ContentView: View {
 
 private struct RunUpgradeView: View {
     @EnvironmentObject private var gameState: GameState
+    @State private var isSelectionEnabled = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
@@ -230,49 +231,60 @@ private struct RunUpgradeView: View {
 
             VStack(spacing: 9) {
                 ForEach(gameState.runUpgradeChoices) { choice in
-                    Button {
-                        gameState.chooseRunUpgrade(choice)
-                    } label: {
-                        HStack(spacing: 12) {
-                            ZStack {
-                                Circle()
-                                    .fill(gameState.selectedTheme.accentColor.opacity(0.18))
+                    HStack(spacing: 12) {
+                        ZStack {
+                            Circle()
+                                .fill(gameState.selectedTheme.accentColor.opacity(0.18))
 
-                                Image(systemName: choice.iconName)
-                                    .font(.headline.weight(.black))
-                                    .foregroundStyle(gameState.selectedTheme.accentColor)
-                            }
-                            .frame(width: 42, height: 42)
+                            Image(systemName: choice.iconName)
+                                .font(.headline.weight(.black))
+                                .foregroundStyle(gameState.selectedTheme.accentColor)
+                        }
+                        .frame(width: 42, height: 42)
 
-                            VStack(alignment: .leading, spacing: 3) {
-                                Text(LocalizedStringKey(choice.titleKey))
-                                    .font(.headline.weight(.black))
-                                    .foregroundStyle(.white)
-                                    .lineLimit(1)
-                                    .minimumScaleFactor(0.78)
+                        VStack(alignment: .leading, spacing: 3) {
+                            Text(LocalizedStringKey(choice.titleKey))
+                                .font(.headline.weight(.black))
+                                .foregroundStyle(.white)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.78)
 
-                                Text(LocalizedStringKey(choice.descriptionKey))
-                                    .font(.caption.weight(.semibold))
-                                    .foregroundStyle(.white.opacity(0.72))
-                                    .lineLimit(2)
-                                    .fixedSize(horizontal: false, vertical: true)
-                            }
+                            Text(LocalizedStringKey(choice.descriptionKey))
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(.white.opacity(0.72))
+                                .lineLimit(2)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
 
-                            Spacer(minLength: 0)
+                        Spacer(minLength: 0)
 
-                            Image(systemName: "chevron.right")
+                        Button {
+                            guard isSelectionEnabled else { return }
+                            gameState.chooseRunUpgrade(choice)
+                        } label: {
+                            Text("upgrade.choose")
                                 .font(.caption.weight(.black))
-                                .foregroundStyle(.white.opacity(0.54))
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.72)
+                                .padding(.horizontal, 12)
+                                .frame(height: 34)
+                                .background(gameState.selectedTheme.accentColor.opacity(isSelectionEnabled ? 0.26 : 0.1), in: Capsule())
+                                .overlay {
+                                    Capsule()
+                                        .stroke(gameState.selectedTheme.accentColor.opacity(isSelectionEnabled ? 0.62 : 0.22), lineWidth: 1)
+                                }
                         }
-                        .padding(12)
-                        .frame(maxWidth: .infinity, minHeight: 68, alignment: .leading)
-                        .background(.white.opacity(0.09), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 8, style: .continuous)
-                                .stroke(.white.opacity(0.13), lineWidth: 1)
-                        }
+                        .buttonStyle(.plain)
+                        .foregroundStyle(isSelectionEnabled ? .white : .white.opacity(0.42))
+                        .disabled(!isSelectionEnabled)
                     }
-                    .buttonStyle(.plain)
+                    .padding(12)
+                    .frame(maxWidth: .infinity, minHeight: 68, alignment: .leading)
+                    .background(.white.opacity(0.09), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 8, style: .continuous)
+                            .stroke(.white.opacity(0.13), lineWidth: 1)
+                    }
                 }
             }
         }
@@ -284,6 +296,18 @@ private struct RunUpgradeView: View {
                 .stroke(gameState.selectedTheme.accentColor.opacity(0.42), lineWidth: 1)
         }
         .shadow(color: .black.opacity(0.32), radius: 22, x: 0, y: 12)
+        .onAppear {
+            isSelectionEnabled = false
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+                isSelectionEnabled = true
+            }
+        }
+        .onChange(of: gameState.clearedStage) { _, _ in
+            isSelectionEnabled = false
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+                isSelectionEnabled = true
+            }
+        }
     }
 }
 
