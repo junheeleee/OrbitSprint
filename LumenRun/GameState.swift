@@ -75,6 +75,7 @@ final class GameState: ObservableObject {
     @Published var shieldCharges = 0
     @Published var shieldTimeRemaining: TimeInterval = 0
     @Published var slowTimeRemaining: TimeInterval = 0
+    @Published var magnetTimeRemaining: TimeInterval = 0
     @Published var feverRemaining: TimeInterval = 0
     @Published var isLoading = true {
         didSet { updatePauseState() }
@@ -142,6 +143,7 @@ final class GameState: ObservableObject {
     private let feverDuration: TimeInterval = 5
     private let shieldDuration: TimeInterval = 8
     private let shieldExtensionDuration: TimeInterval = 6
+    private let magnetDuration: TimeInterval = 5
     private var canShowAchievementToast = false
     private var pendingAchievementToasts: [AchievementDefinition] = []
 
@@ -216,6 +218,7 @@ final class GameState: ObservableObject {
         shieldCharges = 0
         shieldTimeRemaining = 0
         slowTimeRemaining = 0
+        magnetTimeRemaining = 0
         feverRemaining = 0
         SoundPlayer.setFeverActive(false, enabled: isSoundEnabled)
         isGameOver = false
@@ -283,6 +286,18 @@ final class GameState: ObservableObject {
         updateBestScore()
     }
 
+    func collectBombClear(count: Int) {
+        guard count > 0 else { return }
+        combo += min(count, 3)
+        multiplier = min(isFeverActive ? 8 : 5, 1 + combo / 5)
+        score += max(4, count * 4) * multiplier
+        level = max(1, score / 15 + 1)
+        SoundPlayer.lumen(enabled: isSoundEnabled)
+        updateScoreMission()
+        updateScoreAchievements()
+        updateBestScore()
+    }
+
     func breakCombo() {
         combo = 0
         multiplier = 1
@@ -320,6 +335,11 @@ final class GameState: ObservableObject {
         SoundPlayer.timeCore(enabled: isSoundEnabled)
     }
 
+    func triggerMagnet() {
+        magnetTimeRemaining = max(magnetTimeRemaining, magnetDuration)
+        SoundPlayer.timeCore(enabled: isSoundEnabled)
+    }
+
     func tick(delta: TimeInterval) {
         if shieldTimeRemaining > 0 {
             shieldTimeRemaining = max(0, shieldTimeRemaining - delta)
@@ -330,6 +350,10 @@ final class GameState: ObservableObject {
 
         if slowTimeRemaining > 0 {
             slowTimeRemaining = max(0, slowTimeRemaining - delta)
+        }
+
+        if magnetTimeRemaining > 0 {
+            magnetTimeRemaining = max(0, magnetTimeRemaining - delta)
         }
 
         if feverRemaining > 0 {

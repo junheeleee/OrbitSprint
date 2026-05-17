@@ -12,7 +12,7 @@
 - First pattern set should include readable phases: normal flow, gate waves, switchback pressure, lumen rush, and overdrive.
 - Pattern changes should be communicated through spawn layout, orbit pulses, color, and item placement instead of intrusive text banners.
 - Collectibles and hazards must be visually distinct by both shape and color, not only by color.
-- Object identities: gold sparks build combo, orange surge cores give high-value score, blue shields protect, violet hourglasses slow time, magenta shards are hazards.
+- Object identities: gold sparks build combo, orange surge cores give high-value score, blue shields protect, violet hourglasses slow time, teal magnets pull nearby sparks, green clear bombs remove nearby hazards, magenta shards are hazards.
 - Hazard objects should use aggressive shapes and danger marks, such as spikes and X marks, so they read as avoidable threats without relying on color.
 - Object guide icons should mirror the in-run silhouettes and markings, not generic system icons, so players build one consistent visual memory.
 - Object identity, localization keys, guide colors, gameplay size, glow, line width, and collision radius should be managed from a shared object catalog.

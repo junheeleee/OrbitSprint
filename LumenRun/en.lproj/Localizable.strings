@@ -51,6 +51,10 @@
 "objects.shield.desc" = "Activates a guard that blocks one crash.";
 "objects.slow.title" = "Violet Hourglass";
 "objects.slow.desc" = "Slows time briefly so fast patterns are easier to read.";
+"objects.magnet.title" = "Teal Magnet Core";
+"objects.magnet.desc" = "Briefly pulls nearby lumen sparks toward you for automatic collection.";
+"objects.bomb.title" = "Green Clear Bomb";
+"objects.bomb.desc" = "Detonates nearby glitch shards and awards score for each shard removed.";
 "objects.shard.title" = "Magenta Glitch Shard";
 "objects.shard.desc" = "A hazard. Crashing into one on your orbit ends the run unless Fever or shield is active.";
 

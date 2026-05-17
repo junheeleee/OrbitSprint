@@ -311,6 +311,11 @@ private struct HUDView: View {
                                 .font(.caption.weight(.black))
                                 .foregroundStyle(Color(red: 0.76, green: 0.58, blue: 1.0))
                         }
+                        if gameState.magnetTimeRemaining > 0 {
+                            Label("\(Int(ceil(gameState.magnetTimeRemaining)))", systemImage: "dot.radiowaves.left.and.right")
+                                .font(.caption.weight(.black))
+                                .foregroundStyle(Color(red: 0.24, green: 0.92, blue: 0.84))
+                        }
                     }
                 }
 
@@ -994,6 +999,14 @@ private struct ObjectGuideIcon: View {
                     Circle().fill(.white.opacity(0.86)).frame(width: 6, height: 6)
                     Circle().fill(.white.opacity(0.86)).frame(width: 6, height: 6)
                 }
+            case .magnet:
+                MagnetGuideShape()
+                    .stroke(.white.opacity(0.9), style: StrokeStyle(lineWidth: 3.1, lineCap: .round, lineJoin: .round))
+                    .frame(width: 22, height: 23)
+            case .bomb:
+                BurstGuideShape(points: 6, innerRatio: 0.52)
+                    .fill(.white.opacity(0.9))
+                    .frame(width: 18, height: 18)
             case .shard:
                 XGuideShape()
                     .stroke(.black.opacity(0.66), style: StrokeStyle(lineWidth: 3.2, lineCap: .round))
@@ -1021,6 +1034,14 @@ private struct ObjectGuideIcon: View {
             HourglassGuideShape()
                 .fill(color)
                 .overlay(HourglassGuideShape().stroke(color.opacity(0.95), lineWidth: 1.4))
+        case .magnet:
+            Circle()
+                .fill(color.opacity(0.94))
+                .overlay(Circle().stroke(color.opacity(0.95), lineWidth: 1.4))
+        case .bomb:
+            Circle()
+                .fill(color.opacity(0.94))
+                .overlay(Circle().stroke(color.opacity(0.95), lineWidth: 1.4))
         case .shard:
             StarGuideShape(points: 6, innerRatio: 0.58)
                 .fill(color)
@@ -1051,6 +1072,31 @@ private struct StarGuideShape: Shape {
         }
 
         path.closeSubpath()
+        return path
+    }
+}
+
+private struct BurstGuideShape: Shape {
+    let points: Int
+    let innerRatio: CGFloat
+
+    func path(in rect: CGRect) -> Path {
+        StarGuideShape(points: points, innerRatio: innerRatio).path(in: rect)
+    }
+}
+
+private struct MagnetGuideShape: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        let width = rect.width
+        let height = rect.height
+        path.move(to: CGPoint(x: rect.minX + width * 0.22, y: rect.minY + height * 0.26))
+        path.addLine(to: CGPoint(x: rect.minX + width * 0.22, y: rect.minY + height * 0.62))
+        path.addQuadCurve(
+            to: CGPoint(x: rect.minX + width * 0.78, y: rect.minY + height * 0.62),
+            control: CGPoint(x: rect.midX, y: rect.maxY)
+        )
+        path.addLine(to: CGPoint(x: rect.minX + width * 0.78, y: rect.minY + height * 0.26))
         return path
     }
 }

@@ -6,6 +6,8 @@ enum LumenObjectKind: String, CaseIterable, Identifiable {
     case surge
     case shield
     case slow
+    case magnet
+    case bomb
     case shard
 
     var id: String { rawValue }
@@ -21,6 +23,10 @@ enum LumenObjectKind: String, CaseIterable, Identifiable {
             return "objects.shield.title"
         case .slow:
             return "objects.slow.title"
+        case .magnet:
+            return "objects.magnet.title"
+        case .bomb:
+            return "objects.bomb.title"
         case .shard:
             return "objects.shard.title"
         }
@@ -36,6 +42,10 @@ enum LumenObjectKind: String, CaseIterable, Identifiable {
             return "objects.shield.desc"
         case .slow:
             return "objects.slow.desc"
+        case .magnet:
+            return "objects.magnet.desc"
+        case .bomb:
+            return "objects.bomb.desc"
         case .shard:
             return "objects.shard.desc"
         }
@@ -51,6 +61,10 @@ enum LumenObjectKind: String, CaseIterable, Identifiable {
             return Color(red: 0.1, green: 0.68, blue: 1.0)
         case .slow:
             return Color(red: 0.68, green: 0.32, blue: 1.0)
+        case .magnet:
+            return Color(red: 0.08, green: 0.86, blue: 0.78)
+        case .bomb:
+            return Color(red: 0.34, green: 0.92, blue: 0.34)
         case .shard:
             return Color(red: 1.0, green: 0.18, blue: 0.48)
         }
@@ -60,7 +74,7 @@ enum LumenObjectKind: String, CaseIterable, Identifiable {
         switch self {
         case .spark:
             return 10
-        case .surge, .shield, .slow:
+        case .surge, .shield, .slow, .magnet, .bomb:
             return 12.5
         case .shard:
             return 14.5
@@ -71,7 +85,7 @@ enum LumenObjectKind: String, CaseIterable, Identifiable {
         switch self {
         case .spark:
             return 8.5
-        case .surge, .shield:
+        case .surge, .shield, .magnet, .bomb:
             return 11.5
         case .slow, .shard:
             return 11
@@ -82,7 +96,7 @@ enum LumenObjectKind: String, CaseIterable, Identifiable {
         switch self {
         case .spark:
             return 1.6
-        case .surge, .shield, .slow:
+        case .surge, .shield, .slow, .magnet, .bomb:
             return 1.8
         case .shard:
             return 2
@@ -93,7 +107,7 @@ enum LumenObjectKind: String, CaseIterable, Identifiable {
         switch self {
         case .spark:
             return 8
-        case .surge:
+        case .surge, .magnet, .bomb:
             return 9
         case .shield, .slow:
             return 7
@@ -112,6 +126,10 @@ enum LumenObjectKind: String, CaseIterable, Identifiable {
             return theme.shieldColor
         case .slow:
             return SKColor(red: 0.68, green: 0.32, blue: 1.0, alpha: 1)
+        case .magnet:
+            return SKColor(red: 0.08, green: 0.86, blue: 0.78, alpha: 1)
+        case .bomb:
+            return SKColor(red: 0.34, green: 0.92, blue: 0.34, alpha: 1)
         case .shard:
             return theme.shardColor
         }

@@ -23,6 +23,8 @@ final class GameScene: SKScene {
         LumenObjectKind.shard.nodeName,
         LumenObjectKind.shield.nodeName,
         LumenObjectKind.slow.nodeName,
+        LumenObjectKind.magnet.nodeName,
+        LumenObjectKind.bomb.nodeName,
         LumenObjectKind.surge.nodeName
     ])
     private let orbitTransitionDuration: TimeInterval = 0.16
@@ -165,6 +167,7 @@ final class GameScene: SKScene {
         }
 
         updatePlayerPosition()
+        updateMagnetPull(delta: delta)
         checkCollisions()
     }
 
@@ -442,6 +445,24 @@ final class GameScene: SKScene {
         ]))
     }
 
+    private func shockwave(at point: CGPoint, color: SKColor, radius: CGFloat) {
+        let ring = SKShapeNode(circleOfRadius: 10)
+        ring.position = point
+        ring.strokeColor = color.withAlphaComponent(0.78)
+        ring.fillColor = .clear
+        ring.lineWidth = 3
+        ring.glowWidth = 14
+        ring.zPosition = 12
+        effectLayer.addChild(ring)
+        ring.run(.sequence([
+            .group([
+                .scale(to: radius / 10, duration: 0.34),
+                .fadeOut(withDuration: 0.34)
+            ]),
+            .removeFromParent()
+        ]))
+    }
+
     private func spawnShard() {
         let radius = chooseThreatRadius()
         let spawnAngle = nextThreatSpawnAngle(on: radius, minLead: 0.95, maxLead: 1.78)
@@ -506,16 +527,22 @@ final class GameScene: SKScene {
         guard !hasNearbyObject(at: spawnAngle, clearance: 0.34, names: powerUpBlockerNames) else { return }
 
         let roll = CGFloat.random(in: 0...1)
-        let isSurge = state.level >= 3 && roll < 0.24
-        let isShield = !isSurge && (state.shieldCharges == 0 || roll < 0.62)
         let kind: LumenObjectKind
         let node: SKShapeNode
 
-        if isSurge {
+        if state.level >= 4 && roll < 0.16 {
+            kind = .bomb
+            node = SKShapeNode(path: circlePath(radius: kind.baseRadius))
+            addSymbol(to: node, path: burstPath(outerRadius: kind.baseRadius * 0.72, innerRadius: kind.baseRadius * 0.34, points: 6), color: .white.withAlphaComponent(0.9), lineWidth: 1.4)
+        } else if state.level >= 3 && roll < 0.32 {
             kind = .surge
             node = SKShapeNode(path: hexPath(radius: kind.baseRadius))
             addSymbol(to: node, path: lightningPath(size: kind.baseRadius * 1.16), color: .white.withAlphaComponent(0.9), lineWidth: 2)
-        } else if isShield {
+        } else if state.level >= 2 && roll < 0.48 {
+            kind = .magnet
+            node = SKShapeNode(path: circlePath(radius: kind.baseRadius))
+            addSymbol(to: node, path: magnetPath(radius: kind.baseRadius * 0.78), color: .white.withAlphaComponent(0.9), lineWidth: 2.7)
+        } else if state.shieldCharges == 0 || roll < 0.72 {
             kind = .shield
             node = SKShapeNode(path: shieldPath(radius: kind.baseRadius))
             addSymbol(to: node, path: checkPath(size: kind.baseRadius * 1.12), color: .white.withAlphaComponent(0.92), lineWidth: 2.2)
@@ -582,6 +609,31 @@ final class GameScene: SKScene {
                 Haptics.collect(enabled: state.isHapticsEnabled)
                 emitBurst(at: hitPoint, color: state.selectedTheme.timeCoreColor, count: 14)
                 flash(color: state.selectedTheme.timeCoreColor.withAlphaComponent(0.18))
+            } else if kind == .magnet {
+                let hitPoint = node.position
+                node.removeFromParent()
+                comboTimer = 0
+                state.triggerMagnet()
+                if state.isFeverActive {
+                    state.collectFeverHit()
+                }
+                Haptics.collect(enabled: state.isHapticsEnabled)
+                emitBurst(at: hitPoint, color: objectColor(for: .magnet), count: 14)
+                pulseOrbit(at: currentRadius, color: objectColor(for: .magnet), duration: 0.42)
+                flash(color: objectColor(for: .magnet).withAlphaComponent(0.16))
+            } else if kind == .bomb {
+                let hitPoint = node.position
+                node.removeFromParent()
+                comboTimer = 0
+                let cleared = clearShards(near: hitPoint, clearance: 118)
+                state.collectBombClear(count: cleared)
+                if state.isFeverActive {
+                    state.collectFeverHit()
+                }
+                Haptics.collect(enabled: state.isHapticsEnabled)
+                emitBurst(at: hitPoint, color: objectColor(for: .bomb), count: max(18, cleared * 8))
+                shockwave(at: hitPoint, color: objectColor(for: .bomb), radius: 118)
+                flash(color: objectColor(for: .bomb).withAlphaComponent(0.18))
             } else if kind == .surge {
                 let hitPoint = node.position
                 node.removeFromParent()
@@ -641,6 +693,44 @@ final class GameScene: SKScene {
                 return
             }
         }
+    }
+
+    private func updateMagnetPull(delta: TimeInterval) {
+        guard state.magnetTimeRemaining > 0 else { return }
+
+        for node in objectLayer.children {
+            guard node.lumenObjectKind == .spark else { continue }
+            let distance = hypot(player.position.x - node.position.x, player.position.y - node.position.y)
+            guard distance < 120 else { continue }
+
+            if distance <= playerRadius + LumenObjectKind.spark.collisionRadius + 3 {
+                let hitPoint = node.position
+                node.removeFromParent()
+                comboTimer = 0
+                state.collectSpark()
+                Haptics.collect(enabled: state.isHapticsEnabled)
+                emitBurst(at: hitPoint, color: state.selectedTheme.sparkColor, count: 6)
+                continue
+            }
+
+            let pull = min(CGFloat(delta) * 7.5, 0.34)
+            let nextX = node.position.x + (player.position.x - node.position.x) * pull
+            let nextY = node.position.y + (player.position.y - node.position.y) * pull
+            node.position = CGPoint(x: nextX, y: nextY)
+        }
+    }
+
+    private func clearShards(near point: CGPoint, clearance: CGFloat) -> Int {
+        var cleared = 0
+        objectLayer.children.forEach { node in
+            guard node.lumenObjectKind == .shard else { return }
+            let distance = hypot(point.x - node.position.x, point.y - node.position.y)
+            guard distance <= clearance else { return }
+            cleared += 1
+            emitBurst(at: node.position, color: objectColor(for: .bomb), count: 6)
+            node.removeFromParent()
+        }
+        return cleared
     }
 
     private func absorbShard(_ node: SKNode, invulnerabilityDuration: TimeInterval) {
@@ -1103,6 +1193,14 @@ final class GameScene: SKScene {
         CGPath(ellipseIn: CGRect(x: -radius, y: -radius, width: radius * 2, height: radius * 2), transform: nil)
     }
 
+    private func circlePath(radius: CGFloat) -> CGPath {
+        CGPath(ellipseIn: CGRect(x: -radius, y: -radius, width: radius * 2, height: radius * 2), transform: nil)
+    }
+
+    private func burstPath(outerRadius: CGFloat, innerRadius: CGFloat, points: Int) -> CGPath {
+        starPath(outerRadius: outerRadius, innerRadius: innerRadius, points: points)
+    }
+
     private func hourglassPath(radius: CGFloat) -> CGPath {
         let path = CGMutablePath()
         let width = radius * 0.78
@@ -1122,6 +1220,18 @@ final class GameScene: SKScene {
 
     private func hexPath(radius: CGFloat) -> CGPath {
         polygonPath(radius: radius, sides: 6)
+    }
+
+    private func magnetPath(radius: CGFloat) -> CGPath {
+        let path = CGMutablePath()
+        let width = radius * 0.72
+        let top = radius * 0.52
+        let bottom = -radius * 0.48
+        path.move(to: CGPoint(x: -width, y: top))
+        path.addLine(to: CGPoint(x: -width, y: bottom))
+        path.addQuadCurve(to: CGPoint(x: width, y: bottom), control: CGPoint(x: 0, y: -radius * 1.18))
+        path.addLine(to: CGPoint(x: width, y: top))
+        return path
     }
 
     private func lightningPath(size: CGFloat) -> CGPath {
