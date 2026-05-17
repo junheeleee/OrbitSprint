@@ -1,6 +1,7 @@
 # Lumen Run Work Log
 
 ## 2026-05-17
+- Reduced long-run stutter by early-filtering collision checks and capping transient SpriteKit effect/object nodes.
 - Hardened long-run collision reliability with swept orbit checks and restored player opacity after invulnerability pulses.
 - Added an opening reward route, stronger pattern-specific spawn behavior, risky surge forks, and a fever-entry shard conversion burst to improve early fun, route choice, and fever payoff.
 - Split the HUD into stable top and status rows, restoring visible shield, slow, and magnet timers after the score layout tightening.

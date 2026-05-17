@@ -5,6 +5,8 @@
 - The player should never respawn directly into unavoidable collision.
 - Collision should only occur with obstacles on the player's current orbit layer.
 - Collision and pickup checks must stay reliable at high speed, including Fever, by accounting for movement between frames.
+- Collision reliability fixes should stay lightweight enough to preserve smooth gameplay on device.
+- SpriteKit transient effect and object counts should be bounded during long runs and Fever sequences.
 - Temporary invulnerability visuals must always restore the player core to full opacity when the effect ends.
 - Obstacles should spawn in ways that preserve player agency.
 - Fever mode should make the player invincible, faster, flashier, and able to convert collisions into score.

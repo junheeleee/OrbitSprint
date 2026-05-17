@@ -45,6 +45,7 @@ final class GameScene: SKScene {
     private var sparkTimer: TimeInterval = 0
     private var powerUpTimer: TimeInterval = 0
     private var comboTimer: TimeInterval = 0
+    private var cleanupTimer: TimeInterval = 0
     private var patternTimer: TimeInterval = 0
     private var patternWaveTimer: TimeInterval = 0
     private var patternDuration: TimeInterval = 8.5
@@ -154,6 +155,7 @@ final class GameScene: SKScene {
         sparkTimer += delta
         powerUpTimer += delta
         comboTimer += delta
+        cleanupTimer += delta
         patternTimer += delta
         patternWaveTimer += delta
         state.tick(delta: delta)
@@ -173,6 +175,7 @@ final class GameScene: SKScene {
         updatePlayerPosition()
         updateMagnetPull(delta: delta)
         checkCollisions()
+        cleanupTransientNodesIfNeeded()
     }
 
     private func setupScene() {
@@ -215,6 +218,7 @@ final class GameScene: SKScene {
         sparkTimer = 0
         powerUpTimer = 0
         comboTimer = 0
+        cleanupTimer = 0
         patternTimer = 0
         patternWaveTimer = 0
         patternDuration = 8.5
@@ -663,6 +667,7 @@ final class GameScene: SKScene {
 
     private func checkCollisions() {
         for node in objectLayer.children {
+            guard node.alpha > 0.08 else { continue }
             guard isOnCollidingRadius(with: node) else { continue }
             guard isTouchingPlayer(node) else { continue }
             guard let kind = node.lumenObjectKind else { continue }
@@ -828,6 +833,19 @@ final class GameScene: SKScene {
         return cleared
     }
 
+    private func cleanupTransientNodesIfNeeded() {
+        guard cleanupTimer >= 0.45 else { return }
+        cleanupTimer = 0
+        trimOldestChildren(in: effectLayer, keeping: state.isFeverActive ? 58 : 72)
+        trimOldestChildren(in: objectLayer, keeping: state.isFeverActive ? 48 : 60)
+    }
+
+    private func trimOldestChildren(in layer: SKNode, keeping limit: Int) {
+        let overflow = layer.children.count - limit
+        guard overflow > 0 else { return }
+        layer.children.prefix(overflow).forEach { $0.removeFromParent() }
+    }
+
     private func absorbShard(_ node: SKNode, invulnerabilityDuration: TimeInterval) {
         node.removeFromParent()
         invulnerableUntil = max(invulnerableUntil, elapsedTime + invulnerabilityDuration)
@@ -957,11 +975,15 @@ final class GameScene: SKScene {
     }
 
     private func emitBurst(at position: CGPoint, color: SKColor, count: Int) {
-        if state.isFeverActive, effectLayer.children.count > 70 {
+        let effectLimit = state.isFeverActive ? 58 : 72
+        guard effectLayer.children.count < effectLimit else {
             return
         }
 
-        for index in 0..<count {
+        let availableSlots = max(0, effectLimit - effectLayer.children.count)
+        let cappedCount = min(count, state.isFeverActive ? 8 : 12, availableSlots)
+
+        for index in 0..<cappedCount {
             let mote = SKShapeNode(circleOfRadius: CGFloat.random(in: 2.0...4.2))
             mote.position = position
             mote.fillColor = color.withAlphaComponent(0.9)
@@ -1118,19 +1140,19 @@ final class GameScene: SKScene {
     }
 
     private func isTouchingPlayer(_ node: SKNode) -> Bool {
-        let distance = hypot(player.position.x - node.position.x, player.position.y - node.position.y)
         let combinedRadius = playerRadius + collisionRadius(for: node)
-        if distance <= combinedRadius {
-            return true
-        }
-
         guard let objectAngle = storedAngle(for: node) else { return false }
         guard let objectRadius = storedRadius(for: node) else { return false }
+        let angularReach = combinedRadius / max(objectRadius, 1) + 0.035
+        let didReachAngle = sweptAngleDidReach(objectAngle, angularReach: angularReach)
+        guard didReachAngle else { return false }
+
         let radialGap = abs(objectRadius - currentRadius)
         guard radialGap <= combinedRadius else { return false }
 
-        let angularReach = combinedRadius / max(objectRadius, 1) + 0.035
-        return sweptAngleDidReach(objectAngle, angularReach: angularReach)
+        let dx = player.position.x - node.position.x
+        let dy = player.position.y - node.position.y
+        return dx * dx + dy * dy <= combinedRadius * combinedRadius || didReachAngle
     }
 
     private func collisionRadius(for node: SKNode) -> CGFloat {
