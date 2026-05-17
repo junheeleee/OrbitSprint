@@ -32,6 +32,17 @@ func ellipsePath(center: CGPoint, width: CGFloat, height: CGFloat, rotationDegre
     return path
 }
 
+func signalLinePath(y: CGFloat, offset: CGFloat) -> NSBezierPath {
+    let path = NSBezierPath()
+    path.move(to: CGPoint(x: 104, y: y))
+    path.curve(
+        to: CGPoint(x: 920, y: y + offset),
+        controlPoint1: CGPoint(x: 320, y: y - 36),
+        controlPoint2: CGPoint(x: 704, y: y + 36)
+    )
+    return path
+}
+
 let bitmap = NSBitmapImageRep(
     bitmapDataPlanes: nil,
     pixelsWide: Int(size.width),
@@ -57,23 +68,25 @@ background.draw(in: rect, angle: -90)
 
 let center = CGPoint(x: 512, y: 512)
 
-for index in 0..<30 {
-    let y = CGFloat(index) * 34 + 12
-    let alpha = index.isMultiple(of: 3) ? 0.16 : 0.07
-    color(0.0, 0.92, 0.82, alpha).setFill()
-    NSBezierPath(roundedRect: CGRect(x: 96 + CGFloat(index % 5) * 12, y: y, width: 250, height: 4), xRadius: 2, yRadius: 2).fill()
+for index in 0..<8 {
+    let y = CGFloat(index) * 112 + 96
+    let line = signalLinePath(y: y, offset: index.isMultiple(of: 2) ? 24 : -24)
+    color(0.0, 0.92, 0.82, index.isMultiple(of: 2) ? 0.16 : 0.09).setStroke()
+    line.lineWidth = index.isMultiple(of: 3) ? 4 : 2
+    line.lineCapStyle = .round
+    line.stroke()
 }
 
 let orbitSpecs: [(CGFloat, CGFloat, CGFloat, NSColor)] = [
-    (650, 230, -18, color(0.0, 0.92, 0.82, 0.74)),
-    (770, 292, 42, color(1.0, 0.2, 0.54, 0.62)),
-    (880, 352, -62, color(1.0, 0.82, 0.2, 0.45))
+    (650, 238, -20, color(0.0, 0.92, 0.82, 0.82)),
+    (760, 300, 38, color(1.0, 0.82, 0.2, 0.62)),
+    (850, 354, -60, color(1.0, 0.22, 0.55, 0.46))
 ]
 
 for spec in orbitSpecs {
     let orbit = ellipsePath(center: center, width: spec.0, height: spec.1, rotationDegrees: spec.2)
     spec.3.setStroke()
-    orbit.lineWidth = 12
+    orbit.lineWidth = 11
     orbit.stroke()
 }
 
@@ -97,27 +110,20 @@ core.stroke()
 color(1.0, 1.0, 1.0, 0.92).setFill()
 NSBezierPath(ovalIn: CGRect(x: 474, y: 474, width: 76, height: 76)).fill()
 
-let shard = starPath(center: CGPoint(x: 720, y: 690), outer: 112, inner: 56, points: 6, rotation: -.pi / 2.4)
-color(1.0, 0.12, 0.46).setFill()
-shard.fill()
-color(0.08, 0.0, 0.04, 0.72).setStroke()
-shard.lineWidth = 12
-shard.stroke()
+let nodeSpecs: [(CGPoint, CGFloat, NSColor)] = [
+    (CGPoint(x: 728, y: 654), 72, color(1.0, 0.86, 0.24, 0.98)),
+    (CGPoint(x: 292, y: 540), 58, color(0.0, 0.92, 0.82, 0.95)),
+    (CGPoint(x: 634, y: 274), 54, color(1.0, 0.22, 0.55, 0.9)),
+    (CGPoint(x: 400, y: 758), 44, color(1.0, 1.0, 1.0, 0.86))
+]
 
-let slash = NSBezierPath()
-slash.move(to: CGPoint(x: 666, y: 636))
-slash.line(to: CGPoint(x: 774, y: 744))
-slash.move(to: CGPoint(x: 774, y: 636))
-slash.line(to: CGPoint(x: 666, y: 744))
-color(0.04, 0.0, 0.03, 0.82).setStroke()
-slash.lineWidth = 18
-slash.lineCapStyle = .round
-slash.stroke()
-
-for point in [CGPoint(x: 270, y: 676), CGPoint(x: 764, y: 344), CGPoint(x: 300, y: 330)] {
-    let spark = starPath(center: point, outer: 34, inner: 15, points: 5)
-    color(1.0, 0.86, 0.24, 0.92).setFill()
-    spark.fill()
+for spec in nodeSpecs {
+    spec.2.setFill()
+    NSBezierPath(ovalIn: CGRect(x: spec.0.x - spec.1 / 2, y: spec.0.y - spec.1 / 2, width: spec.1, height: spec.1)).fill()
+    color(1.0, 1.0, 1.0, 0.56).setStroke()
+    let ring = NSBezierPath(ovalIn: CGRect(x: spec.0.x - spec.1 / 2, y: spec.0.y - spec.1 / 2, width: spec.1, height: spec.1))
+    ring.lineWidth = 6
+    ring.stroke()
 }
 
 NSGraphicsContext.restoreGraphicsState()

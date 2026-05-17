@@ -8,6 +8,7 @@ Use this checklist before important commits, TestFlight builds, and App Store re
 - Loading screen appears correctly.
 - Start screen appears correctly.
 - Loading/start logo reads as a Lumen core and relay orbit, not as a hazard object.
+- App icon, loading logo, and start logo use the same Lumen core/orbit/node identity.
 - Restart after game over works without app relaunch.
 - Player appears at normal size and color after restarting from game over.
 
@@ -63,4 +64,5 @@ Use this checklist before important commits, TestFlight builds, and App Store re
 - Privacy manifest exists.
 - App supports required orientation behavior.
 - App icon is present.
+- App icon remains readable at small Home Screen size.
 - No debug-only files are included.

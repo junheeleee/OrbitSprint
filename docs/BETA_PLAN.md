@@ -45,7 +45,7 @@ Run this script on device after every major gameplay/balance commit.
 - Stage target score may still need tuning after real play.
 - Relay cards now have rarity and risk picks, but still need real-device tuning for whether downsides feel fair.
 - Stage themes currently change visual tone and opening route, but later should add clearer stage-specific rules.
-- Start/loading branding now uses the Lumen core and relay orbit language, but app icon/start/gameplay should still be compared side by side on device.
+- App icon and start/loading branding now share the Lumen core, relay orbit, and signal node language, but still need small-size device review.
 - Game Center leaderboard still depends on App Store Connect setup.
 - App Store release needs metadata, screenshots, privacy review, and final signing checks.
 
