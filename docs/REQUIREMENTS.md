@@ -4,6 +4,8 @@
 - One-button orbit movement should remain responsive and smooth.
 - The player should never respawn directly into unavoidable collision.
 - Collision should only occur with obstacles on the player's current orbit layer.
+- Collision and pickup checks must stay reliable at high speed, including Fever, by accounting for movement between frames.
+- Temporary invulnerability visuals must always restore the player core to full opacity when the effect ends.
 - Obstacles should spawn in ways that preserve player agency.
 - Fever mode should make the player invincible, faster, flashier, and able to convert collisions into score.
 - The HUD should show fever buildup progress so players can judge when to risk chasing one more spark.

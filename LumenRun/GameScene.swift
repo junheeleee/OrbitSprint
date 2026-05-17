@@ -35,6 +35,7 @@ final class GameScene: SKScene {
     private var currentOrbitIndex = 0
     private var orbitStepDirection = 1
     private var angle: CGFloat = -.pi / 2
+    private var previousAngle: CGFloat = -.pi / 2
     private var angularSpeed: CGFloat = 1.72
     private var lastUpdate: TimeInterval = 0
     private var elapsedTime: TimeInterval = 0
@@ -146,6 +147,7 @@ final class GameScene: SKScene {
         difficulty = 1 + min(CGFloat(state.score) * 0.012, 1.45)
         let timeScale: CGFloat = state.slowTimeRemaining > 0 ? 0.62 : 1
         let feverScale: CGFloat = state.isFeverActive ? 2.25 : 1
+        previousAngle = angle
         angle += angularSpeed * difficulty * timeScale * feverScale * CGFloat(delta)
         updateOrbitRadius(delta: delta)
         spawnTimer += delta
@@ -187,7 +189,7 @@ final class GameScene: SKScene {
         setupShieldAura()
         player.alpha = 0.64
         targetRadius = currentRadius
-        player.run(.sequence([.wait(forDuration: safeUntil), .fadeAlpha(to: 1, duration: 0.25)]))
+        player.run(.sequence([.wait(forDuration: safeUntil), .fadeAlpha(to: 1, duration: 0.25)]), withKey: "spawnFade")
 
         applyTheme()
         drawStars()
@@ -203,6 +205,7 @@ final class GameScene: SKScene {
         currentOrbitIndex = 0
         orbitStepDirection = 1
         angle = -.pi / 2
+        previousAngle = angle
         angularSpeed = abs(angularSpeed)
         lastUpdate = 0
         elapsedTime = 0
@@ -894,7 +897,16 @@ final class GameScene: SKScene {
             .fadeAlpha(to: 0.42, duration: 0.08),
             .fadeAlpha(to: 0.9, duration: 0.08)
         ])
-        player.run(.repeat(pulse, count: 6), withKey: "invulnerablePulse")
+        player.run(
+            .sequence([
+                .repeat(pulse, count: 6),
+                .run { [weak self] in
+                    guard let self, !self.state.isGameOver else { return }
+                    self.player.alpha = 1
+                }
+            ]),
+            withKey: "invulnerablePulse"
+        )
     }
 
     private func setupShieldAura() {
@@ -1101,16 +1113,51 @@ final class GameScene: SKScene {
 
     private func isOnCollidingRadius(with node: SKNode) -> Bool {
         guard let objectRadius = storedRadius(for: node) else { return true }
-        return abs(objectRadius - currentRadius) <= collisionRadiusTolerance
+        let dynamicTolerance = max(collisionRadiusTolerance, playerRadius + collisionRadius(for: node))
+        return abs(objectRadius - currentRadius) <= dynamicTolerance
     }
 
     private func isTouchingPlayer(_ node: SKNode) -> Bool {
         let distance = hypot(player.position.x - node.position.x, player.position.y - node.position.y)
-        return distance <= playerRadius + collisionRadius(for: node)
+        let combinedRadius = playerRadius + collisionRadius(for: node)
+        if distance <= combinedRadius {
+            return true
+        }
+
+        guard let objectAngle = storedAngle(for: node) else { return false }
+        guard let objectRadius = storedRadius(for: node) else { return false }
+        let radialGap = abs(objectRadius - currentRadius)
+        guard radialGap <= combinedRadius else { return false }
+
+        let angularReach = combinedRadius / max(objectRadius, 1) + 0.035
+        return sweptAngleDidReach(objectAngle, angularReach: angularReach)
     }
 
     private func collisionRadius(for node: SKNode) -> CGFloat {
         node.lumenObjectKind?.collisionRadius ?? 12
+    }
+
+    private func sweptAngleDidReach(_ objectAngle: CGFloat, angularReach: CGFloat) -> Bool {
+        let travel = angularTravelDistance(from: previousAngle, to: angle)
+        guard travel > 0 else {
+            return angularDistance(angle, objectAngle) <= angularReach
+        }
+
+        let distanceFromStart = angularTravelDistance(from: previousAngle, to: objectAngle)
+        return distanceFromStart <= travel + angularReach || angularDistance(angle, objectAngle) <= angularReach
+    }
+
+    private func angularTravelDistance(from start: CGFloat, to end: CGFloat) -> CGFloat {
+        let normalizedStart = normalizedAngle(start)
+        let normalizedEnd = normalizedAngle(end)
+
+        if angularSpeed >= 0 {
+            let distance = normalizedEnd - normalizedStart
+            return distance >= 0 ? distance : distance + 2 * .pi
+        }
+
+        let distance = normalizedStart - normalizedEnd
+        return distance >= 0 ? distance : distance + 2 * .pi
     }
 
     private func nextThreatSpawnAngle(on radius: CGFloat, minLead: CGFloat, maxLead: CGFloat) -> CGFloat {
