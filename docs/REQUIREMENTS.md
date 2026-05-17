@@ -6,6 +6,7 @@
 - Collision should only occur with obstacles on the player's current orbit layer.
 - Obstacles should spawn in ways that preserve player agency.
 - Fever mode should make the player invincible, faster, flashier, and able to convert collisions into score.
+- The HUD should show fever buildup progress so players can judge when to risk chasing one more spark.
 - Gameplay depth is the current highest product priority before more cosmetic polish.
 - Add stage-like pacing with recognizable obstacle patterns, escalation beats, and short relief windows.
 - Add strategic decisions inside runs, such as choosing risky score routes, safer survival routes, and timed item pickups.

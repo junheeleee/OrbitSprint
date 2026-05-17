@@ -151,6 +151,20 @@ final class GameState: ObservableObject {
         feverRemaining > 0
     }
 
+    var feverComboGoal: Int {
+        feverComboThreshold
+    }
+
+    var feverProgress: Double {
+        guard !isFeverActive else { return 1 }
+        return min(1, Double(combo) / Double(feverComboThreshold))
+    }
+
+    var comboUntilFever: Int {
+        guard !isFeverActive else { return 0 }
+        return max(0, feverComboThreshold - combo)
+    }
+
     var topRunRecords: [RunRecord] {
         Array(runRecords.sorted { $0.score > $1.score }.prefix(5))
     }

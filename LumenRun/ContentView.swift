@@ -276,30 +276,7 @@ private struct HUDView: View {
 
             HStack(spacing: 9) {
                 VStack(alignment: .trailing, spacing: 4) {
-                    if gameState.combo > 0 {
-                        VStack(alignment: .trailing, spacing: 3) {
-                            if gameState.isFeverActive {
-                                Text("hud.fever")
-                                    .font(.caption2.weight(.black))
-                                    .foregroundStyle(.black)
-                                    .padding(.horizontal, 8)
-                                    .padding(.vertical, 3)
-                                    .background(
-                                        LinearGradient(
-                                            colors: gameState.selectedTheme.feverColors,
-                                            startPoint: .leading,
-                                            endPoint: .trailing
-                                        ),
-                                        in: Capsule()
-                                    )
-                            }
-
-                            Text(String(format: NSLocalizedString("hud.combo", comment: ""), gameState.combo))
-                                .font(.caption.weight(.black))
-                                .foregroundStyle(gameState.isFeverActive ? .white : Color(red: 1.0, green: 0.82, blue: 0.28))
-                                .monospacedDigit()
-                        }
-                    }
+                    FeverMeter()
                     HStack(spacing: 5) {
                         if gameState.shieldTimeRemaining > 0 {
                             Label("\(Int(ceil(gameState.shieldTimeRemaining)))", systemImage: "shield.fill")
@@ -515,6 +492,69 @@ private struct FeverBackdrop: View {
         )
         .ignoresSafeArea()
         .allowsHitTesting(false)
+    }
+}
+
+private struct FeverMeter: View {
+    @EnvironmentObject private var gameState: GameState
+
+    var body: some View {
+        VStack(alignment: .trailing, spacing: 4) {
+            HStack(spacing: 6) {
+                if gameState.isFeverActive {
+                    Text("hud.fever")
+                        .font(.caption2.weight(.black))
+                        .foregroundStyle(.black)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 3)
+                        .background(
+                            LinearGradient(
+                                colors: gameState.selectedTheme.feverColors,
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            ),
+                            in: Capsule()
+                        )
+                } else if gameState.combo > 0 {
+                    Text(String(format: NSLocalizedString("hud.feverSoon", comment: ""), gameState.comboUntilFever))
+                        .font(.caption2.weight(.black))
+                        .foregroundStyle(Color(red: 1.0, green: 0.82, blue: 0.28))
+                        .monospacedDigit()
+                } else {
+                    Text("hud.feverReady")
+                        .font(.caption2.weight(.bold))
+                        .foregroundStyle(.white.opacity(0.52))
+                }
+
+                if gameState.combo > 0 {
+                    Text(String(format: NSLocalizedString("hud.combo", comment: ""), gameState.combo))
+                        .font(.caption.weight(.black))
+                        .foregroundStyle(gameState.isFeverActive ? .white : Color(red: 1.0, green: 0.82, blue: 0.28))
+                        .monospacedDigit()
+                }
+            }
+
+            GeometryReader { proxy in
+                ZStack(alignment: .leading) {
+                    Capsule()
+                        .fill(.white.opacity(0.14))
+                    Capsule()
+                        .fill(
+                            LinearGradient(
+                                colors: gameState.selectedTheme.feverColors,
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
+                        .frame(width: max(6, proxy.size.width * gameState.feverProgress))
+                        .shadow(color: gameState.selectedTheme.feverColors.first?.opacity(0.45) ?? .clear, radius: gameState.isFeverActive ? 8 : 3)
+                }
+            }
+            .frame(width: 112, height: 7)
+            .clipShape(Capsule())
+            .animation(.snappy(duration: 0.18), value: gameState.feverProgress)
+            .animation(.snappy(duration: 0.18), value: gameState.isFeverActive)
+        }
     }
 }
 

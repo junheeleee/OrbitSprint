@@ -3,6 +3,8 @@
 "hud.level" = "LV %d";
 "hud.combo" = "%d 콤보";
 "hud.fever" = "피버 싱크";
+"hud.feverReady" = "피버 대기";
+"hud.feverSoon" = "피버까지 %d";
 
 "loading.title" = "루멘런 점화 중";
 "start.eyebrow" = "네온 코어 러너";

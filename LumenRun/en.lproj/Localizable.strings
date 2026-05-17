@@ -3,6 +3,8 @@
 "hud.level" = "LV %d";
 "hud.combo" = "%d COMBO";
 "hud.fever" = "FEVER SYNC";
+"hud.feverReady" = "FEVER IDLE";
+"hud.feverSoon" = "%d TO FEVER";
 
 "loading.title" = "Igniting the Run";
 "start.eyebrow" = "NEON CORE RUNNER";
