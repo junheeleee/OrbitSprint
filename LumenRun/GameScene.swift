@@ -46,6 +46,7 @@ final class GameScene: SKScene {
     private var powerUpTimer: TimeInterval = 0
     private var comboTimer: TimeInterval = 0
     private var cleanupTimer: TimeInterval = 0
+    private var magnetPullTimer: TimeInterval = 0
     private var patternTimer: TimeInterval = 0
     private var patternWaveTimer: TimeInterval = 0
     private var patternDuration: TimeInterval = 8.5
@@ -159,6 +160,7 @@ final class GameScene: SKScene {
         powerUpTimer += delta
         comboTimer += delta
         cleanupTimer += delta
+        magnetPullTimer += delta
         patternTimer += delta
         patternWaveTimer += delta
         state.tick(delta: delta)
@@ -222,6 +224,7 @@ final class GameScene: SKScene {
         powerUpTimer = 0
         comboTimer = 0
         cleanupTimer = 0
+        magnetPullTimer = 0
         patternTimer = 0
         patternWaveTimer = 0
         patternDuration = 8.5
@@ -801,25 +804,37 @@ final class GameScene: SKScene {
 
     private func updateMagnetPull(delta: TimeInterval) {
         guard state.magnetTimeRemaining > 0 else { return }
+        guard magnetPullTimer >= 1.0 / 24.0 else { return }
+        let pullDelta = magnetPullTimer
+        magnetPullTimer = 0
+
+        var movedSparkCount = 0
+        let captureRadiusSquared: CGFloat = 18 * 18
+        let pullRadiusSquared: CGFloat = 104 * 104
+        let pull = min(CGFloat(pullDelta) * 6.2, 0.26)
 
         for node in objectLayer.children {
             guard node.lumenObjectKind == .spark else { continue }
-            let distance = hypot(player.position.x - node.position.x, player.position.y - node.position.y)
-            guard distance < 120 else { continue }
+            guard movedSparkCount < 5 else { return }
 
-            if distance <= playerRadius + LumenObjectKind.spark.collisionRadius + 3 {
+            let dx = player.position.x - node.position.x
+            let dy = player.position.y - node.position.y
+            let distanceSquared = dx * dx + dy * dy
+            guard distanceSquared < pullRadiusSquared else { continue }
+
+            if distanceSquared <= captureRadiusSquared {
                 let hitPoint = node.position
                 node.removeFromParent()
                 comboTimer = 0
                 state.collectSpark()
                 Haptics.collect(enabled: state.isHapticsEnabled)
-                emitBurst(at: hitPoint, color: state.selectedTheme.sparkColor, count: 6)
+                emitBurst(at: hitPoint, color: state.selectedTheme.sparkColor, count: 3)
                 continue
             }
 
-            let pull = min(CGFloat(delta) * 7.5, 0.34)
-            let nextX = node.position.x + (player.position.x - node.position.x) * pull
-            let nextY = node.position.y + (player.position.y - node.position.y) * pull
+            movedSparkCount += 1
+            let nextX = node.position.x + dx * pull
+            let nextY = node.position.y + dy * pull
             node.position = CGPoint(x: nextX, y: nextY)
         }
     }
