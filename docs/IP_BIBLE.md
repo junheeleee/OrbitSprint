@@ -17,6 +17,7 @@ This document keeps the game identity consistent across title, visuals, sound, U
 - Item pickup, collision, fever, shield, and score feedback should be easy to distinguish.
 - Spark collection should read as a small relay signal, power-up pickup as a stronger system pulse, and glitch collisions/clears as fractured shard energy.
 - Fever should feel like a dramatic power state, not just a stat change.
+- Fever should communicate overcharge, conversion, and danger return: entry radiates from the core, glitch hits convert magenta energy into lumen energy, and the final second warns the player visually.
 - UI should support the sci-fi identity without hurting readability.
 - Menu screens should feel like entering a signal system, not reading a generic mobile-game card.
 

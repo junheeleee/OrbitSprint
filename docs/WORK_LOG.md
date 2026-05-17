@@ -1,6 +1,7 @@
 # Lumen Run Work Log
 
 ## 2026-05-17
+- Enhanced Fever as an overcharge state with core-to-orbit entry beams, glitch-to-lumen conversion effects, and a final-second danger-return warning pulse.
 - Unified object feedback effects so spark collection emits small relay rings, power-ups emit stronger system pulses, and glitch clears emit fractured shard energy.
 - Refined the app icon core glow by masking the teal light to a circular field instead of leaving a visible square gradient around the yellow core.
 - Began in-game IP polish by adding a lumen signal mark to the player core and turning plain orbit rings into relay-network lanes with signal segments and nodes.

@@ -54,6 +54,7 @@ final class GameScene: SKScene {
     private var currentPattern: RunPattern = .flow
     private var lastScreenFlashTime: TimeInterval = -10
     private var lastFeverFlashTime: TimeInterval = -10
+    private var didWarnFeverEnding = false
     private var didSpawnOpeningRoute = false
     private var difficulty: CGFloat = 1
     private var renderedTheme: GameTheme?
@@ -134,8 +135,11 @@ final class GameScene: SKScene {
             renderedFeverActive = state.isFeverActive
             drawOrbits()
             if state.isFeverActive {
+                didWarnFeverEnding = false
                 triggerFeverBurst()
                 convertNearbyShardsForFever()
+            } else {
+                didWarnFeverEnding = false
             }
         }
         if renderedShieldCharges != state.shieldCharges {
@@ -162,6 +166,7 @@ final class GameScene: SKScene {
         patternTimer += delta
         patternWaveTimer += delta
         state.tick(delta: delta)
+        updateFeverEndingCue()
 
         if comboTimer > scaledInterval(easy: 3.1, hard: 1.75) {
             state.breakCombo()
@@ -230,6 +235,7 @@ final class GameScene: SKScene {
         currentPattern = .flow
         lastScreenFlashTime = -10
         lastFeverFlashTime = -10
+        didWarnFeverEnding = false
         didSpawnOpeningRoute = false
         difficulty = 1
         renderedShieldCharges = -1
@@ -824,7 +830,7 @@ final class GameScene: SKScene {
                     comboTimer = 0
                     state.collectFeverHit()
                     Haptics.collect(enabled: state.isHapticsEnabled)
-                    emitGlitchClearSignal(at: hitPoint, color: state.selectedTheme.feverColor, count: 10, radius: 54)
+                    emitFeverConversionSignal(at: hitPoint, count: 10, radius: 58)
                     throttledFeverFlash(color: state.selectedTheme.feverColor.withAlphaComponent(0.18))
                     continue
                 }
@@ -1073,6 +1079,12 @@ final class GameScene: SKScene {
         shockwave(at: position, color: color, radius: radius)
     }
 
+    private func emitFeverConversionSignal(at position: CGPoint, count: Int, radius: CGFloat) {
+        emitGlitchFragments(at: position, color: state.selectedTheme.shardColor)
+        signalRing(at: position, color: state.selectedTheme.shardColor, radius: radius * 0.72, duration: 0.18, lineWidth: 1.4)
+        emitPowerSignal(at: position, color: state.selectedTheme.feverColor, count: count, radius: radius)
+    }
+
     private func signalRing(at position: CGPoint, color: SKColor, radius: CGFloat, duration: TimeInterval, lineWidth: CGFloat) {
         guard effectLayer.children.count < (state.isFeverActive ? 42 : 56) else { return }
 
@@ -1158,6 +1170,8 @@ final class GameScene: SKScene {
 
     private func triggerFeverBurst() {
         flash(color: state.selectedTheme.feverColor.withAlphaComponent(0.16))
+        signalRing(at: player.position, color: .white.withAlphaComponent(0.82), radius: 72, duration: 0.24, lineWidth: 2)
+        signalRing(at: player.position, color: state.selectedTheme.feverColor, radius: orbitRadii.last ?? 148, duration: 0.42, lineWidth: 3)
         for radius in orbitRadii {
             let ring = SKShapeNode(circleOfRadius: radius)
             ring.position = center
@@ -1168,6 +1182,28 @@ final class GameScene: SKScene {
             effectLayer.addChild(ring)
             ring.run(.sequence([
                 .group([.scale(to: 1.28, duration: 0.36), .fadeOut(withDuration: 0.36)]),
+                .removeFromParent()
+            ]))
+        }
+
+        for index in 0..<10 {
+            let angle = CGFloat(index) / 10 * 2 * .pi
+            let start = point(on: orbitRadii[0] * 0.55, angle: angle)
+            let end = point(on: (orbitRadii.last ?? 148) * 1.08, angle: angle + 0.18)
+            let beamPath = CGMutablePath()
+            beamPath.move(to: start)
+            beamPath.addLine(to: end)
+            let beam = SKShapeNode(path: beamPath)
+            beam.strokeColor = state.selectedTheme.feverColor.withAlphaComponent(0.42)
+            beam.lineWidth = 2
+            beam.glowWidth = 9
+            beam.zPosition = 11
+            effectLayer.addChild(beam)
+            beam.run(.sequence([
+                .group([
+                    .fadeOut(withDuration: 0.28),
+                    .scale(to: 1.04, duration: 0.28)
+                ]),
                 .removeFromParent()
             ]))
         }
@@ -1197,6 +1233,24 @@ final class GameScene: SKScene {
         label.run(seq)
     }
 
+    private func updateFeverEndingCue() {
+        guard state.isFeverActive else { return }
+        guard state.feverRemaining <= 1.15 else { return }
+        guard !didWarnFeverEnding else { return }
+        didWarnFeverEnding = true
+
+        signalRing(at: player.position, color: state.selectedTheme.feverColor, radius: 86, duration: 0.34, lineWidth: 2.6)
+        signalRing(at: player.position, color: state.selectedTheme.shardColor.withAlphaComponent(0.75), radius: 52, duration: 0.24, lineWidth: 1.4)
+        for radius in orbitRadii {
+            pulseOrbit(at: radius, color: state.selectedTheme.shardColor, duration: 0.26)
+        }
+        player.run(.sequence([
+            .scale(to: 0.9, duration: 0.07),
+            .scale(to: 1.08, duration: 0.07),
+            .scale(to: 1.0, duration: 0.1)
+        ]), withKey: "feverEndingPulse")
+    }
+
     private func convertNearbyShardsForFever() {
         var converted = 0
         objectLayer.children.forEach { node in
@@ -1205,7 +1259,7 @@ final class GameScene: SKScene {
             guard let objectAngle = storedAngle(for: node) else { return }
             if angularDistance(objectAngle, angle) < 1.1 {
                 converted += 1
-                emitGlitchClearSignal(at: node.position, color: state.selectedTheme.feverColor, count: 4, radius: 44)
+                emitFeverConversionSignal(at: node.position, count: 4, radius: 44)
                 node.removeFromParent()
             }
         }

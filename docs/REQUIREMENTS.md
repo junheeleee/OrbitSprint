@@ -17,6 +17,7 @@
 - Difficulty should ramp gradually from score, keeping the opening run approachable before gate, switchback, and overdrive patterns appear.
 - Fever should feel faster and rewarding without causing noticeable frame stutter on device.
 - Fever mode should make the player invincible, faster, flashier, and able to convert collisions into score.
+- Fever should clearly show entry overcharge, glitch-to-lumen conversion, and an end warning before normal danger returns.
 - The HUD should show fever buildup progress so players can judge when to risk chasing one more spark.
 - HUD text for score, best score, combo, and fever status must remain single-line and non-overlapping on small iPhone screens.
 - Active power-up timers, especially shield duration, must remain visible while the effect is running.
