@@ -361,6 +361,10 @@ final class GameScene: SKScene {
                 spawnSparkTrail()
                 sparkTimer = 0
             }
+            if state.level >= 2, patternWaveTimer > 2.25 {
+                spawnPowerUp(kind: .magnet, on: randomOrbitRadius(), near: nextPlayableSpawnAngle(minLead: 0.9, maxLead: 2.1))
+                patternWaveTimer = 0
+            }
             if spawnTimer > max(1.45, 2.15 - Double(state.level) * 0.04) {
                 spawnShard()
                 spawnTimer = 0
@@ -374,6 +378,10 @@ final class GameScene: SKScene {
                 spawnSpark()
                 sparkTimer = 0
             }
+            if patternWaveTimer > 1.7 {
+                spawnPowerUp(kind: .surge, on: randomOrbitRadius(), near: nextPlayableSpawnAngle(minLead: 0.82, maxLead: 1.9))
+                patternWaveTimer = 0
+            }
         }
     }
 
@@ -385,6 +393,10 @@ final class GameScene: SKScene {
             spawnShard(on: orbitRadii[index], near: waveAngle + CGFloat.random(in: -0.04...0.04), rewardChance: 0, allowParallel: true)
         }
         spawnSpark(on: orbitRadii[safeIndex], near: waveAngle + CGFloat.random(in: -0.08...0.08))
+        if patternStep.isMultiple(of: 3) {
+            spawnPowerUp(kind: .shield, on: orbitRadii[safeIndex], near: waveAngle - 0.2)
+        }
+        patternStep += 1
     }
 
     private func spawnSwitchbackStep() {
@@ -394,6 +406,9 @@ final class GameScene: SKScene {
         let spawnAngle = nextThreatSpawnAngle(on: radius, minLead: 0.82, maxLead: 1.42)
         pulseOrbit(at: radius, color: state.selectedTheme.shardColor, duration: 0.32)
         spawnShard(on: radius, near: spawnAngle, rewardChance: patternStep.isMultiple(of: 2) ? 0.45 : 0.18, allowParallel: false)
+        if state.level >= 4, patternStep % 5 == 4 {
+            spawnPowerUp(kind: .bomb, on: rewardRadius(awayFrom: radius), near: spawnAngle + 0.16)
+        }
         patternStep += 1
     }
 
@@ -524,30 +539,44 @@ final class GameScene: SKScene {
     private func spawnPowerUp() {
         let radius = randomOrbitRadius()
         let spawnAngle = nextPlayableSpawnAngle(minLead: 1.05, maxLead: 2.4)
+        let roll = CGFloat.random(in: 0...1)
+        spawnPowerUp(kind: selectedPowerUpKind(for: roll), on: radius, near: spawnAngle)
+    }
+
+    private func selectedPowerUpKind(for roll: CGFloat) -> LumenObjectKind {
+        if state.level >= 4 && roll < 0.16 {
+            return .bomb
+        }
+        if state.level >= 3 && roll < 0.32 {
+            return .surge
+        }
+        if state.level >= 2 && roll < 0.48 {
+            return .magnet
+        }
+        if state.shieldCharges == 0 || roll < 0.72 {
+            return .shield
+        }
+        return .slow
+    }
+
+    private func spawnPowerUp(kind: LumenObjectKind, on radius: CGFloat, near spawnAngle: CGFloat) {
         guard !hasNearbyObject(at: spawnAngle, clearance: 0.34, names: powerUpBlockerNames) else { return }
 
-        let roll = CGFloat.random(in: 0...1)
-        let kind: LumenObjectKind
         let node: SKShapeNode
 
-        if state.level >= 4 && roll < 0.16 {
-            kind = .bomb
+        if kind == .bomb {
             node = SKShapeNode(path: burstPath(outerRadius: kind.baseRadius * 1.12, innerRadius: kind.baseRadius * 0.46, points: 8))
             addSymbol(to: node, path: clearSlashPath(size: kind.baseRadius * 1.35), color: .white.withAlphaComponent(0.92), lineWidth: 2.6)
-        } else if state.level >= 3 && roll < 0.32 {
-            kind = .surge
+        } else if kind == .surge {
             node = SKShapeNode(path: hexPath(radius: kind.baseRadius))
             addSymbol(to: node, path: lightningPath(size: kind.baseRadius * 1.16), color: .white.withAlphaComponent(0.9), lineWidth: 2)
-        } else if state.level >= 2 && roll < 0.48 {
-            kind = .magnet
+        } else if kind == .magnet {
             node = SKShapeNode(path: magnetBodyPath(radius: kind.baseRadius))
             addSymbol(to: node, path: pullArrowPath(size: kind.baseRadius * 1.25), color: .white.withAlphaComponent(0.9), lineWidth: 2.4)
-        } else if state.shieldCharges == 0 || roll < 0.72 {
-            kind = .shield
+        } else if kind == .shield {
             node = SKShapeNode(path: shieldPath(radius: kind.baseRadius))
             addSymbol(to: node, path: checkPath(size: kind.baseRadius * 1.25), color: .white.withAlphaComponent(0.92), lineWidth: 2.5)
         } else {
-            kind = .slow
             node = SKShapeNode(path: hourglassPath(radius: kind.baseRadius))
             addHourglassSand(to: node, radius: kind.baseRadius)
         }

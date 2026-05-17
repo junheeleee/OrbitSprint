@@ -11,6 +11,7 @@
 - Add strategic decisions inside runs, such as choosing risky score routes, safer survival routes, and timed item pickups.
 - First pattern set should include readable phases: normal flow, gate waves, switchback pressure, lumen rush, and overdrive.
 - Pattern changes should be communicated through spawn layout, orbit pulses, color, and item placement instead of intrusive text banners.
+- Run patterns should have distinct reward/risk identities: harvest favors magnets and spark trails, gates offer shield preparation, switchbacks reward bomb timing, and overdrive pushes surge-core risk/reward.
 - Collectibles and hazards must be visually distinct by both shape and color, not only by color.
 - Object identities: gold sparks build combo, orange surge cores give high-value score, blue shields protect, violet hourglasses slow time, teal magnets pull nearby sparks, green clear bombs remove nearby hazards, magenta shards are hazards.
 - Hazard objects should use aggressive shapes and danger marks, such as spikes and X marks, so they read as avoidable threats without relying on color.
