@@ -92,8 +92,10 @@ final class GameState: ObservableObject {
     @Published var multiplier = 1
     @Published var level = 1
     @Published private(set) var stage = 1
-    @Published private(set) var stageTargetScore = 45
+    @Published private(set) var stageTargetScore = 90
     @Published private(set) var clearedStage = 0
+    @Published private(set) var stageClearSerial = 0
+    @Published private(set) var stageResumeSerial = 0
     @Published var shieldCharges = 0
     @Published var shieldTimeRemaining: TimeInterval = 0
     @Published var slowTimeRemaining: TimeInterval = 0
@@ -170,7 +172,7 @@ final class GameState: ObservableObject {
     private let shieldDuration: TimeInterval = 8
     private let shieldExtensionDuration: TimeInterval = 6
     private let magnetDuration: TimeInterval = 5
-    private var nextStageScore = 45
+    private var nextStageScore = 90
     private var recentRunUpgradeKinds: [RunUpgradeKind] = []
     private var canShowAchievementToast = false
     private var pendingAchievementToasts: [AchievementDefinition] = []
@@ -258,8 +260,10 @@ final class GameState: ObservableObject {
         multiplier = 1
         level = 1
         stage = 1
-        stageTargetScore = 45
+        stageTargetScore = 90
         clearedStage = 0
+        stageClearSerial = 0
+        stageResumeSerial = 0
         shieldCharges = 0
         shieldTimeRemaining = 0
         slowTimeRemaining = 0
@@ -267,7 +271,7 @@ final class GameState: ObservableObject {
         feverRemaining = 0
         runUpgradeChoices = []
         isRunUpgradePresented = false
-        nextStageScore = 45
+        nextStageScore = 90
         recentRunUpgradeKinds = []
         SoundPlayer.setFeverActive(false, enabled: isSoundEnabled)
         isGameOver = false
@@ -356,6 +360,7 @@ final class GameState: ObservableObject {
         applyRunUpgrade(choice.kind)
         runUpgradeChoices = []
         isRunUpgradePresented = false
+        stageResumeSerial += 1
     }
 
     func breakCombo() {
@@ -737,6 +742,7 @@ final class GameState: ObservableObject {
         guard !isRunUpgradePresented, !isGameOver, score >= nextStageScore else { return }
         clearedStage = stage
         runUpgradeChoices = makeRunUpgradeChoices()
+        stageClearSerial += 1
         let nextStage = stage + 1
         stage = nextStage
         nextStageScore += stageScoreRequirement(for: nextStage)
@@ -807,6 +813,6 @@ final class GameState: ObservableObject {
     }
 
     private func stageScoreRequirement(for stage: Int) -> Int {
-        45 + min(stage - 1, 5) * 20
+        110 + min(stage - 2, 6) * 40
     }
 }

@@ -62,6 +62,9 @@ final class GameScene: SKScene {
     private var renderedCoreSkin: CoreSkin?
     private var renderedFeverActive = false
     private var renderedShieldCharges = -1
+    private var renderedStageClearSerial = 0
+    private var renderedStageResumeSerial = 0
+    private var renderedStage = 1
 
     private lazy var player = SKShapeNode(circleOfRadius: playerRadius)
     private lazy var shieldAura = SKShapeNode(path: shieldPath(radius: 30))
@@ -146,6 +149,19 @@ final class GameScene: SKScene {
         if renderedShieldCharges != state.shieldCharges {
             renderedShieldCharges = state.shieldCharges
             refreshShieldAura()
+        }
+        if renderedStage != state.stage {
+            renderedStage = state.stage
+            drawStars()
+            drawOrbits()
+        }
+        if renderedStageClearSerial != state.stageClearSerial {
+            renderedStageClearSerial = state.stageClearSerial
+            presentStageClear()
+        }
+        if renderedStageResumeSerial != state.stageResumeSerial {
+            renderedStageResumeSerial = state.stageResumeSerial
+            startNextStage()
         }
 
         guard !state.isPaused else { return }
@@ -233,7 +249,7 @@ final class GameScene: SKScene {
         patternDuration = 8.5
         patternIndex = 0
         patternStep = 0
-        currentPattern = .flow
+        currentPattern = stageOpeningPattern
         lastScreenFlashTime = -10
         lastFeverFlashTime = -10
         didWarnFeverEnding = false
@@ -241,6 +257,9 @@ final class GameScene: SKScene {
         difficulty = 1
         renderedShieldCharges = -1
         renderedFeverActive = state.isFeverActive
+        renderedStageClearSerial = state.stageClearSerial
+        renderedStageResumeSerial = state.stageResumeSerial
+        renderedStage = state.stage
 
         resetPlayerVisuals()
         shieldAura.removeAllActions()
@@ -253,6 +272,75 @@ final class GameScene: SKScene {
         player.setScale(1)
         player.alpha = 1
         player.isHidden = false
+    }
+
+    private func presentStageClear() {
+        guard state.clearedStage > 0 else { return }
+        lastUpdate = 0
+        spawnTimer = 0
+        sparkTimer = 0
+        powerUpTimer = 0
+        patternTimer = 0
+        patternWaveTimer = 0
+        comboTimer = 0
+        objectLayer.children.forEach { node in
+            node.removeAllActions()
+            node.run(.sequence([
+                .group([
+                    .fadeOut(withDuration: 0.16),
+                    .scale(to: 0.2, duration: 0.16)
+                ]),
+                .removeFromParent()
+            ]))
+        }
+        effectLayer.removeAllChildren()
+        resetPlayerVisuals()
+        safeUntil = max(safeUntil, elapsedTime + 1.2)
+        invulnerableUntil = max(invulnerableUntil, elapsedTime + 1.2)
+        pulseStageClearRings()
+    }
+
+    private func startNextStage() {
+        lastUpdate = 0
+        spawnTimer = 0
+        sparkTimer = 0
+        powerUpTimer = 0
+        patternTimer = 0
+        patternWaveTimer = 0
+        patternStep = 0
+        patternIndex += 1
+        currentPattern = .flow
+        didSpawnOpeningRoute = false
+        objectLayer.removeAllChildren()
+        drawStars()
+        drawOrbits()
+        safeUntil = max(safeUntil, elapsedTime + 1.8)
+        invulnerableUntil = max(invulnerableUntil, elapsedTime + 1.0)
+        resetPlayerVisuals()
+        pulseOrbit(at: currentRadius, color: stageAccentColor, duration: 0.5)
+        spawnOpeningRoute()
+    }
+
+    private func pulseStageClearRings() {
+        flash(color: stageAccentColor.withAlphaComponent(0.14))
+        for (index, radius) in orbitRadii.enumerated() {
+            let ring = SKShapeNode(circleOfRadius: radius)
+            ring.position = center
+            ring.strokeColor = stageAccentColor.withAlphaComponent(0.74)
+            ring.fillColor = .clear
+            ring.lineWidth = 2.3
+            ring.glowWidth = 10
+            ring.zPosition = 12
+            effectLayer.addChild(ring)
+            ring.run(.sequence([
+                .wait(forDuration: TimeInterval(index) * 0.05),
+                .group([
+                    .scale(to: 1.2, duration: 0.34),
+                    .fadeOut(withDuration: 0.34)
+                ]),
+                .removeFromParent()
+            ]))
+        }
     }
 
     private func refreshPlayerIdentityMark() {
@@ -305,9 +393,9 @@ final class GameScene: SKScene {
             ring.position = center
             ring.strokeColor = state.isFeverActive
                 ? state.selectedTheme.feverColor.withAlphaComponent(0.35 + CGFloat(index) * 0.12)
-                : state.selectedTheme.playerColor.withAlphaComponent(0.12 + CGFloat(index) * 0.07)
+                : stageAccentColor.withAlphaComponent(0.13 + CGFloat(index) * 0.08)
             ring.lineWidth = state.isFeverActive ? 3 : 2
-            ring.glowWidth = state.isFeverActive ? 7 : 1
+            ring.glowWidth = state.isFeverActive ? 7 : 2
             orbitLayer.addChild(ring)
 
             addSignalSegments(to: orbitLayer, radius: radius, index: index)
@@ -316,8 +404,8 @@ final class GameScene: SKScene {
 
         let core = SKShapeNode(circleOfRadius: 42)
         core.position = center
-        core.fillColor = (state.isFeverActive ? state.selectedTheme.feverColor : state.selectedTheme.sparkColor).withAlphaComponent(0.12)
-        core.strokeColor = (state.isFeverActive ? state.selectedTheme.feverColor : state.selectedTheme.sparkColor).withAlphaComponent(0.44)
+        core.fillColor = (state.isFeverActive ? state.selectedTheme.feverColor : stageSecondaryColor).withAlphaComponent(0.12)
+        core.strokeColor = (state.isFeverActive ? state.selectedTheme.feverColor : stageAccentColor).withAlphaComponent(0.44)
         core.lineWidth = state.isFeverActive ? 3 : 2
         core.glowWidth = state.isFeverActive ? 16 : 8
         orbitLayer.addChild(core)
@@ -339,14 +427,68 @@ final class GameScene: SKScene {
 
     private func drawStars() {
         children.filter { $0.name == NodeName.star }.forEach { $0.removeFromParent() }
-        for _ in 0..<42 {
+        let colors = stageStarColors
+        let starCount = 36 + min(state.stage, 5) * 3
+        for _ in 0..<starCount {
             let star = SKShapeNode(circleOfRadius: CGFloat.random(in: 1...2.4))
             star.name = NodeName.star
             star.position = CGPoint(x: CGFloat.random(in: 0...max(size.width, 1)), y: CGFloat.random(in: 0...max(size.height, 1)))
-            star.fillColor = .white.withAlphaComponent(CGFloat.random(in: 0.18...0.56))
+            star.fillColor = colors.randomElement()?.withAlphaComponent(CGFloat.random(in: 0.18...0.56)) ?? .white
             star.strokeColor = .clear
             star.zPosition = -2
             addChild(star)
+        }
+    }
+
+    private var stageAccentColor: SKColor {
+        switch state.stage % 4 {
+        case 1:
+            return state.selectedTheme.playerColor
+        case 2:
+            return state.selectedTheme.timeCoreColor
+        case 3:
+            return state.selectedTheme.shieldColor
+        default:
+            return state.selectedTheme.feverColor
+        }
+    }
+
+    private var stageSecondaryColor: SKColor {
+        switch state.stage % 4 {
+        case 1:
+            return state.selectedTheme.sparkColor
+        case 2:
+            return state.selectedTheme.shieldColor
+        case 3:
+            return state.selectedTheme.sparkColor
+        default:
+            return objectColor(for: .surge)
+        }
+    }
+
+    private var stageStarColors: [SKColor] {
+        switch state.stage % 4 {
+        case 1:
+            return [.white, state.selectedTheme.sparkColor, state.selectedTheme.playerColor]
+        case 2:
+            return [.white, state.selectedTheme.timeCoreColor, state.selectedTheme.shieldColor]
+        case 3:
+            return [.white, state.selectedTheme.shieldColor, state.selectedTheme.sparkColor]
+        default:
+            return [.white, state.selectedTheme.feverColor, objectColor(for: .surge)]
+        }
+    }
+
+    private var stageOpeningPattern: RunPattern {
+        switch state.stage % 4 {
+        case 1:
+            return .flow
+        case 2:
+            return .harvest
+        case 3:
+            return .gate
+        default:
+            return .switchback
         }
     }
 
@@ -360,7 +502,7 @@ final class GameScene: SKScene {
             let path = arcPath(radius: radius, startAngle: angle, endAngle: angle + arcLength)
             let node = SKShapeNode(path: path)
             node.position = center
-            node.strokeColor = (state.isFeverActive ? state.selectedTheme.feverColor : state.selectedTheme.playerColor)
+            node.strokeColor = (state.isFeverActive ? state.selectedTheme.feverColor : stageAccentColor)
                 .withAlphaComponent(state.isFeverActive ? 0.72 : 0.34)
             node.lineWidth = state.isFeverActive ? 4 : 2.6
             node.glowWidth = state.isFeverActive ? 12 : 5
@@ -379,7 +521,7 @@ final class GameScene: SKScene {
         for nodeAngle in nodeAngles {
             let marker = SKShapeNode(circleOfRadius: state.isFeverActive ? 4.2 : 3.2)
             marker.position = point(on: radius, angle: nodeAngle)
-            marker.fillColor = (state.isFeverActive ? state.selectedTheme.feverColor : state.selectedTheme.sparkColor)
+            marker.fillColor = (state.isFeverActive ? state.selectedTheme.feverColor : stageSecondaryColor)
                 .withAlphaComponent(state.isFeverActive ? 0.9 : 0.58)
             marker.strokeColor = .white.withAlphaComponent(0.34)
             marker.lineWidth = 0.8
@@ -495,8 +637,20 @@ final class GameScene: SKScene {
             let index = offset % orbitRadii.count
             spawnSpark(on: orbitRadii[index], near: baseAngle + CGFloat(offset) * 0.22)
         }
-        spawnPowerUp(kind: .shield, on: orbitRadii[1], near: baseAngle + 0.52)
-        pulseOrbit(at: orbitRadii[0], color: state.selectedTheme.sparkColor, duration: 0.48)
+        switch state.stage % 4 {
+        case 1:
+            spawnPowerUp(kind: .shield, on: orbitRadii[1], near: baseAngle + 0.52)
+        case 2:
+            spawnPowerUp(kind: .slow, on: orbitRadii[2], near: baseAngle + 0.52)
+            spawnSparkTrail()
+        case 3:
+            spawnPowerUp(kind: .magnet, on: orbitRadii[0], near: baseAngle + 0.52)
+            spawnGateWave()
+        default:
+            spawnPowerUp(kind: .surge, on: orbitRadii[1], near: baseAngle + 0.52)
+            spawnPowerUp(kind: .bomb, on: orbitRadii[2], near: baseAngle + 0.76)
+        }
+        pulseOrbit(at: orbitRadii[0], color: stageSecondaryColor, duration: 0.48)
     }
 
     private func spawnGateWave() {
