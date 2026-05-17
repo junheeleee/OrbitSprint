@@ -5,6 +5,7 @@
 "hud.fever" = "FEVER SYNC";
 "hud.feverReady" = "FEVER IDLE";
 "hud.feverSoon" = "%d TO FEVER";
+"hud.feverMeter" = "FEVER %d/%d";
 
 "loading.title" = "Igniting the Run";
 "start.eyebrow" = "NEON CORE RUNNER";

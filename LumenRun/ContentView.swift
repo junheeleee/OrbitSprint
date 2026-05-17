@@ -264,6 +264,9 @@ private struct HUDView: View {
                     .font(.system(size: 42, weight: .heavy, design: .rounded))
                     .foregroundStyle(.white)
                     .monospacedDigit()
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.55)
+                    .allowsTightening(true)
                 HStack(spacing: 8) {
                     StatusPill(text: String(format: NSLocalizedString("hud.level", comment: ""), gameState.level))
                     if gameState.multiplier > 1 {
@@ -271,10 +274,12 @@ private struct HUDView: View {
                     }
                 }
             }
+            .layoutPriority(1)
+            .frame(maxWidth: 132, alignment: .leading)
 
             Spacer()
 
-            HStack(spacing: 9) {
+            HStack(spacing: 7) {
                 VStack(alignment: .trailing, spacing: 4) {
                     FeverMeter()
                     HStack(spacing: 5) {
@@ -304,12 +309,15 @@ private struct HUDView: View {
                         .font(.title2.weight(.heavy))
                         .foregroundStyle(Color(red: 1.0, green: 0.82, blue: 0.28))
                         .monospacedDigit()
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.62)
                 }
+                .frame(width: 58, alignment: .trailing)
 
                 Button(action: togglePause) {
                     Image(systemName: gameState.isUserPaused ? "play.fill" : "pause.fill")
                         .font(.headline.weight(.bold))
-                        .frame(width: 40, height: 40)
+                        .frame(width: 36, height: 36)
                         .contentShape(Circle())
                 }
                 .buttonStyle(.plain)
@@ -322,7 +330,7 @@ private struct HUDView: View {
                 Button(action: openAchievements) {
                     Image(systemName: "trophy.fill")
                         .font(.headline.weight(.bold))
-                        .frame(width: 40, height: 40)
+                        .frame(width: 36, height: 36)
                         .contentShape(Circle())
                 }
                 .buttonStyle(.plain)
@@ -334,7 +342,7 @@ private struct HUDView: View {
                 Button(action: openSettings) {
                     Image(systemName: "gearshape.fill")
                         .font(.headline.weight(.bold))
-                        .frame(width: 40, height: 40)
+                        .frame(width: 36, height: 36)
                         .contentShape(Circle())
                 }
                 .buttonStyle(.plain)
@@ -500,39 +508,7 @@ private struct FeverMeter: View {
 
     var body: some View {
         VStack(alignment: .trailing, spacing: 4) {
-            HStack(spacing: 6) {
-                if gameState.isFeverActive {
-                    Text("hud.fever")
-                        .font(.caption2.weight(.black))
-                        .foregroundStyle(.black)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 3)
-                        .background(
-                            LinearGradient(
-                                colors: gameState.selectedTheme.feverColors,
-                                startPoint: .leading,
-                                endPoint: .trailing
-                            ),
-                            in: Capsule()
-                        )
-                } else if gameState.combo > 0 {
-                    Text(String(format: NSLocalizedString("hud.feverSoon", comment: ""), gameState.comboUntilFever))
-                        .font(.caption2.weight(.black))
-                        .foregroundStyle(Color(red: 1.0, green: 0.82, blue: 0.28))
-                        .monospacedDigit()
-                } else {
-                    Text("hud.feverReady")
-                        .font(.caption2.weight(.bold))
-                        .foregroundStyle(.white.opacity(0.52))
-                }
-
-                if gameState.combo > 0 {
-                    Text(String(format: NSLocalizedString("hud.combo", comment: ""), gameState.combo))
-                        .font(.caption.weight(.black))
-                        .foregroundStyle(gameState.isFeverActive ? .white : Color(red: 1.0, green: 0.82, blue: 0.28))
-                        .monospacedDigit()
-                }
-            }
+            feverLabel
 
             GeometryReader { proxy in
                 ZStack(alignment: .leading) {
@@ -550,10 +526,39 @@ private struct FeverMeter: View {
                         .shadow(color: gameState.selectedTheme.feverColors.first?.opacity(0.45) ?? .clear, radius: gameState.isFeverActive ? 8 : 3)
                 }
             }
-            .frame(width: 112, height: 7)
+            .frame(width: 92, height: 7)
             .clipShape(Capsule())
             .animation(.snappy(duration: 0.18), value: gameState.feverProgress)
             .animation(.snappy(duration: 0.18), value: gameState.isFeverActive)
+        }
+        .frame(width: 92, alignment: .trailing)
+    }
+
+    @ViewBuilder
+    private var feverLabel: some View {
+        if gameState.isFeverActive {
+            Text("hud.fever")
+                .font(.caption2.weight(.black))
+                .foregroundStyle(.black)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+                .padding(.horizontal, 7)
+                .padding(.vertical, 3)
+                .background(
+                    LinearGradient(
+                        colors: gameState.selectedTheme.feverColors,
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    ),
+                    in: Capsule()
+                )
+        } else {
+            Text(String(format: NSLocalizedString("hud.feverMeter", comment: ""), gameState.combo, gameState.feverComboGoal))
+                .font(.caption2.weight(.black))
+                .foregroundStyle(gameState.combo > 0 ? Color(red: 1.0, green: 0.82, blue: 0.28) : .white.opacity(0.52))
+                .monospacedDigit()
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
         }
     }
 }

@@ -5,6 +5,7 @@
 "hud.fever" = "피버 싱크";
 "hud.feverReady" = "피버 대기";
 "hud.feverSoon" = "피버까지 %d";
+"hud.feverMeter" = "피버 %d/%d";
 
 "loading.title" = "루멘런 점화 중";
 "start.eyebrow" = "네온 코어 러너";
