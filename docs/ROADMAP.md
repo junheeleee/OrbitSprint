@@ -17,6 +17,7 @@
 - Distinct obstacle waves, safe-lane windows, and risk/reward item routes
 
 ## Polish Beta
+- First beta plan and playtest checklist
 - Stronger sci-fi identity
 - Better music and sound direction
 - Visual effects pass

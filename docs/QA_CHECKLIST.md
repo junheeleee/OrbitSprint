@@ -22,6 +22,18 @@ Use this checklist before important commits, TestFlight builds, and App Store re
 - Fever mode grants invincibility.
 - Fever collisions convert into score.
 - Shield item visibly protects the player.
+- Stage 1 clear happens after a meaningful run segment, not almost immediately.
+- Stage clear removes active objects and gives a clear checkpoint feeling.
+- Relay card choices appear only after stage clears.
+- Choosing a relay card resumes the run cleanly into the next stage.
+- Stage 2 and later routes feel visually or structurally different from stage 1.
+
+## Beta Device Soak
+- A real iPhone can play for 5 minutes without severe stutter.
+- Stage 3 can be reached without UI getting stuck.
+- Fever, magnet, shield, and relay card selection can all happen in the same run.
+- Restarting after a longer run does not leave the player transparent, tiny, or hidden.
+- Pause/resume works during stages, after stage clear, and after retry.
 
 ## Audio
 - Background music plays.

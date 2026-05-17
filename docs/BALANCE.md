@@ -22,6 +22,16 @@ Track gameplay tuning changes here so the game becomes more skillful and less ra
 - Respawn should always give the player a fair recovery window.
 - Fever should create a short, memorable power spike.
 - Shield should be valuable but not remove all tension.
+- Stage checkpoints should be far enough apart to feel earned.
+- Relay card picks should feel meaningful without interrupting the run too often.
+- Stage 1 should teach the rhythm before advanced patterns and risky objects appear.
+
+## First Beta Baseline
+- Stage 1 target: 120 score.
+- Later stage targets should grow by larger chunks so card choices feel earned.
+- Advanced patterns unlock by stage progression, not only raw score.
+- Early difficulty ramp should prioritize readability over punishment.
+- Score-only card effects should not skip too much stage progression by themselves.
 
 ## Change Log Template
 
@@ -33,4 +43,3 @@ Reason:
 Observed Result:
 Next Adjustment:
 ```
-
