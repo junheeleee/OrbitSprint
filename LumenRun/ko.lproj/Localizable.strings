@@ -9,6 +9,12 @@
 "hud.feverSoon" = "피버까지 %d";
 "hud.feverMeter" = "피버 %d/%d";
 
+"stage.entering" = "스테이지 %d 진입";
+"stage.route.flow" = "네온 플로우";
+"stage.route.harvest" = "루멘 수확 구간";
+"stage.route.gate" = "게이트 압박 구간";
+"stage.route.overdrive" = "오버드라이브 구간";
+
 "loading.title" = "루멘 코어 점화 중";
 "start.eyebrow" = "붕괴 궤도 신호망";
 "start.subtitle" = "꺼져가는 루멘 코어를 이어 글리치 궤도망을 돌파하세요.";

@@ -1,6 +1,7 @@
 # Lumen Run Work Log
 
 ## 2026-05-18
+- Added friend-beta clarity polish with selected-card build summary chips and short next-stage route intro to make the run easier to understand from the outside.
 - Prevented accidental relay card picks from held gameplay taps by adding a short input lock and moving selection to explicit per-card pick buttons.
 - Added a first beta plan with readiness criteria, device playtest script, known watch areas, and next beta work.
 - Tuned first-beta balance by lengthening stage goals, slowing early difficulty ramp, delaying advanced patterns/items by stage, and softening score-only card spikes.

@@ -29,7 +29,7 @@ struct DailyMission: Codable, Identifiable, Equatable {
     }
 }
 
-enum RunUpgradeKind: CaseIterable {
+enum RunUpgradeKind: CaseIterable, Hashable {
     case shieldCache
     case magnetBoost
     case timeBend
@@ -44,6 +44,15 @@ struct RunUpgradeChoice: Identifiable, Equatable {
     let titleKey: String
     let descriptionKey: String
     let iconName: String
+
+    var id: RunUpgradeKind { kind }
+}
+
+struct RunBuildSummary: Identifiable, Equatable {
+    let kind: RunUpgradeKind
+    let titleKey: String
+    let iconName: String
+    let count: Int
 
     var id: RunUpgradeKind { kind }
 }
@@ -96,6 +105,7 @@ final class GameState: ObservableObject {
     @Published private(set) var clearedStage = 0
     @Published private(set) var stageClearSerial = 0
     @Published private(set) var stageResumeSerial = 0
+    @Published private(set) var runUpgradeCounts: [RunUpgradeKind: Int] = [:]
     @Published var shieldCharges = 0
     @Published var shieldTimeRemaining: TimeInterval = 0
     @Published var slowTimeRemaining: TimeInterval = 0
@@ -195,6 +205,38 @@ final class GameState: ObservableObject {
         return max(0, feverComboThreshold - combo)
     }
 
+    var stageRouteTitleKey: String {
+        switch stage % 4 {
+        case 1:
+            return "stage.route.flow"
+        case 2:
+            return "stage.route.harvest"
+        case 3:
+            return "stage.route.gate"
+        default:
+            return "stage.route.overdrive"
+        }
+    }
+
+    var activeBuildSummaries: [RunBuildSummary] {
+        runUpgradeCounts
+            .sorted {
+                if $0.value == $1.value {
+                    return upgradeSortIndex($0.key) < upgradeSortIndex($1.key)
+                }
+                return $0.value > $1.value
+            }
+            .prefix(4)
+            .map { kind, count in
+                RunBuildSummary(
+                    kind: kind,
+                    titleKey: upgradeTitleKey(for: kind),
+                    iconName: upgradeIconName(for: kind),
+                    count: count
+                )
+            }
+    }
+
     var topRunRecords: [RunRecord] {
         Array(runRecords.sorted { $0.score > $1.score }.prefix(5))
     }
@@ -264,6 +306,7 @@ final class GameState: ObservableObject {
         clearedStage = 0
         stageClearSerial = 0
         stageResumeSerial = 0
+        runUpgradeCounts = [:]
         shieldCharges = 0
         shieldTimeRemaining = 0
         slowTimeRemaining = 0
@@ -772,6 +815,7 @@ final class GameState: ObservableObject {
     private func applyRunUpgrade(_ kind: RunUpgradeKind) {
         recentRunUpgradeKinds.append(kind)
         recentRunUpgradeKinds = Array(recentRunUpgradeKinds.suffix(2))
+        runUpgradeCounts[kind, default: 0] += 1
 
         switch kind {
         case .shieldCache:
@@ -814,5 +858,47 @@ final class GameState: ObservableObject {
 
     private func stageScoreRequirement(for stage: Int) -> Int {
         170 + min(stage - 2, 6) * 50
+    }
+
+    private func upgradeTitleKey(for kind: RunUpgradeKind) -> String {
+        switch kind {
+        case .shieldCache:
+            return "upgrade.shield.title"
+        case .magnetBoost:
+            return "upgrade.magnet.title"
+        case .timeBend:
+            return "upgrade.slow.title"
+        case .feverCharge:
+            return "upgrade.fever.title"
+        case .scoreSurge:
+            return "upgrade.score.title"
+        case .comboEngine:
+            return "upgrade.combo.title"
+        case .overclock:
+            return "upgrade.overclock.title"
+        }
+    }
+
+    private func upgradeIconName(for kind: RunUpgradeKind) -> String {
+        switch kind {
+        case .shieldCache:
+            return "shield.fill"
+        case .magnetBoost:
+            return "dot.radiowaves.left.and.right"
+        case .timeBend:
+            return "hourglass"
+        case .feverCharge:
+            return "flame.fill"
+        case .scoreSurge:
+            return "bolt.fill"
+        case .comboEngine:
+            return "link.circle.fill"
+        case .overclock:
+            return "speedometer"
+        }
+    }
+
+    private func upgradeSortIndex(_ kind: RunUpgradeKind) -> Int {
+        RunUpgradeKind.allCases.firstIndex(of: kind) ?? 0
     }
 }

@@ -9,6 +9,7 @@ struct ContentView: View {
     @State private var didScheduleLoading = false
     @State private var isRecordsPresented = false
     @State private var isObjectGuidePresented = false
+    @State private var isStageIntroVisible = false
 
     var body: some View {
         ZStack {
@@ -25,6 +26,7 @@ struct ContentView: View {
             gameOverlay
 
             achievementToastOverlay
+            stageIntroOverlay
 
             if gameState.isLoading {
                 LoadingView()
@@ -93,6 +95,9 @@ struct ContentView: View {
         }
         .onChange(of: gameState.achievementToast?.id) { _, _ in
             scheduleAchievementToastDismiss()
+        }
+        .onChange(of: gameState.stageResumeSerial) { _, _ in
+            scheduleStageIntro()
         }
         .animation(.spring(response: 0.35, dampingFraction: 0.82), value: gameState.isGameOver)
         .animation(.spring(response: 0.35, dampingFraction: 0.82), value: gameState.isUserPaused)
@@ -171,6 +176,22 @@ struct ContentView: View {
     }
 
     @ViewBuilder
+    private var stageIntroOverlay: some View {
+        if isStageIntroVisible, !gameState.isStartScreenPresented, !gameState.isLoading, !gameState.isGameOver {
+            VStack {
+                StageIntroToast()
+                    .padding(.top, 120)
+
+                Spacer()
+            }
+            .padding(.horizontal, 20)
+            .transition(.scale.combined(with: .opacity))
+            .zIndex(7)
+            .allowsHitTesting(false)
+        }
+    }
+
+    @ViewBuilder
     private var achievementToastOverlay: some View {
         if let achievement = gameState.achievementToast {
             VStack {
@@ -199,6 +220,50 @@ struct ContentView: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
             gameState.dismissAchievementToast(achievement)
         }
+    }
+
+    private func scheduleStageIntro() {
+        guard gameState.stageResumeSerial > 0 else { return }
+        isStageIntroVisible = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.35) {
+            isStageIntroVisible = false
+        }
+    }
+}
+
+private struct StageIntroToast: View {
+    @EnvironmentObject private var gameState: GameState
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "arrowtriangle.forward.circle.fill")
+                .font(.title2.weight(.black))
+                .foregroundStyle(gameState.selectedTheme.accentColor)
+
+            VStack(alignment: .leading, spacing: 3) {
+                Text(String(format: NSLocalizedString("stage.entering", comment: ""), gameState.stage))
+                    .font(.caption.weight(.black))
+                    .foregroundStyle(.white.opacity(0.72))
+                    .textCase(.uppercase)
+
+                Text(LocalizedStringKey(gameState.stageRouteTitleKey))
+                    .font(.headline.weight(.black))
+                    .foregroundStyle(.white)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.78)
+            }
+
+            Spacer(minLength: 0)
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 12)
+        .frame(maxWidth: 360)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: 8, style: .continuous)
+                .stroke(gameState.selectedTheme.accentColor.opacity(0.48), lineWidth: 1)
+        }
+        .shadow(color: .black.opacity(0.28), radius: 18, x: 0, y: 10)
     }
 }
 
@@ -440,6 +505,46 @@ private struct HUDView: View {
                 PowerupTimersView()
                 FeverMeter()
             }
+
+            if !gameState.activeBuildSummaries.isEmpty {
+                BuildSummaryView()
+            }
+        }
+    }
+}
+
+private struct BuildSummaryView: View {
+    @EnvironmentObject private var gameState: GameState
+
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 7) {
+                ForEach(gameState.activeBuildSummaries) { summary in
+                    HStack(spacing: 5) {
+                        Image(systemName: summary.iconName)
+                            .font(.caption2.weight(.black))
+
+                        Text(LocalizedStringKey(summary.titleKey))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.72)
+
+                        if summary.count > 1 {
+                            Text("Lv.\(summary.count)")
+                                .monospacedDigit()
+                        }
+                    }
+                    .font(.caption2.weight(.bold))
+                    .foregroundStyle(.white.opacity(0.86))
+                    .padding(.horizontal, 9)
+                    .frame(height: 25)
+                    .background(gameState.selectedTheme.accentColor.opacity(0.13), in: Capsule())
+                    .overlay {
+                        Capsule()
+                            .stroke(gameState.selectedTheme.accentColor.opacity(0.28), lineWidth: 1)
+                    }
+                }
+            }
+            .padding(.top, 1)
         }
     }
 }

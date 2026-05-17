@@ -9,6 +9,12 @@
 "hud.feverSoon" = "%d TO FEVER";
 "hud.feverMeter" = "FEVER %d/%d";
 
+"stage.entering" = "Entering Stage %d";
+"stage.route.flow" = "Neon Flow";
+"stage.route.harvest" = "Lumen Harvest";
+"stage.route.gate" = "Gate Pressure";
+"stage.route.overdrive" = "Overdrive Route";
+
 "loading.title" = "Igniting the Lumen Core";
 "start.eyebrow" = "COLLAPSING ORBIT SIGNAL";
 "start.subtitle" = "Relay a fading lumen core through a collapsing glitch orbit.";

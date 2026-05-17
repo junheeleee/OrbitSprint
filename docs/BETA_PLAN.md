@@ -17,6 +17,8 @@ This document defines the target for the first playable beta. The goal is not Ap
 - [ ] Stage clear feels like a real checkpoint, not only a pause popup.
 - [ ] Card choices do not appear too often.
 - [ ] Card choices do not repeat in a boring pattern.
+- [ ] Selected cards leave a small visible build summary during the run.
+- [ ] New stages show a short route identity cue so observers understand that the route changed.
 - [ ] Fever feels powerful but does not cause stutter.
 - [ ] Magnet can collect many sparks without frame spikes.
 - [ ] Game over, retry, pause, settings, rewards, achievements, and object guide all remain usable.
@@ -45,8 +47,6 @@ Run this script on device after every major gameplay/balance commit.
 - App Store release needs metadata, screenshots, privacy review, and final signing checks.
 
 ## Next Beta Work
-- Add a small current-build summary HUD for selected relay card effects.
 - Add card rarity and 2-3 risky cards.
-- Add stage intro labels or lightweight stage identity, without interrupting active play too much.
 - Do a device performance pass after 5-minute runs.
 - Prepare TestFlight/App Store Connect checklist once the gameplay loop survives playtesting.
