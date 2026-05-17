@@ -35,6 +35,8 @@ enum RunUpgradeKind: CaseIterable {
     case timeBend
     case feverCharge
     case scoreSurge
+    case comboEngine
+    case overclock
 }
 
 struct RunUpgradeChoice: Identifiable, Equatable {
@@ -89,6 +91,9 @@ final class GameState: ObservableObject {
     @Published var combo = 0
     @Published var multiplier = 1
     @Published var level = 1
+    @Published private(set) var stage = 1
+    @Published private(set) var stageTargetScore = 45
+    @Published private(set) var clearedStage = 0
     @Published var shieldCharges = 0
     @Published var shieldTimeRemaining: TimeInterval = 0
     @Published var slowTimeRemaining: TimeInterval = 0
@@ -165,7 +170,8 @@ final class GameState: ObservableObject {
     private let shieldDuration: TimeInterval = 8
     private let shieldExtensionDuration: TimeInterval = 6
     private let magnetDuration: TimeInterval = 5
-    private var nextRunUpgradeScore = 45
+    private var nextStageScore = 45
+    private var recentRunUpgradeKinds: [RunUpgradeKind] = []
     private var canShowAchievementToast = false
     private var pendingAchievementToasts: [AchievementDefinition] = []
 
@@ -251,6 +257,9 @@ final class GameState: ObservableObject {
         combo = 0
         multiplier = 1
         level = 1
+        stage = 1
+        stageTargetScore = 45
+        clearedStage = 0
         shieldCharges = 0
         shieldTimeRemaining = 0
         slowTimeRemaining = 0
@@ -258,7 +267,8 @@ final class GameState: ObservableObject {
         feverRemaining = 0
         runUpgradeChoices = []
         isRunUpgradePresented = false
-        nextRunUpgradeScore = 45
+        nextStageScore = 45
+        recentRunUpgradeKinds = []
         SoundPlayer.setFeverActive(false, enabled: isSoundEnabled)
         isGameOver = false
         isUserPaused = false
@@ -724,9 +734,13 @@ final class GameState: ObservableObject {
     }
 
     private func offerRunUpgradeIfNeeded() {
-        guard !isRunUpgradePresented, !isGameOver, score >= nextRunUpgradeScore else { return }
+        guard !isRunUpgradePresented, !isGameOver, score >= nextStageScore else { return }
+        clearedStage = stage
         runUpgradeChoices = makeRunUpgradeChoices()
-        nextRunUpgradeScore += 45
+        let nextStage = stage + 1
+        stage = nextStage
+        nextStageScore += stageScoreRequirement(for: nextStage)
+        stageTargetScore = nextStageScore
         isRunUpgradePresented = true
     }
 
@@ -736,15 +750,23 @@ final class GameState: ObservableObject {
             RunUpgradeChoice(kind: .magnetBoost, titleKey: "upgrade.magnet.title", descriptionKey: "upgrade.magnet.desc", iconName: "dot.radiowaves.left.and.right"),
             RunUpgradeChoice(kind: .timeBend, titleKey: "upgrade.slow.title", descriptionKey: "upgrade.slow.desc", iconName: "hourglass"),
             RunUpgradeChoice(kind: .feverCharge, titleKey: "upgrade.fever.title", descriptionKey: "upgrade.fever.desc", iconName: "flame.fill"),
-            RunUpgradeChoice(kind: .scoreSurge, titleKey: "upgrade.score.title", descriptionKey: "upgrade.score.desc", iconName: "bolt.fill")
+            RunUpgradeChoice(kind: .scoreSurge, titleKey: "upgrade.score.title", descriptionKey: "upgrade.score.desc", iconName: "bolt.fill"),
+            RunUpgradeChoice(kind: .comboEngine, titleKey: "upgrade.combo.title", descriptionKey: "upgrade.combo.desc", iconName: "link.circle.fill"),
+            RunUpgradeChoice(kind: .overclock, titleKey: "upgrade.overclock.title", descriptionKey: "upgrade.overclock.desc", iconName: "speedometer")
         ]
-        let seed = max(0, score / 9 + level * 3 + combo)
-        return (0..<3).map { offset in
-            pool[(seed + offset * 2) % pool.count]
+        let freshPool = pool.filter { !recentRunUpgradeKinds.contains($0.kind) }
+        let choicePool = freshPool.count >= 3 ? freshPool : pool
+        let seed = max(0, score / 11 + stage * 5 + combo * 2 + clearedStage)
+
+        return (0..<min(3, choicePool.count)).map { offset in
+            choicePool[(seed + offset * 3) % choicePool.count]
         }
     }
 
     private func applyRunUpgrade(_ kind: RunUpgradeKind) {
+        recentRunUpgradeKinds.append(kind)
+        recentRunUpgradeKinds = Array(recentRunUpgradeKinds.suffix(2))
+
         switch kind {
         case .shieldCache:
             grantShield()
@@ -768,6 +790,23 @@ final class GameState: ObservableObject {
             updateScoreAchievements()
             updateBestScore()
             SoundPlayer.lumen(enabled: isSoundEnabled)
+        case .comboEngine:
+            combo += 4
+            multiplier = min(isFeverActive ? 8 : 5, 1 + combo / 5)
+            SoundPlayer.lumen(enabled: isSoundEnabled)
+        case .overclock:
+            score += max(18, multiplier * 12)
+            combo += 2
+            multiplier = min(isFeverActive ? 8 : 5, 1 + combo / 5)
+            level = max(1, score / 25 + 1)
+            updateScoreMission()
+            updateScoreAchievements()
+            updateBestScore()
+            SoundPlayer.timeCore(enabled: isSoundEnabled)
         }
+    }
+
+    private func stageScoreRequirement(for stage: Int) -> Int {
+        45 + min(stage - 1, 5) * 20
     }
 }

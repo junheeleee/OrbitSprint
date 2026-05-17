@@ -213,6 +213,11 @@ private struct RunUpgradeView: View {
                     .foregroundStyle(gameState.selectedTheme.accentColor)
 
                 VStack(alignment: .leading, spacing: 3) {
+                    Text(String(format: NSLocalizedString("upgrade.stageCleared", comment: ""), gameState.clearedStage))
+                        .font(.caption.weight(.black))
+                        .foregroundStyle(gameState.selectedTheme.accentColor)
+                        .textCase(.uppercase)
+
                     Text("upgrade.title")
                         .font(.title2.weight(.black))
                         .foregroundStyle(.white)
@@ -398,6 +403,8 @@ private struct HUDView: View {
             HStack(alignment: .center, spacing: 8) {
                 HStack(spacing: 8) {
                     StatusPill(text: String(format: NSLocalizedString("hud.level", comment: ""), gameState.level))
+                    StatusPill(text: String(format: NSLocalizedString("hud.stage", comment: ""), gameState.stage))
+                    StatusPill(text: String(format: NSLocalizedString("hud.stageTarget", comment: ""), gameState.stageTargetScore))
                     if gameState.multiplier > 1 {
                         StatusPill(text: "x\(gameState.multiplier)")
                     }

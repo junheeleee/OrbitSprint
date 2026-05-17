@@ -1,6 +1,8 @@
 "app.title" = "LUMEN RUN";
 "hud.best" = "BEST";
 "hud.level" = "LV %d";
+"hud.stage" = "ST %d";
+"hud.stageTarget" = "GOAL %d";
 "hud.combo" = "%d COMBO";
 "hud.fever" = "FEVER SYNC";
 "hud.feverReady" = "FEVER IDLE";
@@ -87,8 +89,9 @@
 "missions.fever" = "Trigger Fever %d times";
 "missions.shields" = "Pick up %d shields";
 
-"upgrade.title" = "Relay Choice";
-"upgrade.subtitle" = "Pick one boost to shape this run.";
+"upgrade.stageCleared" = "Stage %d Cleared";
+"upgrade.title" = "Relay Card Pick";
+"upgrade.subtitle" = "Choose one card to strengthen this run's build.";
 "upgrade.shield.title" = "Shield Cache";
 "upgrade.shield.desc" = "Gain a shield immediately to block the next crash.";
 "upgrade.magnet.title" = "Magnet Amplifier";
@@ -99,6 +102,10 @@
 "upgrade.fever.desc" = "Move closer to Fever or extend active Fever time.";
 "upgrade.score.title" = "Score Surge";
 "upgrade.score.desc" = "Gain instant bonus points to push the record higher.";
+"upgrade.combo.title" = "Combo Engine";
+"upgrade.combo.desc" = "Raise combo to move closer to Fever and a stronger multiplier.";
+"upgrade.overclock.title" = "Risky Overclock";
+"upgrade.overclock.desc" = "Gain a larger score and combo burst, pushing the run forward fast.";
 
 "achievements.title" = "Achievements";
 "achievements.all" = "All Achievements";
