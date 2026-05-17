@@ -1,6 +1,7 @@
 # Lumen Run Work Log
 
 ## 2026-05-17
+- Refined the app icon core glow by masking the teal light to a circular field instead of leaving a visible square gradient around the yellow core.
 - Began in-game IP polish by adding a lumen signal mark to the player core and turning plain orbit rings into relay-network lanes with signal segments and nodes.
 - Started the first IP polish pass with a branded start/loading mark, unified title-screen action buttons, refreshed app icon art, and clearer core/orbit/shard visual direction.
 - Restored per-frame magnet motion while keeping capped spark pulls so the magnet effect feels smooth instead of stepping at a lower frame rate.

@@ -82,7 +82,10 @@ let glow = NSGradient(colors: [
     color(0.0, 0.86, 0.82, 0.72),
     color(0.0, 0.86, 0.82, 0.0)
 ])!
-glow.draw(in: CGRect(x: 302, y: 302, width: 420, height: 420), relativeCenterPosition: .zero)
+NSGraphicsContext.saveGraphicsState()
+NSBezierPath(ovalIn: CGRect(x: 286, y: 286, width: 452, height: 452)).addClip()
+glow.draw(in: CGRect(x: 286, y: 286, width: 452, height: 452), relativeCenterPosition: .zero)
+NSGraphicsContext.restoreGraphicsState()
 
 let core = NSBezierPath(ovalIn: CGRect(x: 392, y: 392, width: 240, height: 240))
 color(1.0, 0.83, 0.18).setFill()
