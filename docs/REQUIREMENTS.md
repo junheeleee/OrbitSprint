@@ -10,6 +10,8 @@
 - Temporary invulnerability visuals must always restore the player core to full opacity when the effect ends.
 - Player-core feedback should avoid opacity animation; respawn and invulnerability should use scale/ring effects so the core never appears unintentionally transparent.
 - Obstacles should spawn in ways that preserve player agency.
+- Difficulty should ramp gradually from score, keeping the opening run approachable before gate, switchback, and overdrive patterns appear.
+- Fever should feel faster and rewarding without causing noticeable frame stutter on device.
 - Fever mode should make the player invincible, faster, flashier, and able to convert collisions into score.
 - The HUD should show fever buildup progress so players can judge when to risk chasing one more spark.
 - HUD text for score, best score, combo, and fever status must remain single-line and non-overlapping on small iPhone screens.

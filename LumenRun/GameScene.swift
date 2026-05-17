@@ -148,9 +148,9 @@ final class GameScene: SKScene {
         lastUpdate = currentTime
         elapsedTime += delta
 
-        difficulty = 1 + min(CGFloat(state.score) * 0.012, 1.45)
+        difficulty = 1 + CGFloat(difficultyProgress) * 0.85
         let timeScale: CGFloat = state.slowTimeRemaining > 0 ? 0.62 : 1
-        let feverScale: CGFloat = state.isFeverActive ? 2.25 : 1
+        let feverScale: CGFloat = state.isFeverActive ? 1.65 : 1
         previousAngle = angle
         angle += angularSpeed * difficulty * timeScale * feverScale * CGFloat(delta)
         updateOrbitRadius(delta: delta)
@@ -163,14 +163,14 @@ final class GameScene: SKScene {
         patternWaveTimer += delta
         state.tick(delta: delta)
 
-        if comboTimer > max(1.45, 2.4 - Double(state.level) * 0.08) {
+        if comboTimer > scaledInterval(easy: 3.1, hard: 1.75) {
             state.breakCombo()
         }
 
         updateRunPattern()
         updatePatternSpawns()
 
-        if powerUpTimer > max(4.2, 8.2 - Double(state.level) * 0.24) {
+        if powerUpTimer > scaledInterval(easy: 8.8, hard: 4.8) {
             spawnPowerUp()
             powerUpTimer = 0
         }
@@ -325,15 +325,18 @@ final class GameScene: SKScene {
         patternTimer = 0
         patternWaveTimer = 0
         patternStep = 0
-        patternDuration = max(6.8, 10.5 - Double(state.level) * 0.18)
+        patternDuration = scaledInterval(easy: 11.5, hard: 7.4)
         telegraphPatternStart(currentPattern)
     }
 
     private func availablePatternSequence() -> [RunPattern] {
-        if state.level < 3 {
+        if state.score < 35 {
+            return [.flow, .harvest]
+        }
+        if state.score < 90 {
             return [.flow, .harvest, .gate]
         }
-        if state.level < 7 {
+        if state.score < 160 {
             return [.flow, .gate, .harvest, .switchback]
         }
         return [.gate, .switchback, .harvest, .overdrive]
@@ -349,51 +352,51 @@ final class GameScene: SKScene {
 
         switch currentPattern {
         case .flow:
-            if spawnTimer > max(0.62, 1.42 - Double(state.level) * 0.052) {
+            if spawnTimer > scaledInterval(easy: 1.72, hard: 0.78) {
                 spawnShard()
                 spawnTimer = 0
             }
-            if elapsedTime > 0.45, sparkTimer > max(0.58, 0.92 - Double(state.level) * 0.018) {
+            if elapsedTime > 0.45, sparkTimer > scaledInterval(easy: 1.08, hard: 0.64) {
                 spawnSpark()
-                if state.level >= 2, patternStep.isMultiple(of: 4) {
+                if state.score >= 45, patternStep.isMultiple(of: 5) {
                     spawnChoiceFork()
                 }
                 patternStep += 1
                 sparkTimer = 0
             }
         case .gate:
-            if spawnTimer > max(1.05, 1.72 - Double(state.level) * 0.045) {
+            if spawnTimer > scaledInterval(easy: 2.05, hard: 1.12) {
                 spawnGateWave()
                 spawnTimer = 0
             }
-            if sparkTimer > max(0.72, 1.15 - Double(state.level) * 0.02) {
+            if sparkTimer > scaledInterval(easy: 1.2, hard: 0.76) {
                 spawnSpark()
                 sparkTimer = 0
             }
         case .switchback:
-            if patternWaveTimer > max(0.62, 0.95 - Double(state.level) * 0.022) {
+            if patternWaveTimer > scaledInterval(easy: 1.15, hard: 0.66) {
                 spawnSwitchbackStep()
                 patternWaveTimer = 0
             }
-            if sparkTimer > max(0.72, 1.05 - Double(state.level) * 0.018) {
+            if sparkTimer > scaledInterval(easy: 1.12, hard: 0.74) {
                 spawnSpark(on: orbitRadii[patternStep % orbitRadii.count], near: nextPlayableSpawnAngle(minLead: 0.82, maxLead: 1.74))
                 sparkTimer = 0
             }
         case .harvest:
-            if sparkTimer > max(0.34, 0.58 - Double(state.level) * 0.01) {
+            if sparkTimer > scaledInterval(easy: 0.72, hard: 0.38) {
                 spawnSparkTrail()
                 sparkTimer = 0
             }
-            if state.level >= 2, patternWaveTimer > 2.25 {
+            if state.score >= 45, patternWaveTimer > scaledInterval(easy: 3.2, hard: 2.1) {
                 spawnPowerUp(kind: .magnet, on: randomOrbitRadius(), near: nextPlayableSpawnAngle(minLead: 0.9, maxLead: 2.1))
                 patternWaveTimer = 0
             }
-            if spawnTimer > max(1.45, 2.15 - Double(state.level) * 0.04) {
+            if spawnTimer > scaledInterval(easy: 2.65, hard: 1.45) {
                 spawnShard()
                 spawnTimer = 0
             }
         case .overdrive:
-            if spawnTimer > max(0.5, 0.95 - Double(state.level) * 0.025) {
+            if spawnTimer > scaledInterval(easy: 1.12, hard: 0.55) {
                 if patternStep.isMultiple(of: 3) {
                     spawnChoiceFork()
                 } else {
@@ -402,11 +405,11 @@ final class GameScene: SKScene {
                 patternStep += 1
                 spawnTimer = 0
             }
-            if sparkTimer > max(0.48, 0.78 - Double(state.level) * 0.014) {
+            if sparkTimer > scaledInterval(easy: 0.9, hard: 0.52) {
                 spawnSpark()
                 sparkTimer = 0
             }
-            if patternWaveTimer > 1.7 {
+            if patternWaveTimer > scaledInterval(easy: 2.2, hard: 1.45) {
                 spawnPowerUp(kind: .surge, on: randomOrbitRadius(), near: nextPlayableSpawnAngle(minLead: 0.82, maxLead: 1.9))
                 patternWaveTimer = 0
             }
@@ -431,7 +434,7 @@ final class GameScene: SKScene {
             spawnShard(on: orbitRadii[index], near: waveAngle + CGFloat.random(in: -0.04...0.04), rewardChance: 0, allowParallel: true)
         }
         spawnSpark(on: orbitRadii[safeIndex], near: waveAngle + CGFloat.random(in: -0.08...0.08))
-        if state.level >= 3 {
+        if state.score >= 70 {
             let riskyIndex = (safeIndex + orbitStepDirection + orbitRadii.count) % orbitRadii.count
             spawnPowerUp(kind: .surge, on: orbitRadii[riskyIndex], near: waveAngle + 0.24)
         }
@@ -448,7 +451,7 @@ final class GameScene: SKScene {
         let spawnAngle = nextThreatSpawnAngle(on: radius, minLead: 0.82, maxLead: 1.42)
         pulseOrbit(at: radius, color: state.selectedTheme.shardColor, duration: 0.32)
         spawnShard(on: radius, near: spawnAngle, rewardChance: patternStep.isMultiple(of: 2) ? 0.45 : 0.18, allowParallel: false)
-        if state.level >= 4, patternStep % 5 == 4 {
+        if state.score >= 120, patternStep % 5 == 4 {
             spawnPowerUp(kind: .bomb, on: rewardRadius(awayFrom: radius), near: spawnAngle + 0.16)
         } else if patternStep.isMultiple(of: 3) {
             spawnSpark(on: rewardRadius(awayFrom: radius), near: spawnAngle + 0.22)
@@ -465,7 +468,7 @@ final class GameScene: SKScene {
             let index = rawIndex % orbitRadii.count
             spawnSpark(on: orbitRadii[index], near: baseAngle + CGFloat(offset) * 0.18)
         }
-        if state.level >= 3, patternStep.isMultiple(of: 4) {
+        if state.score >= 75, patternStep.isMultiple(of: 4) {
             spawnPowerUp(kind: .magnet, on: orbitRadii[startIndex], near: baseAngle - 0.2)
         }
         patternStep += 1
@@ -618,13 +621,13 @@ final class GameScene: SKScene {
     }
 
     private func selectedPowerUpKind(for roll: CGFloat) -> LumenObjectKind {
-        if state.level >= 4 && roll < 0.16 {
+        if state.score >= 120 && roll < 0.16 {
             return .bomb
         }
-        if state.level >= 3 && roll < 0.32 {
+        if state.score >= 70 && roll < 0.32 {
             return .surge
         }
-        if state.level >= 2 && roll < 0.48 {
+        if state.score >= 45 && roll < 0.48 {
             return .magnet
         }
         if state.shieldCharges == 0 || roll < 0.72 {
@@ -1012,25 +1015,24 @@ final class GameScene: SKScene {
     }
 
     private func triggerFeverBurst() {
-        flash(color: state.selectedTheme.feverColor.withAlphaComponent(0.22))
+        flash(color: state.selectedTheme.feverColor.withAlphaComponent(0.16))
         for radius in orbitRadii {
             let ring = SKShapeNode(circleOfRadius: radius)
             ring.position = center
             ring.strokeColor = state.selectedTheme.feverColor.withAlphaComponent(0.6)
-            ring.lineWidth = 3
-            ring.glowWidth = 16
+            ring.lineWidth = 2
+            ring.glowWidth = 9
             ring.zPosition = 10
             effectLayer.addChild(ring)
             ring.run(.sequence([
-                .group([.scale(to: 1.45, duration: 0.52), .fadeOut(withDuration: 0.52)]),
+                .group([.scale(to: 1.28, duration: 0.36), .fadeOut(withDuration: 0.36)]),
                 .removeFromParent()
             ]))
         }
 
-        // FEVER! 텍스트
         let label = SKLabelNode(text: "FEVER!")
         label.fontName = "AvenirNext-Heavy"
-        label.fontSize = 52
+        label.fontSize = 42
         label.fontColor = state.selectedTheme.feverColor
         label.position = center
         label.zPosition = 30
@@ -1038,42 +1040,30 @@ final class GameScene: SKScene {
         label.setScale(0.4)
         addChild(label)
 
-        // 그림자용 복사본
-        let shadow = SKLabelNode(text: "FEVER!")
-        shadow.fontName = "AvenirNext-Heavy"
-        shadow.fontSize = 52
-        shadow.fontColor = state.selectedTheme.feverColor.withAlphaComponent(0.35)
-        shadow.position = CGPoint(x: center.x + 2, y: center.y - 3)
-        shadow.zPosition = 29
-        shadow.alpha = 0
-        shadow.setScale(0.4)
-        addChild(shadow)
-
         let appear = SKAction.group([
             .fadeIn(withDuration: 0.08),
-            .scale(to: 1.15, duration: 0.18)
+            .scale(to: 1.08, duration: 0.14)
         ])
         let settle = SKAction.scale(to: 1.0, duration: 0.1)
-        let hold = SKAction.wait(forDuration: 0.55)
+        let hold = SKAction.wait(forDuration: 0.42)
         let disappear = SKAction.group([
-            .fadeOut(withDuration: 0.3),
-            .scale(to: 1.3, duration: 0.3),
-            .moveBy(x: 0, y: 18, duration: 0.3)
+            .fadeOut(withDuration: 0.22),
+            .scale(to: 1.18, duration: 0.22),
+            .moveBy(x: 0, y: 14, duration: 0.22)
         ])
         let seq = SKAction.sequence([appear, settle, hold, disappear, .removeFromParent()])
         label.run(seq)
-        shadow.run(seq)
     }
 
     private func convertNearbyShardsForFever() {
         var converted = 0
         objectLayer.children.forEach { node in
             guard node.lumenObjectKind == .shard else { return }
-            guard converted < 6 else { return }
+            guard converted < 3 else { return }
             guard let objectAngle = storedAngle(for: node) else { return }
-            if angularDistance(objectAngle, angle) < 1.45 {
+            if angularDistance(objectAngle, angle) < 1.1 {
                 converted += 1
-                emitBurst(at: node.position, color: state.selectedTheme.feverColor, count: 8)
+                emitBurst(at: node.position, color: state.selectedTheme.feverColor, count: 4)
                 node.removeFromParent()
             }
         }
@@ -1082,7 +1072,7 @@ final class GameScene: SKScene {
         for _ in 0..<converted {
             state.collectFeverHit()
         }
-        shockwave(at: player.position, color: state.selectedTheme.feverColor, radius: 150)
+        shockwave(at: player.position, color: state.selectedTheme.feverColor, radius: 110)
     }
 
     private func updatePlayerPosition() {
@@ -1118,6 +1108,14 @@ final class GameScene: SKScene {
 
     private func randomOrbitRadius() -> CGFloat {
         orbitRadii.randomElement() ?? orbitRadii[0]
+    }
+
+    private var difficultyProgress: Double {
+        min(1, Double(max(state.score - 20, 0)) / 150)
+    }
+
+    private func scaledInterval(easy: Double, hard: Double) -> Double {
+        easy - (easy - hard) * difficultyProgress
     }
 
     private func rewardRadius(awayFrom radius: CGFloat) -> CGFloat {
@@ -1209,7 +1207,7 @@ final class GameScene: SKScene {
             return false
         }
 
-        let clearance = state.level < 6 ? 0.58 : 0.46
+        let clearance = state.score < 120 ? 0.62 : 0.48
         return !objectLayer.children.contains { node in
             guard node.lumenObjectKind == .shard else { return false }
             guard let objectAngle = storedAngle(for: node) else { return false }

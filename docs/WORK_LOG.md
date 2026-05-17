@@ -1,6 +1,7 @@
 # Lumen Run Work Log
 
 ## 2026-05-17
+- Softened early difficulty with score-gated pattern unlocks, slower spawn scaling, reduced Fever speed, and lighter Fever entry effects.
 - Removed player-core opacity animations, fixed SpriteKit render ordering, and further reduced particle/node caps to address respawn transparency and device stutter.
 - Reduced long-run stutter by early-filtering collision checks and capping transient SpriteKit effect/object nodes.
 - Hardened long-run collision reliability with swept orbit checks and restored player opacity after invulnerability pulses.

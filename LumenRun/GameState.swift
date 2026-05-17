@@ -269,7 +269,7 @@ final class GameState: ObservableObject {
 
         multiplier = min(isFeverActive ? 8 : 5, 1 + combo / 5)
         score += multiplier + (isFeverActive ? 1 : 0)
-        level = max(1, score / 15 + 1)
+        level = max(1, score / 25 + 1)
         SoundPlayer.lumen(enabled: isSoundEnabled)
         advanceMission(.sparks, by: 1)
         updateScoreMission()
@@ -280,7 +280,7 @@ final class GameState: ObservableObject {
     func collectFeverHit() {
         guard isFeverActive else { return }
         score += max(3, multiplier + 2)
-        level = max(1, score / 15 + 1)
+        level = max(1, score / 25 + 1)
         SoundPlayer.lumen(enabled: isSoundEnabled)
         updateScoreMission()
         updateScoreAchievements()
@@ -293,7 +293,7 @@ final class GameState: ObservableObject {
         }
         multiplier = min(isFeverActive ? 8 : 5, 1 + combo / 5)
         score += max(8, multiplier * 3)
-        level = max(1, score / 15 + 1)
+        level = max(1, score / 25 + 1)
         SoundPlayer.lumen(enabled: isSoundEnabled)
         updateScoreMission()
         updateScoreAchievements()
@@ -305,7 +305,7 @@ final class GameState: ObservableObject {
         combo += min(count, 3)
         multiplier = min(isFeverActive ? 8 : 5, 1 + combo / 5)
         score += max(4, count * 4) * multiplier
-        level = max(1, score / 15 + 1)
+        level = max(1, score / 25 + 1)
         SoundPlayer.lumen(enabled: isSoundEnabled)
         updateScoreMission()
         updateScoreAchievements()
