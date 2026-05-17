@@ -516,24 +516,33 @@ private struct LumenSignalMark: View {
                 .frame(width: size * 0.26, height: size * 0.26)
                 .shadow(color: Color(red: 1.0, green: 0.78, blue: 0.18).opacity(0.72), radius: size * 0.13)
 
-            Image(systemName: "exclamationmark.triangle.fill")
-                .font(.system(size: size * 0.16, weight: .black))
-                .foregroundStyle(Color(red: 1.0, green: 0.18, blue: 0.48))
-                .rotationEffect(.degrees(-18))
-                .offset(x: size * 0.24, y: -size * 0.19)
-                .shadow(color: Color(red: 1.0, green: 0.18, blue: 0.48).opacity(0.65), radius: 8)
-
-            if !isCompact {
-                ForEach(0..<4, id: \.self) { index in
-                    Capsule()
-                        .fill(.white.opacity(0.12))
-                        .frame(width: size * 0.2, height: 2)
-                        .offset(x: -size * 0.42, y: CGFloat(index - 2) * size * 0.085)
-                }
-            }
+            GlitchShardMark(size: size * 0.28)
+                .rotationEffect(.degrees(-16))
+                .offset(x: size * 0.27, y: -size * 0.18)
         }
         .frame(width: size, height: size)
         .accessibilityHidden(true)
+    }
+}
+
+private struct GlitchShardMark: View {
+    let size: CGFloat
+
+    var body: some View {
+        ZStack {
+            StarGuideShape(points: 6, innerRatio: 0.56)
+                .fill(Color(red: 1.0, green: 0.1, blue: 0.45))
+                .overlay {
+                    StarGuideShape(points: 6, innerRatio: 0.56)
+                        .stroke(Color(red: 0.08, green: 0.0, blue: 0.04).opacity(0.82), lineWidth: max(3, size * 0.08))
+                }
+
+            XGuideShape()
+                .stroke(Color(red: 0.08, green: 0.0, blue: 0.04).opacity(0.84), style: StrokeStyle(lineWidth: max(4, size * 0.11), lineCap: .round))
+                .padding(size * 0.18)
+        }
+        .frame(width: size, height: size)
+        .shadow(color: Color(red: 1.0, green: 0.1, blue: 0.45).opacity(0.58), radius: size * 0.18)
     }
 }
 
