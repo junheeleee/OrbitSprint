@@ -52,6 +52,7 @@ final class GameScene: SKScene {
     private var patternIndex = 0
     private var patternStep = 0
     private var currentPattern: RunPattern = .flow
+    private var lastScreenFlashTime: TimeInterval = -10
     private var lastFeverFlashTime: TimeInterval = -10
     private var didSpawnOpeningRoute = false
     private var difficulty: CGFloat = 1
@@ -79,6 +80,8 @@ final class GameScene: SKScene {
     override func didMove(to view: SKView) {
         super.didMove(to: view)
         view.isMultipleTouchEnabled = false
+        view.ignoresSiblingOrder = true
+        view.preferredFramesPerSecond = 60
         setupScene()
     }
 
@@ -190,9 +193,9 @@ final class GameScene: SKScene {
         player.zPosition = 5
         addChild(player)
         setupShieldAura()
-        player.alpha = 0.64
+        player.alpha = 1
         targetRadius = currentRadius
-        player.run(.sequence([.wait(forDuration: safeUntil), .fadeAlpha(to: 1, duration: 0.25)]), withKey: "spawnFade")
+        player.run(.sequence([.scale(to: 0.82, duration: 0.1), .scale(to: 1.0, duration: 0.28)]), withKey: "spawnPulse")
 
         applyTheme()
         drawStars()
@@ -225,22 +228,23 @@ final class GameScene: SKScene {
         patternIndex = 0
         patternStep = 0
         currentPattern = .flow
+        lastScreenFlashTime = -10
         lastFeverFlashTime = -10
         didSpawnOpeningRoute = false
         difficulty = 1
         renderedShieldCharges = -1
         renderedFeverActive = state.isFeverActive
 
-        resetPlayerVisuals(alpha: 1)
+        resetPlayerVisuals()
         shieldAura.removeAllActions()
         shieldAura.setScale(1)
         shieldAura.alpha = 0
     }
 
-    private func resetPlayerVisuals(alpha: CGFloat) {
+    private func resetPlayerVisuals() {
         player.removeAllActions()
         player.setScale(1)
-        player.alpha = alpha
+        player.alpha = 1
         player.isHidden = false
     }
 
@@ -779,12 +783,9 @@ final class GameScene: SKScene {
                 player.run(
                     .sequence([
                         .scale(to: 1.45, duration: 0.08),
-                        .group([
-                            .scale(to: 0.1, duration: 0.16),
-                            .fadeAlpha(to: 0.35, duration: 0.16)
-                        ]),
+                        .scale(to: 0.1, duration: 0.16),
                         .run { [weak self] in
-                            self?.resetPlayerVisuals(alpha: 0.35)
+                            self?.resetPlayerVisuals()
                         }
                     ]),
                     withKey: "deathPulse"
@@ -836,8 +837,8 @@ final class GameScene: SKScene {
     private func cleanupTransientNodesIfNeeded() {
         guard cleanupTimer >= 0.45 else { return }
         cleanupTimer = 0
-        trimOldestChildren(in: effectLayer, keeping: state.isFeverActive ? 58 : 72)
-        trimOldestChildren(in: objectLayer, keeping: state.isFeverActive ? 48 : 60)
+        trimOldestChildren(in: effectLayer, keeping: state.isFeverActive ? 42 : 56)
+        trimOldestChildren(in: objectLayer, keeping: state.isFeverActive ? 42 : 52)
     }
 
     private func trimOldestChildren(in layer: SKNode, keeping limit: Int) {
@@ -912,14 +913,15 @@ final class GameScene: SKScene {
     private func pulseInvulnerability() {
         player.removeAction(forKey: "invulnerablePulse")
         let pulse = SKAction.sequence([
-            .fadeAlpha(to: 0.42, duration: 0.08),
-            .fadeAlpha(to: 0.9, duration: 0.08)
+            .scale(to: 0.86, duration: 0.07),
+            .scale(to: 1.06, duration: 0.07)
         ])
         player.run(
             .sequence([
                 .repeat(pulse, count: 6),
                 .run { [weak self] in
                     guard let self, !self.state.isGameOver else { return }
+                    self.player.setScale(1)
                     self.player.alpha = 1
                 }
             ]),
@@ -959,6 +961,8 @@ final class GameScene: SKScene {
     }
 
     private func flash(color: SKColor) {
+        guard elapsedTime - lastScreenFlashTime > 0.12 else { return }
+        lastScreenFlashTime = elapsedTime
         let node = SKShapeNode(rectOf: size)
         node.position = center
         node.fillColor = color
@@ -975,13 +979,13 @@ final class GameScene: SKScene {
     }
 
     private func emitBurst(at position: CGPoint, color: SKColor, count: Int) {
-        let effectLimit = state.isFeverActive ? 58 : 72
+        let effectLimit = state.isFeverActive ? 42 : 56
         guard effectLayer.children.count < effectLimit else {
             return
         }
 
         let availableSlots = max(0, effectLimit - effectLayer.children.count)
-        let cappedCount = min(count, state.isFeverActive ? 8 : 12, availableSlots)
+        let cappedCount = min(count, state.isFeverActive ? 5 : 8, availableSlots)
 
         for index in 0..<cappedCount {
             let mote = SKShapeNode(circleOfRadius: CGFloat.random(in: 2.0...4.2))

@@ -8,6 +8,7 @@
 - Collision reliability fixes should stay lightweight enough to preserve smooth gameplay on device.
 - SpriteKit transient effect and object counts should be bounded during long runs and Fever sequences.
 - Temporary invulnerability visuals must always restore the player core to full opacity when the effect ends.
+- Player-core feedback should avoid opacity animation; respawn and invulnerability should use scale/ring effects so the core never appears unintentionally transparent.
 - Obstacles should spawn in ways that preserve player agency.
 - Fever mode should make the player invincible, faster, flashier, and able to convert collisions into score.
 - The HUD should show fever buildup progress so players can judge when to risk chasing one more spark.
