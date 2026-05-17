@@ -12,6 +12,9 @@
 - Gameplay depth is the current highest product priority before more cosmetic polish.
 - Add stage-like pacing with recognizable obstacle patterns, escalation beats, and short relief windows.
 - Add strategic decisions inside runs, such as choosing risky score routes, safer survival routes, and timed item pickups.
+- Early runs should offer a quick readable reward route within the first moments after spawn safety ends.
+- Patterns should create route choices where safer paths give steady sparks and riskier paths offer stronger rewards such as surge cores.
+- Fever entry should feel like a payoff moment by converting nearby danger into points and visual impact.
 - First pattern set should include readable phases: normal flow, gate waves, switchback pressure, lumen rush, and overdrive.
 - Pattern changes should be communicated through spawn layout, orbit pulses, color, and item placement instead of intrusive text banners.
 - Run patterns should have distinct reward/risk identities: harvest favors magnets and spark trails, gates offer shield preparation, switchbacks reward bomb timing, and overdrive pushes surge-core risk/reward.

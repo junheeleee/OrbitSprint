@@ -51,6 +51,7 @@ final class GameScene: SKScene {
     private var patternStep = 0
     private var currentPattern: RunPattern = .flow
     private var lastFeverFlashTime: TimeInterval = -10
+    private var didSpawnOpeningRoute = false
     private var difficulty: CGFloat = 1
     private var renderedTheme: GameTheme?
     private var renderedCoreSkin: CoreSkin?
@@ -129,6 +130,7 @@ final class GameScene: SKScene {
             drawOrbits()
             if state.isFeverActive {
                 triggerFeverBurst()
+                convertNearbyShardsForFever()
             }
         }
         if renderedShieldCharges != state.shieldCharges {
@@ -217,6 +219,7 @@ final class GameScene: SKScene {
         patternStep = 0
         currentPattern = .flow
         lastFeverFlashTime = -10
+        didSpawnOpeningRoute = false
         difficulty = 1
         renderedShieldCharges = -1
         renderedFeverActive = state.isFeverActive
@@ -328,6 +331,11 @@ final class GameScene: SKScene {
     private func updatePatternSpawns() {
         guard elapsedTime > safeUntil else { return }
 
+        if !didSpawnOpeningRoute {
+            didSpawnOpeningRoute = true
+            spawnOpeningRoute()
+        }
+
         switch currentPattern {
         case .flow:
             if spawnTimer > max(0.62, 1.42 - Double(state.level) * 0.052) {
@@ -336,6 +344,10 @@ final class GameScene: SKScene {
             }
             if elapsedTime > 0.45, sparkTimer > max(0.58, 0.92 - Double(state.level) * 0.018) {
                 spawnSpark()
+                if state.level >= 2, patternStep.isMultiple(of: 4) {
+                    spawnChoiceFork()
+                }
+                patternStep += 1
                 sparkTimer = 0
             }
         case .gate:
@@ -353,7 +365,7 @@ final class GameScene: SKScene {
                 patternWaveTimer = 0
             }
             if sparkTimer > max(0.72, 1.05 - Double(state.level) * 0.018) {
-                spawnSpark()
+                spawnSpark(on: orbitRadii[patternStep % orbitRadii.count], near: nextPlayableSpawnAngle(minLead: 0.82, maxLead: 1.74))
                 sparkTimer = 0
             }
         case .harvest:
@@ -371,7 +383,12 @@ final class GameScene: SKScene {
             }
         case .overdrive:
             if spawnTimer > max(0.5, 0.95 - Double(state.level) * 0.025) {
-                spawnShard()
+                if patternStep.isMultiple(of: 3) {
+                    spawnChoiceFork()
+                } else {
+                    spawnShard()
+                }
+                patternStep += 1
                 spawnTimer = 0
             }
             if sparkTimer > max(0.48, 0.78 - Double(state.level) * 0.014) {
@@ -385,6 +402,16 @@ final class GameScene: SKScene {
         }
     }
 
+    private func spawnOpeningRoute() {
+        let baseAngle = nextPlayableSpawnAngle(minLead: 0.82, maxLead: 1.16)
+        for offset in 0..<5 {
+            let index = offset % orbitRadii.count
+            spawnSpark(on: orbitRadii[index], near: baseAngle + CGFloat(offset) * 0.22)
+        }
+        spawnPowerUp(kind: .shield, on: orbitRadii[1], near: baseAngle + 0.52)
+        pulseOrbit(at: orbitRadii[0], color: state.selectedTheme.sparkColor, duration: 0.48)
+    }
+
     private func spawnGateWave() {
         let safeIndex = reachableSafeLaneIndex()
         let waveAngle = nextPlayableSpawnAngle(minLead: 1.06, maxLead: 1.62)
@@ -393,6 +420,10 @@ final class GameScene: SKScene {
             spawnShard(on: orbitRadii[index], near: waveAngle + CGFloat.random(in: -0.04...0.04), rewardChance: 0, allowParallel: true)
         }
         spawnSpark(on: orbitRadii[safeIndex], near: waveAngle + CGFloat.random(in: -0.08...0.08))
+        if state.level >= 3 {
+            let riskyIndex = (safeIndex + orbitStepDirection + orbitRadii.count) % orbitRadii.count
+            spawnPowerUp(kind: .surge, on: orbitRadii[riskyIndex], near: waveAngle + 0.24)
+        }
         if patternStep.isMultiple(of: 3) {
             spawnPowerUp(kind: .shield, on: orbitRadii[safeIndex], near: waveAngle - 0.2)
         }
@@ -408,6 +439,8 @@ final class GameScene: SKScene {
         spawnShard(on: radius, near: spawnAngle, rewardChance: patternStep.isMultiple(of: 2) ? 0.45 : 0.18, allowParallel: false)
         if state.level >= 4, patternStep % 5 == 4 {
             spawnPowerUp(kind: .bomb, on: rewardRadius(awayFrom: radius), near: spawnAngle + 0.16)
+        } else if patternStep.isMultiple(of: 3) {
+            spawnSpark(on: rewardRadius(awayFrom: radius), near: spawnAngle + 0.22)
         }
         patternStep += 1
     }
@@ -421,6 +454,36 @@ final class GameScene: SKScene {
             let index = rawIndex % orbitRadii.count
             spawnSpark(on: orbitRadii[index], near: baseAngle + CGFloat(offset) * 0.18)
         }
+        if state.level >= 3, patternStep.isMultiple(of: 4) {
+            spawnPowerUp(kind: .magnet, on: orbitRadii[startIndex], near: baseAngle - 0.2)
+        }
+        patternStep += 1
+    }
+
+    private func spawnChoiceFork() {
+        let baseAngle = nextPlayableSpawnAngle(minLead: 0.92, maxLead: 1.64)
+        let safeIndex = reachableSafeLaneIndex()
+        let riskyIndex = rewardLaneIndex(awayFrom: safeIndex)
+        let safeRadius = orbitRadii[safeIndex]
+        let riskyRadius = orbitRadii[riskyIndex]
+
+        pulseOrbit(at: safeRadius, color: state.selectedTheme.sparkColor, duration: 0.34)
+        pulseOrbit(at: riskyRadius, color: objectColor(for: .surge), duration: 0.34)
+        spawnSpark(on: safeRadius, near: baseAngle - 0.08)
+        spawnSpark(on: safeRadius, near: baseAngle + 0.12)
+        spawnPowerUp(kind: .surge, on: riskyRadius, near: baseAngle + 0.04)
+        spawnShard(on: riskyRadius, near: baseAngle - 0.28, rewardChance: 0, allowParallel: true)
+        spawnShard(on: riskyRadius, near: baseAngle + 0.34, rewardChance: 0, allowParallel: true)
+    }
+
+    private func rewardLaneIndex(awayFrom index: Int) -> Int {
+        if index == 0 {
+            return 2
+        }
+        if index == orbitRadii.count - 1 {
+            return 0
+        }
+        return Bool.random() ? 0 : 2
     }
 
     private func reachableSafeLaneIndex() -> Int {
@@ -962,6 +1025,26 @@ final class GameScene: SKScene {
         let seq = SKAction.sequence([appear, settle, hold, disappear, .removeFromParent()])
         label.run(seq)
         shadow.run(seq)
+    }
+
+    private func convertNearbyShardsForFever() {
+        var converted = 0
+        objectLayer.children.forEach { node in
+            guard node.lumenObjectKind == .shard else { return }
+            guard converted < 6 else { return }
+            guard let objectAngle = storedAngle(for: node) else { return }
+            if angularDistance(objectAngle, angle) < 1.45 {
+                converted += 1
+                emitBurst(at: node.position, color: state.selectedTheme.feverColor, count: 8)
+                node.removeFromParent()
+            }
+        }
+
+        guard converted > 0 else { return }
+        for _ in 0..<converted {
+            state.collectFeverHit()
+        }
+        shockwave(at: player.position, color: state.selectedTheme.feverColor, radius: 150)
     }
 
     private func updatePlayerPosition() {
