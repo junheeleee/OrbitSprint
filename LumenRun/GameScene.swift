@@ -902,6 +902,7 @@ final class GameScene: SKScene {
             let nextX = node.position.x + dx * pull
             let nextY = node.position.y + dy * pull
             node.position = CGPoint(x: nextX, y: nextY)
+            syncObjectTrackingData(for: node)
         }
     }
 
@@ -1332,6 +1333,10 @@ final class GameScene: SKScene {
     }
 
     private func isOnCollidingRadius(with node: SKNode) -> Bool {
+        if node.lumenObjectKind == .spark, isSpatiallyTouchingPlayer(node, extraTolerance: 8) {
+            return true
+        }
+
         guard let objectRadius = storedRadius(for: node) else { return true }
         let dynamicTolerance = max(collisionRadiusTolerance, playerRadius + collisionRadius(for: node))
         return abs(objectRadius - currentRadius) <= dynamicTolerance
@@ -1339,6 +1344,10 @@ final class GameScene: SKScene {
 
     private func isTouchingPlayer(_ node: SKNode) -> Bool {
         let combinedRadius = playerRadius + collisionRadius(for: node)
+        if node.lumenObjectKind == .spark, isSpatiallyTouchingPlayer(node, extraTolerance: 8) {
+            return true
+        }
+
         guard let objectAngle = storedAngle(for: node) else { return false }
         guard let objectRadius = storedRadius(for: node) else { return false }
         let angularReach = combinedRadius / max(objectRadius, 1) + 0.035
@@ -1351,6 +1360,13 @@ final class GameScene: SKScene {
         let dx = player.position.x - node.position.x
         let dy = player.position.y - node.position.y
         return dx * dx + dy * dy <= combinedRadius * combinedRadius || didReachAngle
+    }
+
+    private func isSpatiallyTouchingPlayer(_ node: SKNode, extraTolerance: CGFloat = 0) -> Bool {
+        let combinedRadius = playerRadius + collisionRadius(for: node) + extraTolerance
+        let dx = player.position.x - node.position.x
+        let dy = player.position.y - node.position.y
+        return dx * dx + dy * dy <= combinedRadius * combinedRadius
     }
 
     private func collisionRadius(for node: SKNode) -> CGFloat {
@@ -1445,6 +1461,13 @@ final class GameScene: SKScene {
         }
 
         return nil
+    }
+
+    private func syncObjectTrackingData(for node: SKNode) {
+        let dx = node.position.x - center.x
+        let dy = node.position.y - center.y
+        node.userData?["radius"] = hypot(dx, dy)
+        node.userData?["angle"] = normalizedAngle(atan2(dy, dx))
     }
 
     private func nearestDistance(from angle: CGFloat, to angles: [CGFloat]) -> CGFloat {

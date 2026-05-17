@@ -5,6 +5,7 @@
 - The player should never respawn directly into unavoidable collision.
 - Collision should only occur with obstacles on the player's current orbit layer.
 - Collision and pickup checks must stay reliable at high speed, including Fever, by accounting for movement between frames.
+- Spark pickups must also honor direct visual overlap, especially after magnet pulls move sparks away from their original orbit tracking data.
 - Collision reliability fixes should stay lightweight enough to preserve smooth gameplay on device.
 - SpriteKit transient effect and object counts should be bounded during long runs and Fever sequences.
 - Magnet behavior should move smoothly every frame while keeping affected-object counts capped to preserve smooth play.
